@@ -1,0 +1,8 @@
+<form class="form-group" [formGroup]="brand" (ngSubmit)="UpdataData()">
+    <label>Brand Name</label>
+    <input type="text" id="brandName" name="brandName"  class="form-control" formControlName="brandName">
+    <br>
+    <div>
+        <button class="btn btn-primary" type="submit">Güncelle</button>
+    </div>
+</form>

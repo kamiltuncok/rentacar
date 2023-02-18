@@ -1,0 +1,45 @@
+<div *ngIf="dataLoaded==false" class="spinner-border text-primary" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+
+<div class="mb-3">
+  <label for="filterText" class="form-label">Ürün Ara</label>
+  <input type="text" [(ngModel)]="filterText" class="form-control" id="filterText" placeholder="arama ifadesi giriniz">
+</div>
+<div *ngIf="filterText" class="alert alert-primary">
+  {{filterText}} aradınız.
+</div>
+
+
+<table *ngIf="dataLoaded==true" class="table">
+  <thead>
+      <tr>
+          <th>Car Id</th>
+          <th>Brand Name</th>
+          <th>Color Name</th>
+          <th>Model Year</th>
+          <th>Daily Price</th>
+          <th>Description</th>
+          <th></th>
+      </tr>
+  </thead>
+<tbody>
+  <tr *ngFor="let car of carDetail | filterPipe:filterText">
+      <td>{{car.carId}}</td>
+      <td>{{car.brandName |uppercase}}</td>
+      <td>{{car.colorName |uppercase}}</td>
+      <td>{{car.modelYear}}</td>
+      <td>{{car.dailyPrice|currency}}</td>
+      <td>{{car.description}}</td>
+      <td>
+        <div class="btn-group">
+          <button type="button" *ngIf="car.returnDATE!=null"  routerLink="carDetail/{{car.carId}}" class="btn btn-info" aria-expanded="false">Informations</button>
+          <button type="button" *ngIf="car.returnDATE==null"  (click)="doesntrent(car)"  class="btn btn-danger" aria-expanded="false">Rented</button>
+        </div>
+      </td>
+  </tr>
+</tbody>
+
+
+</table>
+
