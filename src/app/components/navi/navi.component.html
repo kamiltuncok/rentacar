@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Navbar</a>
@@ -35,3 +36,54 @@
     </div>
   </nav>
 
+=======
+<nav class="navbar navbar-expand-lg navbar-mid-color" style="background-color:rgb(80,128,168)">
+  <div class="container">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a id="" class="navbar-brand" href="/">Anasayfa</a>
+        </li>
+        <li class="nav-item">
+          <a class="navbar-brand" href="/cars">Arabalar</a>
+        </li>
+        <li class="nav-item">
+          <a class="navbar-brand" href="/branches">Şubeler</a>
+        </li>
+      </ul>
+      <ul *ngIf="isAuthenticated()" class="navbar-nav mr-right">
+        <li class="nav-item">
+          <a class="navbar-brand" href="/cars/add">Araba Ekle</a>
+        </li>
+      </ul>
+      <ul *ngIf="isAuthenticated()" class="navbar-nav mr-right">
+        <li class="nav-item">
+          <a class="navbar-brand" href="/carimages/add">Araba Resmi Ekle</a>
+        </li>
+      </ul>
+      <ul *ngIf="!isAuthenticated()" class="navbar-nav mr-right" id="righta">
+        <li class="nav-item">
+          <a class="navbar-brand" href="/login">Giriş</a>
+        </li>
+        <li class="nav-item">
+          <a class="navbar-brand" href="/register">Kayıt ol</a>
+        </li>
+      </ul>
+
+      <ul *ngIf="isAuthenticated()" class="navbar-nav mr-right" id="right">
+        <li class="nav-item">
+          <a *ngIf="dataLoaded" class="navbar-brand text-blue" [routerLink]="getProfileUrl()">
+            <img [src]="'assets/images/user.png'" width="30" height="30">
+            {{ displayName }}
+          </a>          
+        </li>
+        <li class="nav-item">
+          <a (click)="logout()" class="navbar-brand" href="">Çıkış Yap</a>
+        </li>
+      </ul>
+      
+    </div>
+  </div>
+</nav>
+<br>
+>>>>>>> 88816fa (location and car component added)

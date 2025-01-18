@@ -12,6 +12,7 @@ import { CarService } from 'src/app/services/car.service';
   styleUrls: ['./brand-update.component.css']
 })
 export class BrandUpdateComponent implements OnInit {
+<<<<<<< HEAD
   updateFormGroup: FormGroup;
   constructor(private brandService:BrandService, private router:ActivatedRoute, private formBuilder:FormBuilder, private toastrService:ToastrService) {}
   brand =new FormGroup({brandName:new FormControl('')});
@@ -22,6 +23,20 @@ export class BrandUpdateComponent implements OnInit {
         brandName:new FormControl(result.data["brandName"], Validators.required),
       });
     });
+=======
+  brand = new FormGroup({
+    brandName: new FormControl(null, [Validators.required]),
+  });
+  constructor(private brandService:BrandService, private router:ActivatedRoute, private formBuilder:FormBuilder, private toastrService:ToastrService) {}
+  
+
+  ngOnInit(): void {
+    this.brandService.getBrandsById(+(this.router.snapshot.paramMap.get('brandId'))).subscribe((result:any)=>{
+      this.brand.patchValue({
+       ...result.data[0]
+      });
+    })
+>>>>>>> 88816fa (location and car component added)
   }
 
   UpdataData(){

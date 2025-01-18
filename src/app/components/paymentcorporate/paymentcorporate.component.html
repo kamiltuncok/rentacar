@@ -1,0 +1,90 @@
+<div class="container">
+    <!-- Similar structure to the payment page with any corporate-specific details -->
+    <div style="background-color: #cedce0;" *ngIf="hideCustomerInfo">
+        <div style="padding: 20px;">
+            <form [formGroup]="customerAddForm">
+                <h1>Kurumsal Müşteri Bilgileri</h1>
+                <div>
+                    <label>Şirket Adı</label>
+                    <input type="text" id="companyName" formControlName="companyName" class="form-control">
+                </div>
+                <div>
+                    <label>Vergi Numarası</label>
+                    <input type="text" id="taxNumber" maxlength="10" formControlName="taxNumber" class="form-control">
+                </div>
+                <div>
+                    <label>Telefon Numarası</label>
+                    <input type="text" id="phoneNumber" formControlName="phoneNumber" class="form-control" minlength="11" maxlength="11">
+                </div>
+                <div>
+                    <label>E-Posta Adresi</label>
+                    <input type="email" id="email" formControlName="email" class="form-control">
+                </div>
+                <div>
+                    <label>Adres</label>
+                    <textarea id="address" formControlName="address" class="form-control" maxlength="140" style="height: 100px;"></textarea>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="container p-0" style="border: 1px solid black; padding: 0.5px; display: flex;">
+            <!-- Left Side - Payment Information -->
+            <div style="flex: 1;">
+                <div class="card px-4" style="background-color: #cedce0;">
+                    <h3>Ödeme Bilgileri</h3>
+                    <hr style="border: 0.5px solid black;">
+                    <div style="position: absolute; top: 0; right: 0; margin-top: 65px; margin-right: 10px;">
+                        <img src="https://bertanuzun.com/wp-content/uploads/2020/03/kredi-karti.png" width="400" height="250" alt="Responsive image">
+                    </div>
+                    <div class="row gx-3">
+                        <div class="col-12">
+                            <div class="d-flex flex-column">
+                                <p class="text mb-1" style="height: 40px;">Kart İsmi</p>
+                                <input id="cardHolder" class="form-control mb-3" required type="text" placeholder="Name" style="height: 40px; width: 400px;">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="d-flex flex-column">
+                                <p class="text mb-1" style="height: 40px;">Kart Numarası</p>
+                                <input id="cardNumber" required class="form-control mb-3" type="text" placeholder="1234 5678 9876 5432" maxlength="16" style="height: 40px; width: 400px;">
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div><label>Son Kullanma Tarihi</label>
+                                <div class="last-usage-date">
+                                    <div class="select-wrapper">
+                                        <select required id="card-date-month">
+                                            <option disabled="disabled" value="" selected="selected">Ay</option>
+                                            <!-- Month options here -->
+                                        </select>
+                                        <i class="icon-chevron-down icon"></i>
+                                    </div>
+                                    <div class="select-wrapper">
+                                        <select required id="card-date-year">
+                                            <option disabled="disabled" value="" selected="selected">Yıl</option>
+                                            <!-- Year options here -->
+                                        </select>
+                                        <i class="icon-chevron-down icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex flex-column">
+                                <p class="text mb-1">CVV/CVC</p>
+                                <input id="cvc" required class="form-control mb-3 pt-2" maxlength="3" type="text" placeholder="***">
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button" (click)="addCorporateCustomerAndRental()" class="btn btn-success btn-xs">Rent</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

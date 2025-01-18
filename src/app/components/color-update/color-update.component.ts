@@ -12,6 +12,7 @@ import { ColorService } from 'src/app/services/color.service';
   styleUrls: ['./color-update.component.css']
 })
 export class ColorUpdateComponent implements OnInit {
+<<<<<<< HEAD
   updateFormGroup: FormGroup;
   constructor(private colorService:ColorService, private router:ActivatedRoute, private formBuilder:FormBuilder, private toastrService:ToastrService) {}
   color =new FormGroup({colorName:new FormControl('')});
@@ -22,6 +23,20 @@ export class ColorUpdateComponent implements OnInit {
         colorName:new FormControl(result.data["colorName"], Validators.required),
       });
     });
+=======
+  color = new FormGroup({
+    colorName: new FormControl(null, [Validators.required]),
+  });
+  constructor(private colorService:ColorService, private router:ActivatedRoute, private formBuilder:FormBuilder, private toastrService:ToastrService) {}
+  
+
+  ngOnInit(): void {
+    this.colorService.getColorsById(+(this.router.snapshot.paramMap.get('colorId'))).subscribe((result:any)=>{
+      this.color.patchValue({
+       ...result.data[0]
+      });
+    })
+>>>>>>> 88816fa (location and car component added)
   }
 
   UpdataData(){

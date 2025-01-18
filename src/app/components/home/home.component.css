@@ -1,0 +1,94 @@
+/* Butonlar için genel stil */
+.btn {
+  background-color: #007bff; /* Varsayılan mavi renk */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 16px;
+  display: inline-block;
+  margin-right: 5px; /* Butonlar arasında küçük mesafe */
+  transition: background-color 0.3s ease; /* Renk geçişi için animasyon */
+}
+
+/* Aktif buton stilini vurgulamak için */
+.btn.active {
+  background-color: #0056b3; /* Daha koyu mavi */
+}
+
+/* İnaktif buton stili için */
+.btn.inactive {
+  background-color: #6c757d; /* Gri renk */
+  color: white;
+}
+
+/* Container stil ayarları */
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.body-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px; /* Add some vertical spacing between rows */
+}
+
+.input-container {
+  flex: 1;
+  margin-left: 10px;
+  margin-right: 10px; /* Add spacing between inputs */
+}
+
+.btn-individual {
+  background-color: #4682B4; /* Çelik Mavi */
+  color: white; /* Metin rengi beyaz */
+  border: none; /* Kenarlık yok */
+  height: 50px; /* Yükseklik */
+  width: 95px; /* Genişlik */
+  border-radius: 4px; /* Köşe yuvarlama */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Geçiş efekti */
+}
+
+.btn-individual:hover {
+  background-color: #3b70a1; /* Hover için daha koyu ton */
+  transform: scale(1.05); /* Hover sırasında butonu büyüt */
+}
+
+.btn-individual.active {
+  background-color: #4682B4; /* Aktif durumda daha koyu bir mavi */
+}
+
+.btn-individual.inactive {
+  background-color: #6c757d; /* İnaktif durumda gri renk */
+  color: white; /* İnaktif durumda metin rengi beyaz */
+}
+
+
+.content-container {
+  background-color: aliceblue; /* İçeriğin arka plan rengini beyaz yapar */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hafif bir gölge efekti */
+  border-radius: 8px; /* Köşeleri yuvarlar */
+}
+
+
+.btn-show-cars {
+  background-color: #4682B4; /* Steel Blue */
+  color: white;
+  border: none;
+  height: 50px;
+  width: 200px;
+  margin-left: 550px;
+  font-size: 18px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-show-cars:hover {
+  background-color: #3b70a1; /* Hover için daha koyu ton */
+  transform: scale(1.05);
+}
+
+
