@@ -1,4 +1,8 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> 88816fa (location and car component added)
 =======
 
 >>>>>>> 88816fa (location and car component added)
@@ -16,7 +20,11 @@ import { CartService } from 'src/app/services/cart.service';
 })
 export class CarComponent implements OnInit {
 <<<<<<< HEAD
+<<<<<<< HEAD
   carDetail:CarDetail[]=[]
+=======
+  carDetail:CarDetail[]=[];
+>>>>>>> 88816fa (location and car component added)
 =======
   carDetail:CarDetail[]=[];
 >>>>>>> 88816fa (location and car component added)
@@ -35,6 +43,12 @@ export class CarComponent implements OnInit {
         this.getCarsByColorId(params["colorId"]);
       }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+      else if (params["locationId"]) {
+        this.getCarsByLocationId(params["locationId"]);
+      }
+>>>>>>> 88816fa (location and car component added)
 =======
       else if (params["locationId"]) {
         this.getCarsByLocationId(params["locationId"]);
@@ -67,13 +81,19 @@ export class CarComponent implements OnInit {
       });
      }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 88816fa (location and car component added)
      getCarsByLocationId(locationId:number) {
       this.carService.getCarsByLocationId(locationId).subscribe(response=>{
        this.carDetail=response.data;
        this.dataLoaded=true;
       });
      }
+<<<<<<< HEAD
+>>>>>>> 88816fa (location and car component added)
+=======
 >>>>>>> 88816fa (location and car component added)
      doesntrent(car:CarDetail){
       this.toastrService.error("Şuan Başka Birisine Kiralı",car.description)
@@ -81,6 +101,10 @@ export class CarComponent implements OnInit {
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> 88816fa (location and car component added)
 =======
 
 >>>>>>> 88816fa (location and car component added)

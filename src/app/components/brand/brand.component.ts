@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Brand } from 'src/app/models/brand';
 import { BrandService } from 'src/app/services/brand.service';
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+import { CarService } from 'src/app/services/car.service';
+>>>>>>> 88816fa (location and car component added)
 =======
 import { CarService } from 'src/app/services/car.service';
 >>>>>>> 88816fa (location and car component added)
@@ -19,7 +23,11 @@ export class BrandComponent implements OnInit {
    
 
 <<<<<<< HEAD
+<<<<<<< HEAD
  constructor(private brandService:BrandService) {}
+=======
+ constructor(private brandService:BrandService,private carService:CarService) {}
+>>>>>>> 88816fa (location and car component added)
 =======
  constructor(private brandService:BrandService,private carService:CarService) {}
 >>>>>>> 88816fa (location and car component added)
@@ -57,6 +65,11 @@ export class BrandComponent implements OnInit {
     }
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  
+
+>>>>>>> 88816fa (location and car component added)
 =======
   
 

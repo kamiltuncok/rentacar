@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 export interface Rental{
     rentalId:number,
     carId:number,
@@ -7,6 +8,8 @@ export interface Rental{
     returnDate:Date
 }
 =======
+=======
+>>>>>>> 88816fa (location and car component added)
 export interface Rental {
     rentalId: number;
     carId: number;
@@ -24,4 +27,7 @@ export enum CustomerType {
     Corporate = 1
   }
 
+<<<<<<< HEAD
+>>>>>>> 88816fa (location and car component added)
+=======
 >>>>>>> 88816fa (location and car component added)

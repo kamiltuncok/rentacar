@@ -13,6 +13,7 @@ import { ColorService } from 'src/app/services/color.service';
 })
 export class ColorUpdateComponent implements OnInit {
 <<<<<<< HEAD
+<<<<<<< HEAD
   updateFormGroup: FormGroup;
   constructor(private colorService:ColorService, private router:ActivatedRoute, private formBuilder:FormBuilder, private toastrService:ToastrService) {}
   color =new FormGroup({colorName:new FormControl('')});
@@ -24,6 +25,8 @@ export class ColorUpdateComponent implements OnInit {
       });
     });
 =======
+=======
+>>>>>>> 88816fa (location and car component added)
   color = new FormGroup({
     colorName: new FormControl(null, [Validators.required]),
   });
@@ -36,6 +39,9 @@ export class ColorUpdateComponent implements OnInit {
        ...result.data[0]
       });
     })
+<<<<<<< HEAD
+>>>>>>> 88816fa (location and car component added)
+=======
 >>>>>>> 88816fa (location and car component added)
   }
 

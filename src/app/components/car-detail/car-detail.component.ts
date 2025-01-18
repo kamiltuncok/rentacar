@@ -1,13 +1,19 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CarDetail } from 'src/app/models/carDetail';
 =======
+=======
+>>>>>>> 88816fa (location and car component added)
 import { CarDetail } from './../../models/carDetail';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+<<<<<<< HEAD
+>>>>>>> 88816fa (location and car component added)
+=======
 >>>>>>> 88816fa (location and car component added)
 import { CarImage } from 'src/app/models/carImage';
 import { CarImageService } from 'src/app/services/car-image.service';
@@ -21,6 +27,7 @@ import { CartService } from 'src/app/services/cart.service';
 })
 export class CarDetailComponent {
 <<<<<<< HEAD
+<<<<<<< HEAD
   carDetails:CarDetail[]=[]
   carDetail: CarDetail;
   carImage:CarImage;
@@ -28,11 +35,16 @@ export class CarDetailComponent {
   apiUrl="https://localhost:44306/";
   defaultImagePath = 'https://www.volvocars.com/images/v/-/media/project/contentplatform/data/media/homepage/featured-models/xc90-recharge-desktop-4x3.jpg?h=1440&iar=0&w=1920';
 =======
+=======
+>>>>>>> 88816fa (location and car component added)
   carDetail: CarDetail;
   carImage:CarImage;
   dataLoaded=false;
   apiUrl="https://localhost:44306/Uploads/Images/";
   defaultImagePath = 'https://www.araba.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Ftasit-com%2Fimages%2Ff_webp%2Cq_auto%2Fv1694162148%2Fmg-araba-modelleri%2Fmg-araba-modelleri.webp%3F_i%3DAA&w=3840&q=75';
+<<<<<<< HEAD
+>>>>>>> 88816fa (location and car component added)
+=======
 >>>>>>> 88816fa (location and car component added)
 
   constructor(
@@ -44,6 +56,7 @@ export class CarDetailComponent {
   ngOnInit():void{
     this.activatedRoute.params.subscribe(params=> {  
       this.getCarById(params["carId"]);
+<<<<<<< HEAD
 <<<<<<< HEAD
       this.getCarImageByCarId(params["carId"]);
     })
@@ -64,6 +77,8 @@ export class CarDetailComponent {
   getImagePath(carImage: CarImage):string {
     let url:string=carImage.imagePath
 =======
+=======
+>>>>>>> 88816fa (location and car component added)
     })
   }
   
@@ -86,6 +101,9 @@ export class CarDetailComponent {
 
   getImagePath(carImage: CarImage):string {
     let url:string="https://localhost:44306/Uploads/Images/" + carImage.imagePath
+<<<<<<< HEAD
+>>>>>>> 88816fa (location and car component added)
+=======
 >>>>>>> 88816fa (location and car component added)
     return  url;
   }

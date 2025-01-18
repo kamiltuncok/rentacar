@@ -1,4 +1,8 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+import { ResponseModel } from './../models/responseModel';
+>>>>>>> 88816fa (location and car component added)
 =======
 import { ResponseModel } from './../models/responseModel';
 >>>>>>> 88816fa (location and car component added)
@@ -27,10 +31,16 @@ export class RentalService {
     .get<ListResponseModel<RentalDetail>>(newPath)
    }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 88816fa (location and car component added)
 
    add(rental:Rental):Observable<ResponseModel>{
     return this.httpClient.post<ResponseModel>(this.apiUrl+"rentals/add",rental)
   }
+<<<<<<< HEAD
+>>>>>>> 88816fa (location and car component added)
+=======
 >>>>>>> 88816fa (location and car component added)
 }
