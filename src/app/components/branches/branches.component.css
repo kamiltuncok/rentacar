@@ -1,0 +1,21 @@
+.container {
+    margin-top: 20px;
+  }
+  
+  .card {
+    background-color:ghostwhite; /* Arka planı beyaz yap */
+    border: 2px solid black;  /* Kenarlık ekle */
+    border-radius: 8px;      /* Kenarları hafif yuvarla */
+    padding: 20px;           /* İçerik ile kenarlık arasında boşluk bırak */
+    margin-bottom: 15px;     /* Kartlar arasına boşluk ekle */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti */
+  }
+  
+  .card h4 {
+    margin-bottom: 10px;
+  }
+  
+  .card p {
+    margin: 5px 0;
+  }
+  

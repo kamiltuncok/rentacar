@@ -1,0 +1,87 @@
+<div class="container" *ngIf="dataLoaded">
+  <div class="info-row">
+    <div class="label">Alış</div>
+    <div class="label">Alış Tarih</div>
+    <div class="label">Alış Saat</div>
+    <div class="label">Dönüş</div>
+    <div class="label">Dönüş Tarih</div>
+    <div class="label">Dönüş Saat</div>
+    <div class="label">Fark</div>
+  </div>
+  <div class="info-row">
+    <div class="value">{{ locationName }}</div>
+    <div class="value">{{ from }}</div>
+    <div class="value">{{ startTime }}</div>
+    <div class="value">{{ locationEndName }}</div>
+    <div class="value">{{ to }}</div>
+    <div class="value">{{ endTime }}</div>
+    <div class="value">{{ gun }}</div>
+  </div>
+   
+  <hr style="border: 0.5px solid black;">
+  
+  <div class="row">
+    <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let car of carDetails">
+      <div class="card" style="margin-bottom: 20px;">
+        <div class="card-body">
+          <img
+            *ngIf="car.imagePath && car.imagePath.length > 0; else otherContent"
+            [src]="getImagePath(car)"
+            class="card-img-top"
+            alt="..."
+            style="height: 200px; object-fit: cover; width: 100%;"
+          />
+          <ng-template #otherContent>
+            <div class="picsum-img-wrapper">
+              <img
+                [src]="defaultImagePath"
+                class="card-img-top"
+                alt="..."
+                style="height: 200px; object-fit: cover; width: 100%;"
+              />
+            </div>
+          </ng-template>
+          <div class="card-body">
+            <h5 class="card-title">{{car.description}}</h5>
+            <div class="d-flex align-items-center">
+
+              <div class="d-flex align-items-center">
+                <img
+                  [src]="'assets/images/gas-station.png'"
+                  alt="{{car.fuelName}}"
+                  style="height: 24px; width: auto; margin-right: 6px;"
+                />
+                <span>{{car.fuelName}}</span>
+              </div>
+            
+              <div class="d-flex align-items-center ms-auto" style="margin-right: 50px;">
+                <img
+                  [src]="'assets/images/manual-transmission.png'"
+                  alt="{{car.gearName}}"
+                  style="height: 24px; width: auto; margin-right: 6px;"
+                />
+                <span>{{car.gearName}}</span>
+                </div>
+            </div>
+            
+            <br>
+            <div class="d-flex align-items-center">
+              <img
+                [src]="'assets/images/deposit.png'"
+                alt="{{car.deposit}}"
+                style="height: 24px; width: auto; margin-right: 6px;"
+              />
+              <span>Depozito: {{car.deposit}}₺</span>
+            </div>
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the bulk of the card's content.
+            </p>
+            <div class="d-flex justify-content-center">
+              <a (click)="navigateToPayment(car.carId)" type="button" class="btn btn-success">Rent</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

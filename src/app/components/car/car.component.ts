@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 88816fa (location and car component added)
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -11,7 +15,11 @@ import { CartService } from 'src/app/services/cart.service';
   styleUrls: ['./car.component.css']
 })
 export class CarComponent implements OnInit {
+<<<<<<< HEAD
   carDetail:CarDetail[]=[]
+=======
+  carDetail:CarDetail[]=[];
+>>>>>>> 88816fa (location and car component added)
   dataLoaded=false;
   filterText="";
 
@@ -26,6 +34,12 @@ export class CarComponent implements OnInit {
       else if (params["colorId"]) {
         this.getCarsByColorId(params["colorId"]);
       }
+<<<<<<< HEAD
+=======
+      else if (params["locationId"]) {
+        this.getCarsByLocationId(params["locationId"]);
+      }
+>>>>>>> 88816fa (location and car component added)
       else{
         this.getCarDetails()
       } 
@@ -52,10 +66,23 @@ export class CarComponent implements OnInit {
        this.dataLoaded=true;
       });
      }
+<<<<<<< HEAD
+=======
+     getCarsByLocationId(locationId:number) {
+      this.carService.getCarsByLocationId(locationId).subscribe(response=>{
+       this.carDetail=response.data;
+       this.dataLoaded=true;
+      });
+     }
+>>>>>>> 88816fa (location and car component added)
      doesntrent(car:CarDetail){
       this.toastrService.error("Şuan Başka Birisine Kiralı",car.description)
    }
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 88816fa (location and car component added)
      
 }

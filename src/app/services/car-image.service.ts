@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 import { HttpClient } from '@angular/common/http';
+=======
+import { SingleResponseModel } from './../models/singleResponseModel';
+import { ResponseModel } from './../models/responseModel';
+import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
+>>>>>>> 88816fa (location and car component added)
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CarImage } from '../models/carImage';
@@ -23,5 +29,33 @@ export class CarImageService {
   let newPath = this.apiURL + "carimages/getbycarid?carId="+carId 
   return this.httpClient.get<ListResponseModel<CarImage>>(newPath);     
  }
+<<<<<<< HEAD
+=======
+ add(formData: FormData): Observable<ResponseModel> {
+  return this.httpClient.post<ResponseModel>(this.apiURL + 'carimages/add', formData);
+}
+getCarImagesColorAndBrandId(brandId: number, colorId: number): Observable<SingleResponseModel<CarImage>> {
+  let newPath = this.apiURL + `carimages/getcarimagebycolorandbrandid?brandId=${brandId}&colorId=${colorId}`;
+  return this.httpClient.get<SingleResponseModel<CarImage>>(newPath);
+}
+
+
+upload(file: File): Observable<HttpEvent<any>> {
+  const formData: FormData = new FormData();
+
+  formData.append('file', file);
+
+  const req = new HttpRequest('POST', `${this.apiURL}carimages/add`, formData, {
+    reportProgress: true,
+    responseType: 'json'
+  });
+
+  return this.httpClient.request(req);
+}
+
+getFiles(): Observable<any> {
+  return this.httpClient.get(`${this.apiURL}carimages/getall`);
+}
+>>>>>>> 88816fa (location and car component added)
 
 }

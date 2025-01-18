@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <label for="citySelect">Şehir Seçiniz:</label>
+        <select id="citySelect" class="form-control" (change)="onCityChange($event)">
+          <option value="">Tüm Şehirler</option>
+          <option value="Ankara">Ankara</option>
+          <option value="Istanbul">İstanbul</option>
+        </select>
+      </div>
+  
+      <div class="col-md-9">
+        <div *ngFor="let location of locations" class="location-item card">
+          <h4>{{ location.locationName }}</h4>
+          <p><strong>Şehir:</strong> {{ location.locationCity }}</p>
+          <p><strong>Adres:</strong> {{ location.address }}</p>
+          <p><strong>Email:</strong> {{ location.email }}</p>
+          <p><strong>Telefon:</strong> {{ location.phoneNumber }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

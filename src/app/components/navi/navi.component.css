@@ -1,0 +1,15 @@
+.navbar-brand:hover {
+    color: black; /* Color on hover */
+}
+.navbar-brand {
+    color:powderblue; /* Color on hover */
+}
+
+#right{
+    margin-left:550px;
+}
+#righta{
+    margin-left:850px;
+}
+
+
