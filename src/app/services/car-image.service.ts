@@ -1,11 +1,5 @@
 <<<<<<< HEAD
-<<<<<<< HEAD
 import { HttpClient } from '@angular/common/http';
-=======
-import { SingleResponseModel } from './../models/singleResponseModel';
-import { ResponseModel } from './../models/responseModel';
-import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
->>>>>>> 88816fa (location and car component added)
 =======
 import { SingleResponseModel } from './../models/singleResponseModel';
 import { ResponseModel } from './../models/responseModel';
@@ -36,10 +30,7 @@ export class CarImageService {
   return this.httpClient.get<ListResponseModel<CarImage>>(newPath);     
  }
 <<<<<<< HEAD
-<<<<<<< HEAD
 =======
-=======
->>>>>>> 88816fa (location and car component added)
  add(formData: FormData): Observable<ResponseModel> {
   return this.httpClient.post<ResponseModel>(this.apiURL + 'carimages/add', formData);
 }
@@ -65,9 +56,6 @@ upload(file: File): Observable<HttpEvent<any>> {
 getFiles(): Observable<any> {
   return this.httpClient.get(`${this.apiURL}carimages/getall`);
 }
-<<<<<<< HEAD
->>>>>>> 88816fa (location and car component added)
-=======
 >>>>>>> 88816fa (location and car component added)
 
 }

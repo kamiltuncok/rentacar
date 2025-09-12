@@ -13,7 +13,6 @@ import { CarService } from 'src/app/services/car.service';
 })
 export class BrandUpdateComponent implements OnInit {
 <<<<<<< HEAD
-<<<<<<< HEAD
   updateFormGroup: FormGroup;
   constructor(private brandService:BrandService, private router:ActivatedRoute, private formBuilder:FormBuilder, private toastrService:ToastrService) {}
   brand =new FormGroup({brandName:new FormControl('')});
@@ -25,8 +24,6 @@ export class BrandUpdateComponent implements OnInit {
       });
     });
 =======
-=======
->>>>>>> 88816fa (location and car component added)
   brand = new FormGroup({
     brandName: new FormControl(null, [Validators.required]),
   });
@@ -39,9 +36,6 @@ export class BrandUpdateComponent implements OnInit {
        ...result.data[0]
       });
     })
-<<<<<<< HEAD
->>>>>>> 88816fa (location and car component added)
-=======
 >>>>>>> 88816fa (location and car component added)
   }
 

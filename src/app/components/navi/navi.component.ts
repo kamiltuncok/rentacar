@@ -1,9 +1,6 @@
 <<<<<<< HEAD
-<<<<<<< HEAD
 import { Component } from '@angular/core';
 =======
-=======
->>>>>>> 88816fa (location and car component added)
 import { CustomerType } from './../../models/rental';
 import { CorporateUser } from './../../models/corporateUser';
 import { Component, OnInit } from '@angular/core';
@@ -14,9 +11,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { UserService } from 'src/app/services/user.service';
 import { CorporateUserService } from 'src/app/services/corporate-user.service';
-<<<<<<< HEAD
->>>>>>> 88816fa (location and car component added)
-=======
 >>>>>>> 88816fa (location and car component added)
 
 @Component({
@@ -25,12 +19,9 @@ import { CorporateUserService } from 'src/app/services/corporate-user.service';
   styleUrls: ['./navi.component.css']
 })
 <<<<<<< HEAD
-<<<<<<< HEAD
 export class NaviComponent {
 
 =======
-=======
->>>>>>> 88816fa (location and car component added)
 export class NaviComponent implements OnInit {
 
   user: User | null = null; // Bireysel kullanıcı verisi
@@ -107,8 +98,5 @@ export class NaviComponent implements OnInit {
   getProfileUrl(): string {
     return this.isCorporate ? '/profilecorporate' : '/profile';
   }
-<<<<<<< HEAD
->>>>>>> 88816fa (location and car component added)
-=======
 >>>>>>> 88816fa (location and car component added)
 }

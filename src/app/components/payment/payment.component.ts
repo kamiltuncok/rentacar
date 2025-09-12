@@ -1,5 +1,4 @@
 <<<<<<< HEAD
-<<<<<<< HEAD
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { CarDetail } from 'src/app/models/carDetail';
@@ -7,8 +6,6 @@ import { CartService } from 'src/app/services/cart.service';
 import { CarService } from 'src/app/services/car.service';
 import { ActivatedRoute } from '@angular/router';
 =======
-=======
->>>>>>> 88816fa (location and car component added)
 import { CustomerType } from './../../models/rental';
 import { IndividualCustomerService } from './../../services/individual-customer.service';
 import { UserService } from './../../services/user.service';
@@ -22,9 +19,6 @@ import { CustomerService } from 'src/app/services/customer.service';
 import { RentalService } from 'src/app/services/rental.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { formatDate } from '@angular/common';
-<<<<<<< HEAD
->>>>>>> 88816fa (location and car component added)
-=======
 >>>>>>> 88816fa (location and car component added)
 
 @Component({
@@ -33,7 +27,6 @@ import { formatDate } from '@angular/common';
   styleUrls: ['./payment.component.css']
 })
 export class PaymentComponent implements OnInit {
-<<<<<<< HEAD
 <<<<<<< HEAD
   carDetails:CarDetail[]=[];
 
@@ -60,8 +53,6 @@ export class PaymentComponent implements OnInit {
       this.cartService.pay(car);
    }
 =======
-=======
->>>>>>> 88816fa (location and car component added)
   carDetail: CarDetail;
   customerAddForm: FormGroup;
   rentalForm: FormGroup;
@@ -253,8 +244,5 @@ export class PaymentComponent implements OnInit {
       );
     }
   }
-<<<<<<< HEAD
->>>>>>> 88816fa (location and car component added)
-=======
 >>>>>>> 88816fa (location and car component added)
 }

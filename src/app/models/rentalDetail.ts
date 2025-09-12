@@ -6,13 +6,7 @@ export interface RentalDetail{
     customerId:number,
     rentDate:Date,
 <<<<<<< HEAD
-<<<<<<< HEAD
     returnDate:Date
-=======
-    returnDate:Date,
-    isReturned: boolean;
-    customerType: number;
->>>>>>> 88816fa (location and car component added)
 =======
     returnDate:Date,
     isReturned: boolean;

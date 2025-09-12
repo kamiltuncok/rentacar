@@ -1,9 +1,4 @@
 <<<<<<< HEAD
-<<<<<<< HEAD
-=======
-import { ResponseModel } from './../models/responseModel';
-import { SingleResponseModel } from './../models/singleResponseModel';
->>>>>>> 88816fa (location and car component added)
 =======
 import { ResponseModel } from './../models/responseModel';
 import { SingleResponseModel } from './../models/singleResponseModel';
@@ -31,10 +26,7 @@ export class CustomerService {
     .get<ListResponseModel<Customer>>(newPath)
    }
 <<<<<<< HEAD
-<<<<<<< HEAD
 =======
-=======
->>>>>>> 88816fa (location and car component added)
    add(customer:Customer):Observable<ResponseModel>{
     return this.httpClient.post<ResponseModel>(this.apiUrl+"customers/add",customer)
   }
@@ -52,8 +44,5 @@ export class CustomerService {
     let newUrl = "https://localhost:44306/api/customers/update"
     return this.httpClient.post<ResponseModel>(newUrl, customer)
   }
-<<<<<<< HEAD
->>>>>>> 88816fa (location and car component added)
-=======
 >>>>>>> 88816fa (location and car component added)
 }

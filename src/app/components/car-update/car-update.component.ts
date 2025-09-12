@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 <<<<<<< HEAD
-<<<<<<< HEAD
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-=======
-import { FormControl, FormGroup, Validators } from '@angular/forms';
->>>>>>> 88816fa (location and car component added)
 =======
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 >>>>>>> 88816fa (location and car component added)
@@ -16,7 +12,6 @@ import { CarService } from 'src/app/services/car.service';
 @Component({
   selector: 'app-car-update',
   templateUrl: './car-update.component.html',
-<<<<<<< HEAD
 <<<<<<< HEAD
   styleUrls: ['./car-update.component.css']
 })
@@ -63,8 +58,6 @@ export class CarUpdateComponent implements OnInit {
   }
 }
 =======
-=======
->>>>>>> 88816fa (location and car component added)
   styleUrls: ['./car-update.component.css'],
 })
 export class CarUpdateComponent implements OnInit {
@@ -115,9 +108,5 @@ export class CarUpdateComponent implements OnInit {
       );
     }
   }
-<<<<<<< HEAD
-}
->>>>>>> 88816fa (location and car component added)
-=======
 }
 >>>>>>> 88816fa (location and car component added)

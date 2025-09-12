@@ -1,28 +1,16 @@
 <<<<<<< HEAD
-<<<<<<< HEAD
 =======
-=======
->>>>>>> 88816fa (location and car component added)
 import { Fuel } from './../../models/fuel';
 import { FuelService } from './../../services/fuel.service';
 import { Brand } from './../../models/brand';
 import { Color } from './../../models/color';
 import { Location } from './../../models/location';
-<<<<<<< HEAD
->>>>>>> 88816fa (location and car component added)
-=======
 >>>>>>> 88816fa (location and car component added)
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CarService } from 'src/app/services/car.service';
 <<<<<<< HEAD
-<<<<<<< HEAD
-=======
-import { BrandService } from 'src/app/services/brand.service'; // Import BrandService
-import { ColorService } from 'src/app/services/color.service'; // Import ColorService
-import { LocationService } from 'src/app/services/location.service'; // Import LocationService
->>>>>>> 88816fa (location and car component added)
 =======
 import { BrandService } from 'src/app/services/brand.service'; // Import BrandService
 import { ColorService } from 'src/app/services/color.service'; // Import ColorService
@@ -35,7 +23,6 @@ import { LocationService } from 'src/app/services/location.service'; // Import L
   styleUrls: ['./car-add.component.css']
 })
 export class CarAddComponent implements OnInit {
-<<<<<<< HEAD
 <<<<<<< HEAD
   carAddForm:FormGroup;
 
@@ -73,8 +60,6 @@ export class CarAddComponent implements OnInit {
     else{
       this.toastrService.error("Formunuz Eksik","Dikkat")
 =======
-=======
->>>>>>> 88816fa (location and car component added)
   carAddForm: FormGroup;
   brands: Brand[] = []; // Array to hold brand data
   colors: Color[] = []; // Array to hold color data
@@ -164,9 +149,6 @@ export class CarAddComponent implements OnInit {
       }
     } else {
       this.toastrService.error('Form is incomplete', 'Attention');
-<<<<<<< HEAD
->>>>>>> 88816fa (location and car component added)
-=======
 >>>>>>> 88816fa (location and car component added)
     }
   }

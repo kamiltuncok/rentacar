@@ -15,6 +15,23 @@ import { CarUpdateComponent } from './components/car-update/car-update.component
 import { CarComponent } from './components/car/car.component';
 import { ColorAddComponent } from './components/color-add/color-add.component';
 import { ColorUpdateComponent } from './components/color-update/color-update.component';
+<<<<<<< HEAD
+import { PaymentComponent } from './components/payment/payment.component';
+
+const routes: Routes = [
+  {path:"",pathMatch:"full", component:CarComponent},
+  {path:"cars", component:CarComponent},
+  {path:"cars/brand/:brandId", component:CarComponent},
+  {path:"cars/color/:colorId", component:CarComponent},
+  {path:"carDetail/:carId", component:CarDetailComponent},
+  {path:"carDetail/:carId/payment", component:PaymentComponent},
+  {path:"cars/add", component:CarAddComponent},
+  {path:"cars/update/:id", component:CarUpdateComponent},
+  {path:"brands/add", component:BrandAddComponent},
+  {path:"brands/update/:brandId", component:BrandUpdateComponent},
+  {path:"colors/add", component:ColorAddComponent},
+  {path:"colors/update/:colorId", component:ColorUpdateComponent},
+=======
 import { LoginComponent } from './components/login/login.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { ProfileComponent } from './components/profile/profile.component';
@@ -47,6 +64,7 @@ const routes: Routes = [
   {path:"registerforcorporate", component:RegisterforcorporateComponent},
   {path:"profile", component:ProfileComponent,canActivate:[LoginGuard]},
   {path:"branches", component:BranchesComponent},
+>>>>>>> 88816fa (location and car component added)
 ];
 
 @NgModule({

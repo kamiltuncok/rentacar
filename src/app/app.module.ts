@@ -10,7 +10,11 @@ import { ColorComponent } from './components/color/color.component';
 import { CustomerComponent } from './components/customer/customer.component';
 import { RentalComponent } from './components/rental/rental.component';
 import { NaviComponent } from './components/navi/navi.component';
+<<<<<<< HEAD
+import { HttpClientModule } from '@angular/common/http';
+=======
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+>>>>>>> 88816fa (location and car component added)
 
 
 import { ToastrModule } from "ngx-toastr";
@@ -25,6 +29,8 @@ import { ColorAddComponent } from './components/color-add/color-add.component';
 import { CarUpdateComponent } from './components/car-update/car-update.component';
 import { ColorUpdateComponent } from './components/color-update/color-update.component';
 import { BrandUpdateComponent } from './components/brand-update/brand-update.component';
+<<<<<<< HEAD
+=======
 import { LoginComponent } from './components/login/login.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { RegisterComponent } from './components/register/register.component';
@@ -38,6 +44,7 @@ import { RegisterforcorporateComponent } from './components/registerforcorporate
 import { LoginforcorporateComponent } from './components/loginforcorporate/loginforcorporate.component';
 import { PaymentcorporateComponent } from './components/paymentcorporate/paymentcorporate.component';
 import { BranchesComponent } from './components/branches/branches.component';
+>>>>>>> 88816fa (location and car component added)
 
 
 @NgModule({
@@ -59,6 +66,8 @@ import { BranchesComponent } from './components/branches/branches.component';
     CarUpdateComponent,
     ColorUpdateComponent,
     BrandUpdateComponent,
+<<<<<<< HEAD
+=======
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
@@ -70,6 +79,7 @@ import { BranchesComponent } from './components/branches/branches.component';
     LoginforcorporateComponent,
     PaymentcorporateComponent,
     BranchesComponent
+>>>>>>> 88816fa (location and car component added)
 
   ],
   imports: [
@@ -83,11 +93,14 @@ import { BranchesComponent } from './components/branches/branches.component';
     ToastrModule.forRoot({
       positionClass: "toast-bottom-right"
     }),
+<<<<<<< HEAD
+=======
   ],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true},
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     JwtHelperService
 
+>>>>>>> 88816fa (location and car component added)
   ],
   bootstrap: [AppComponent]
 })
