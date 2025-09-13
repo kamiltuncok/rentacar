@@ -1,25 +1,22 @@
-<<<<<<< HEAD
 import { Component, OnInit } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-import { CarDetail } from 'src/app/models/carDetail';
-import { CartService } from 'src/app/services/cart.service';
-import { CarService } from 'src/app/services/car.service';
-import { ActivatedRoute } from '@angular/router';
-=======
-import { CustomerType } from './../../models/rental';
-import { IndividualCustomerService } from './../../services/individual-customer.service';
-import { UserService } from './../../services/user.service';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { CarDetail } from 'src/app/models/carDetail';
-import { CarService } from 'src/app/services/car.service';
-import { CustomerService } from 'src/app/services/customer.service';
-import { RentalService } from 'src/app/services/rental.service';
-import { AuthService } from 'src/app/services/auth.service';
 import { formatDate } from '@angular/common';
->>>>>>> 88816fa (location and car component added)
+
+import { CarDetail } from 'src/app/models/carDetail';
+import { CustomerType } from './../../models/rental';
+
+import { CarService } from 'src/app/services/car.service';
+import { CartService } from 'src/app/services/cart.service';
+import { IndividualCustomerService } from './../../services/individual-customer.service';
+import { RentalService } from './../../services/rental.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
+
+interface ErrorModel {
+  ErrorMessage: string;
+}
 
 @Component({
   selector: 'app-payment',
@@ -27,32 +24,6 @@ import { formatDate } from '@angular/common';
   styleUrls: ['./payment.component.css']
 })
 export class PaymentComponent implements OnInit {
-<<<<<<< HEAD
-  carDetails:CarDetail[]=[];
-
-  carDetail:CarDetail;
-
-
-  constructor(private activatedRoute:ActivatedRoute,
-    private carService:CarService,
-    private toastrService:ToastrService,
-    private cartService:CartService) {}
-
-  ngOnInit():void {
-    this.activatedRoute.params.subscribe(params=> {  
-      this.getCarById(params["carId"]);
-    })
-  }
-  getCarById(carId:number){
-    this.carService.getCarDetailById(carId).subscribe(response=>{
-     this.carDetail=response.data;
-    })
-  }
-  pay(car:CarDetail){
-      this.toastrService.success("Araba Kiralandı",car.description)
-      this.cartService.pay(car);
-   }
-=======
   carDetail: CarDetail;
   customerAddForm: FormGroup;
   rentalForm: FormGroup;
@@ -68,6 +39,7 @@ export class PaymentComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private carService: CarService,
+    private cartService: CartService,
     private formBuilder: FormBuilder,
     private customerService: IndividualCustomerService,
     private rentalService: RentalService,
@@ -81,6 +53,7 @@ export class PaymentComponent implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       this.getCarById(params['carId']);
     });
+
     this.activatedRoute.queryParams.subscribe((queryParams) => {
       const from = queryParams['from'];
       const startTime = queryParams['startTime'];
@@ -93,9 +66,10 @@ export class PaymentComponent implements OnInit {
       this.rentdate = `${from} ${startTime}`;
       this.returndate = `${to} ${endTime}`;
     });
+
     this.createCustomerAddForm();
     this.createRentalForm();
-    this.getCustomerInfo(); // Müşteri bilgisi kontrolü
+    this.getCustomerInfo();
   }
 
   getCarById(carId: number) {
@@ -119,24 +93,21 @@ export class PaymentComponent implements OnInit {
 
   addCustomerAndRental() {
     if (this.customerAddForm.valid) {
-      let customerModel = Object.assign({}, this.customerAddForm.value);
+      const customerModel = Object.assign({}, this.customerAddForm.value);
       this.customerService.add(customerModel).subscribe(
         (response: any) => {
           if (response.success) {
-            this.customerId = response.data.customerId; // CustomerId'yi al
+            this.customerId = response.data.customerId;
             this.toastrService.success('Müşteri Eklendi', 'Başarılı');
-            this.rentalForm.get('customerId').patchValue(this.customerId);
+            this.rentalForm.get('customerId')?.patchValue(this.customerId);
             this.addRentalEntry();
           }
         },
-        (responseError) => {
-          if (responseError.error.Errors && responseError.error.Errors.length > 0) {
-            for (let i = 0; i < responseError.error.Errors.length; i++) {
-              this.toastrService.error(
-                responseError.error.Errors[i].ErrorMessage,
-                'Doğrulama Hatası'
-              );
-            }
+        (responseError: any) => {
+          if (responseError.error?.Errors && responseError.error.Errors.length > 0) {
+            responseError.error.Errors.forEach((err: ErrorModel) => {
+              this.toastrService.error(err.ErrorMessage, 'Doğrulama Hatası');
+            });
           } else {
             this.toastrService.error('Müşteri eklenirken bir hata oluştu.', 'Hata');
           }
@@ -148,25 +119,11 @@ export class PaymentComponent implements OnInit {
   }
 
   createRentalForm() {
-    const formattedRentDate = formatDate(
-      this.rentdate,
-      'yyyy-MM-ddTHH:mm:ss.SSSZ',
-      'en-US'
-    );
-    const formattedReturnDate = formatDate(
-      this.returndate,
-      'yyyy-MM-ddTHH:mm:ss.SSSZ',
-      'en-US'
-    );
+    const formattedRentDate = formatDate(this.rentdate, 'yyyy-MM-ddTHH:mm:ss.SSSZ', 'en-US');
+    const formattedReturnDate = formatDate(this.returndate, 'yyyy-MM-ddTHH:mm:ss.SSSZ', 'en-US');
 
-    const formattedRentDateWithoutOffset = formattedRentDate.replace(
-      /[+-]\d{4}$/,
-      'Z'
-    );
-    const formattedReturnDateWithoutOffset = formattedReturnDate.replace(
-      /[+-]\d{4}$/,
-      'Z'
-    );
+    const formattedRentDateWithoutOffset = formattedRentDate.replace(/[+-]\d{4}$/, 'Z');
+    const formattedReturnDateWithoutOffset = formattedReturnDate.replace(/[+-]\d{4}$/, 'Z');
 
     this.rentalForm = this.formBuilder.group({
       carId: [this.GettingCarId, Validators.required],
@@ -183,34 +140,12 @@ export class PaymentComponent implements OnInit {
     if (this.rentalForm.valid) {
       const rentalModel = Object.assign({}, this.rentalForm.value);
       this.rentalService.add(rentalModel).subscribe(
-        (data) => {
+        () => {
           this.toastrService.success('Kiralama Başarılı');
-          this.carService.carisrented(rentalModel.carId).subscribe(
-            () => {
-              // Araç kiralandı durumu güncellendi
-            },
-            (error) => {
-              this.toastrService.error('Aracın kiralandı durumu güncellenirken bir hata oluştu.', 'Hata');
-            }
-          );
+          this.carService.carisrented(rentalModel.carId).subscribe();
         },
-        (responseError) => {
-          if (responseError.error && responseError.error.errors) {
-            const errors = responseError.error.errors;
-            if (Object.keys(errors).length > 0) {
-              for (let key in errors) {
-                if (errors.hasOwnProperty(key)) {
-                  errors[key].forEach((error: string) => {
-                    this.toastrService.error(error, 'Doğrulama Hatası');
-                  });
-                }
-              }
-            } else {
-              this.toastrService.error('Kiralama işlemi sırasında bir hata oluştu.', 'Hata');
-            }
-          } else {
-            this.toastrService.error('Kiralama işlemi sırasında bir hata oluştu.', 'Hata');
-          }
+        (responseError: any) => {
+          this.toastrService.error('Kiralama işlemi sırasında bir hata oluştu.', 'Hata');
         }
       );
     } else {
@@ -227,7 +162,7 @@ export class PaymentComponent implements OnInit {
       const userId = this.authService.getCurrentUserId;
       this.userService.getUserById(userId).subscribe(
         (response: any) => {
-          this.customerId = response.data.customerId; // Örnek olarak, user tablosundan müşteriye ait bir alan
+          this.customerId = response.data.customerId;
           this.customerAddForm.patchValue({
             firstName: response.data.firstName,
             lastName: response.data.lastName,
@@ -236,7 +171,7 @@ export class PaymentComponent implements OnInit {
             email: response.data.email,
             address: response.data.address
           });
-          this.hideCustomerInfo = false; // Kullanıcı giriş yapmışsa müşteri bilgisi sayfasını göster
+          this.hideCustomerInfo = false;
         },
         (error: any) => {
           this.toastrService.error('Müşteri bilgisi alınamadı.', 'Hata');
@@ -244,5 +179,4 @@ export class PaymentComponent implements OnInit {
       );
     }
   }
->>>>>>> 88816fa (location and car component added)
 }

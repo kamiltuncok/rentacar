@@ -1,12 +1,10 @@
-<<<<<<< HEAD
-=======
+
 <div class="row">
 <div class="col-md-3">
   <app-brand></app-brand>
   <app-color></app-color>
 </div>
 <div class="col-md-9">
->>>>>>> 88816fa (location and car component added)
 <div *ngIf="dataLoaded==false" class="spinner-border text-primary" role="status">
   <span class="visually-hidden">Loading...</span>
 </div>
@@ -26,10 +24,7 @@
           <th>Car Id</th>
           <th>Brand Name</th>
           <th>Color Name</th>
-<<<<<<< HEAD
-=======
           <th>Location Name</th>
->>>>>>> 88816fa (location and car component added)
           <th>Model Year</th>
           <th>Daily Price</th>
           <th>Description</th>
@@ -41,22 +36,16 @@
       <td>{{car.carId}}</td>
       <td>{{car.brandName |uppercase}}</td>
       <td>{{car.colorName |uppercase}}</td>
-<<<<<<< HEAD
-=======
       <td>{{car.locationName |uppercase}}</td>
->>>>>>> 88816fa (location and car component added)
       <td>{{car.modelYear}}</td>
       <td>{{car.dailyPrice|currency}}</td>
       <td>{{car.description}}</td>
       <td>
         <div class="btn-group">
-<<<<<<< HEAD
           <button type="button" *ngIf="car.returnDATE!=null"  routerLink="carDetail/{{car.carId}}" class="btn btn-info" aria-expanded="false">Informations</button>
           <button type="button" *ngIf="car.returnDATE==null"  (click)="doesntrent(car)"  class="btn btn-danger" aria-expanded="false">Rented</button>
-=======
           <button type="button"   routerLink="carDetail/{{car.carId}}" class="btn btn-info" aria-expanded="false">Informations</button>
           <!-- <button type="button" *ngIf="car.returnDATE==null"  (click)="doesntrent(car)"  class="btn btn-danger" aria-expanded="false">Rented</button> -->
->>>>>>> 88816fa (location and car component added)
         </div>
       </td>
   </tr>
@@ -65,8 +54,5 @@
 
 </table>
 
-<<<<<<< HEAD
-=======
 </div>
 
->>>>>>> 88816fa (location and car component added)

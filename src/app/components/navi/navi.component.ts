@@ -1,27 +1,19 @@
-<<<<<<< HEAD
-import { Component } from '@angular/core';
-=======
-import { CustomerType } from './../../models/rental';
-import { CorporateUser } from './../../models/corporateUser';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/models/user';
+import { CorporateUser } from './../../models/corporateUser';
+import { CustomerType } from './../../models/rental';
 import { AuthService } from 'src/app/services/auth.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { UserService } from 'src/app/services/user.service';
 import { CorporateUserService } from 'src/app/services/corporate-user.service';
->>>>>>> 88816fa (location and car component added)
 
 @Component({
   selector: 'app-navi',
   templateUrl: './navi.component.html',
   styleUrls: ['./navi.component.css']
 })
-<<<<<<< HEAD
-export class NaviComponent {
-
-=======
 export class NaviComponent implements OnInit {
 
   user: User | null = null; // Bireysel kullanıcı verisi
@@ -36,7 +28,7 @@ export class NaviComponent implements OnInit {
     private corporateUserService: CorporateUserService,
     private localStorageService: LocalStorageService,
     private toastrService: ToastrService,
-    private router: Router,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -53,11 +45,9 @@ export class NaviComponent implements OnInit {
   getUserData() {
     if (this.authService.isAuthenticated()) {
       const userId = this.authService.getCurrentUserId;
-      const customerType = this.authService.getCustomerType(); // Burada getCustomerType() metodunu çağırıyoruz
-  
-      // CustomerType kontrolü yap
+      const customerType = this.authService.getCustomerType(); // CustomerType kontrolü
+
       if (customerType === 'Individual') {
-        // Bireysel kullanıcı verisini al
         this.userService.getUserById(userId).subscribe(
           (response: { data: User }) => {
             this.user = response.data;
@@ -70,7 +60,6 @@ export class NaviComponent implements OnInit {
           }
         );
       } else if (customerType === 'Corporate') {
-        // Kurumsal kullanıcı verisini al
         this.corporateUserService.getUserById(userId).subscribe(
           (response: { data: CorporateUser }) => {
             this.corporateUser = response.data;
@@ -87,9 +76,6 @@ export class NaviComponent implements OnInit {
       }
     }
   }
-  
-  
-  
 
   isAuthenticated() {
     return this.authService.isAuthenticated();
@@ -98,5 +84,4 @@ export class NaviComponent implements OnInit {
   getProfileUrl(): string {
     return this.isCorporate ? '/profilecorporate' : '/profile';
   }
->>>>>>> 88816fa (location and car component added)
 }

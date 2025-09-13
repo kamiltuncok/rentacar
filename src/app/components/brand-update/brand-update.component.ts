@@ -12,43 +12,46 @@ import { CarService } from 'src/app/services/car.service';
   styleUrls: ['./brand-update.component.css']
 })
 export class BrandUpdateComponent implements OnInit {
-<<<<<<< HEAD
   updateFormGroup: FormGroup;
-  constructor(private brandService:BrandService, private router:ActivatedRoute, private formBuilder:FormBuilder, private toastrService:ToastrService) {}
-  brand =new FormGroup({brandName:new FormControl('')});
-
-  ngOnInit(): void {
-    this.brandService.getBrandsById( Number(this.router.snapshot.paramMap.get('brandId'))).subscribe((result:any)=>{
-      this.brand =new FormGroup({
-        brandName:new FormControl(result.data["brandName"], Validators.required),
-      });
-    });
-=======
   brand = new FormGroup({
     brandName: new FormControl(null, [Validators.required]),
   });
-  constructor(private brandService:BrandService, private router:ActivatedRoute, private formBuilder:FormBuilder, private toastrService:ToastrService) {}
-  
+
+  constructor(
+    private brandService: BrandService,
+    private router: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private toastrService: ToastrService
+  ) {}
 
   ngOnInit(): void {
-    this.brandService.getBrandsById(+(this.router.snapshot.paramMap.get('brandId'))).subscribe((result:any)=>{
-      this.brand.patchValue({
-       ...result.data[0]
-      });
-    })
->>>>>>> 88816fa (location and car component added)
+    const brandId = Number(this.router.snapshot.paramMap.get('brandId'));
+    this.brandService.getBrandsById(brandId).subscribe((result: any) => {
+      if (result.data && result.data.length > 0) {
+        this.brand.patchValue({
+          ...result.data[0]
+        });
+      } else if (result.data) {
+        // Fallback for single object response
+        this.brand = new FormGroup({
+          brandName: new FormControl(result.data["brandName"], Validators.required),
+        });
+      }
+    });
   }
 
-  UpdataData(){
-    if(this.brand.valid){
-      let a:any= this.brand.value.brandName;
-      let brand:Brand=Object.assign({brandId:Number(this.router.snapshot.paramMap.get('brandId'))},{brandName:a})
-      this.brandService.update(brand).subscribe(response=>{
-        this.toastrService.success(response.message)
-      }, responseError=>{
-        this.toastrService.error(responseError.error.message)
-      })
+  UpdataData() {
+    if (this.brand.valid) {
+      const brandId = Number(this.router.snapshot.paramMap.get('brandId'));
+      const brand: Brand = Object.assign({ brandId }, { brandName: this.brand.value.brandName });
+      this.brandService.update(brand).subscribe(
+        response => {
+          this.toastrService.success(response.message);
+        },
+        responseError => {
+          this.toastrService.error(responseError.error.message);
+        }
+      );
     }
   }
-
 }
