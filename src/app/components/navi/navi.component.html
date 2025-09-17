@@ -1,5 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-mid-color" style="background-color:rgb(80,128,168)">
   <div class="container">
+    <!-- Logo kısmı -->
+    <a class="navbar-brand logo-container" href="/">
+      <img src="assets/images/logocar.png" alt="Logo" class="logo-img">
+    </a>
+    
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
@@ -12,16 +17,19 @@
           <a class="navbar-brand" href="/branches">Şubeler</a>
         </li>
       </ul>
+      
       <ul *ngIf="isAuthenticated()" class="navbar-nav mr-right">
         <li class="nav-item">
           <a class="navbar-brand" href="/cars/add">Araba Ekle</a>
         </li>
       </ul>
+      
       <ul *ngIf="isAuthenticated()" class="navbar-nav mr-right">
         <li class="nav-item">
           <a class="navbar-brand" href="/carimages/add">Araba Resmi Ekle</a>
         </li>
       </ul>
+      
       <ul *ngIf="!isAuthenticated()" class="navbar-nav mr-right" id="righta">
         <li class="nav-item">
           <a class="navbar-brand" href="/login">Giriş</a>
@@ -30,21 +38,19 @@
           <a class="navbar-brand" href="/register">Kayıt ol</a>
         </li>
       </ul>
-
+      
       <ul *ngIf="isAuthenticated()" class="navbar-nav mr-right" id="right">
         <li class="nav-item">
           <a *ngIf="dataLoaded" class="navbar-brand text-blue" [routerLink]="getProfileUrl()">
             <img [src]="'assets/images/user.png'" width="30" height="30">
             {{ displayName }}
-          </a>          
+          </a>
         </li>
         <li class="nav-item">
           <a (click)="logout()" class="navbar-brand" href="">Çıkış Yap</a>
         </li>
       </ul>
-      
     </div>
   </div>
 </nav>
 <br>
-

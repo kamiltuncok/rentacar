@@ -6,10 +6,14 @@
 }
 
 #right{
-    margin-left:550px;
+    margin-left:400px;
 }
 #righta{
-    margin-left:850px;
+    margin-left:750px;
+}
+
+.logo-img {
+    height: 45px;
 }
 
 
