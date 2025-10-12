@@ -17,7 +17,7 @@ export class CarListComponent {
   locationEndName: string;
   startTime: string = '';
   endTime: string = '';
-  gun: string = '';
+  gun: number;
   from: string = '';
   to: string = '';
   dataLoaded = false;

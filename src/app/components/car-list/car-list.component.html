@@ -41,43 +41,55 @@
               />
             </div>
           </ng-template>
-          <div class="card-body">
-            <h5 class="card-title">{{car.description}}</h5>
-            <div class="d-flex align-items-center">
-
-              <div class="d-flex align-items-center">
-                <img
-                  [src]="'assets/images/gas-station.png'"
-                  alt="{{car.fuelName}}"
-                  style="height: 24px; width: auto; margin-right: 6px;"
-                />
-                <span>{{car.fuelName}}</span>
-              </div>
-            
-              <div class="d-flex align-items-center ms-auto" style="margin-right: 50px;">
-                <img
-                  [src]="'assets/images/manual-transmission.png'"
-                  alt="{{car.gearName}}"
-                  style="height: 24px; width: auto; margin-right: 6px;"
-                />
-                <span>{{car.gearName}}</span>
-                </div>
-            </div>
-            
-            <br>
-            <div class="d-flex align-items-center">
-              <img
-                [src]="'assets/images/deposit.png'"
-                alt="{{car.deposit}}"
+         <div class="card-body">
+    <h5 class="card-title">{{car.description}}</h5>
+    <div class="d-flex align-items-center mb-2">
+        
+        <div class="d-flex align-items-center">
+            <img
+                [src]="'assets/images/gas-station.png'"
+                alt="{{car.fuelName}}"
                 style="height: 24px; width: auto; margin-right: 6px;"
-              />
-              <span>Depozito: {{car.deposit}}₺</span>
-            </div>
-            <p class="card-text">
-              Some quick example text to build on the card title and make up the bulk of the card's content.
-            </p>
+            />
+            <span>{{car.fuelName}}</span>
+        </div>
+        
+        <div class="d-flex align-items-center ms-auto">
+            <img
+                [src]="'assets/images/manual-transmission.png'"
+                alt="{{car.gearName}}"
+                style="height: 24px; width: auto; margin-right: 6px;"
+            />
+            <span>{{car.gearName}}</span>
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center mb-3">
+
+    <div class="d-flex align-items-center">
+        <img
+            [src]="'assets/images/deposit.png'"
+            alt="{{car.deposit}}"
+            style="height: 24px; width: auto; margin-right: 6px;"
+        />
+        <span>Depozito: {{car.deposit}}₺</span>
+    </div>
+    
+    <div class="d-flex align-items-center ms-auto">
+        <img
+            [src]="'assets/images/money.png'"
+            alt="Günlük Fiyat"
+            style="height: 24px; width: auto; margin-right: 6px;"
+        />
+        <span>Günlük Fiyat: {{car.dailyPrice}}₺</span>
+    </div>
+</div>
+    
+    <p class="card-text">
+        Some quick example text to build on the card title and make up the bulk of the card's content.
+    </p>
             <div class="d-flex justify-content-center">
-              <a (click)="navigateToPayment(car.carId)" type="button" class="btn btn-success">Rent</a>
+              <a (click)="navigateToPayment(car.carId)" type="button" class="btn btn-success">{{gun}} Günlük Fiyat:{{car.dailyPrice * gun}}₺</a>
             </div>
           </div>
         </div>
