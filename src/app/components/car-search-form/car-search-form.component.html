@@ -1,0 +1,63 @@
+<div class="content-container">
+  <button *ngIf="showCloseButton" class="close-btn" (click)="onClose()">✖</button>
+
+  <div class="button-container mb-3">
+    <button class="btn btn-individual"
+      (click)="setCustomerType('individual')"
+      [ngClass]="{'active': customerType === 'individual', 'inactive': customerType !== 'individual'}">
+      Bireysel
+    </button>
+    <button class="btn btn-individual"
+      (click)="setCustomerType('corporate')"
+      [ngClass]="{'active': customerType === 'corporate', 'inactive': customerType !== 'corporate'}">
+      Kurumsal
+    </button>
+  </div>
+
+  <div class="body-row">
+    <div class="input-container">
+      <label>Teslim Alma Ofisi</label>
+      <input type="text" class="form-control" [(ngModel)]="selectedStartLocation"
+        placeholder="Teslim Alma Ofisi Seçiniz" [attr.list]="alisOfisiId" style="width: 600px"
+        (change)="setStartLocation(selectedStartLocation)">
+      <datalist [id]="alisOfisiId">
+        <option *ngFor="let option of alisOfisiOptions" [value]="option"></option>
+      </datalist>
+    </div>
+
+    <div class="input-container">
+      <label>Alış Tarihi</label>
+      <input type="date" class="form-control" [(ngModel)]="selectedStartDate">
+    </div>
+    <div class="input-container">
+      <label>Alış Saati</label>
+      <input type="time" class="form-control" [(ngModel)]="selectedStartTime">
+    </div>
+  </div>
+
+  <div class="input-container">
+    <input type="checkbox" (click)="toggleReturnOfficeVisibility($event)">
+    <label>Araç farklı bir ofiste teslim edilecek</label>
+  </div>
+
+  <div class="body-row">
+    <div class="input-container" *ngIf="isDifferentReturnOffice">
+      <label>İade Etme Ofisi</label>
+      <input type="text" class="form-control" [(ngModel)]="selectedEndLocation"
+        placeholder="İade Ofisi Seçiniz" [attr.list]="iadeOfisiId" style="width: 600px">
+      <datalist [id]="iadeOfisiId">
+        <option *ngFor="let option of iadeOfisiOptions" [value]="option"></option>
+      </datalist>
+    </div>
+    <div class="input-container">
+      <label>İade Tarihi</label>
+      <input type="date" class="form-control" [(ngModel)]="selectedEndDate">
+    </div>
+    <div class="input-container">
+      <label>İade Saati</label>
+      <input type="time" class="form-control" [(ngModel)]="selectedEndTime">
+    </div>
+  </div>
+
+  <button (click)="onSearch()" type="button" class="btn-show-cars">Araçları Göster</button>
+</div>

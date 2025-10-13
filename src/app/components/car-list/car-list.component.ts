@@ -34,21 +34,59 @@ export class CarListComponent {
   ) { }
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe(queryParams => {
-      // Retrieve query parameters
-      this.locationName = queryParams["locationName"];
-      this.locationEndName = queryParams["locationEndName"];
-      this.from = queryParams["from"];
-      this.to = queryParams["to"];
-      this.startTime = queryParams["startTime"];
-      this.endTime = queryParams["endTime"];
-      this.gun = queryParams["gun"];
-      this.customerType = +queryParams["customerType"]; // Get customer type
-  
-      // Now you have the correct values from query parameters
-      this.getCarByLocationName(this.locationName);
-    });
+  this.activatedRoute.queryParams.subscribe(queryParams => {
+    this.locationName = queryParams["locationName"];
+    this.locationEndName = queryParams["locationEndName"];
+    this.from = queryParams["from"];
+    this.to = queryParams["to"];
+    this.startTime = queryParams["startTime"];
+    this.endTime = queryParams["endTime"];
+    this.customerType = +queryParams["customerType"];
+    
+    // URL'den gelen tarihlere göre gun'ı hesapla
+    this.calculateGunFromDates();
+    
+    this.getCarByLocationName(this.locationName);
+  });
+}
+
+calculateGunFromDates() {
+  if (this.from && this.to) {
+    const startDateTime = new Date(this.from + 'T' + this.startTime);
+    const endDateTime = new Date(this.to + 'T' + this.endTime);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Geçmiş tarih kontrolü
+    if (startDateTime < today) {
+      this.toastrService.error('Teslim alma tarihi bugünden önce olamaz.', 'Hata');
+      this.router.navigate(['/home']); // Ana sayfaya yönlendir
+      return;
+    }
+
+    // Tarih sıralaması kontrolü
+    if (startDateTime >= endDateTime) {
+      this.toastrService.error('Alış tarihi, iade tarihinden önce olmalıdır.', 'Hata');
+      this.router.navigate(['/home']);
+      return;
+    }
+
+    const dayDifference = Math.ceil((endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60 * 24));
+    this.gun = dayDifference;
+    
+    sessionStorage.setItem('gun', dayDifference.toString());
+  } else {
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      this.gun = navigation.extras.state['gun'];
+    } else {
+      const storedGun = sessionStorage.getItem('gun');
+      if (storedGun) {
+        this.gun = parseInt(storedGun, 10);
+      }
+    }
   }
+}
 
   getCarByLocationName(locationName: string) {
     this.carDetailService.getCarsByLocationName(locationName).subscribe(response => {
@@ -80,10 +118,23 @@ export class CarListComponent {
   }
 
   navigateToPayment(carId: number) {
-    const routePath = this.customerType === 0 ? 'payment' : 'paymentcorporate'; // Determine route based on customer type
-    this.router.navigate([routePath, carId], {
-      relativeTo: this.activatedRoute,
-      queryParams: this.activatedRoute.snapshot.queryParams,
-    });
-  }
+  const routePath = this.customerType === 0 ? 'payment' : 'paymentcorporate';
+  
+  // Sadece gun state ile, diğerleri query param olarak
+  this.router.navigate([routePath, carId], {
+    relativeTo: this.activatedRoute,
+    queryParams: {
+      locationName: this.locationName,
+      locationEndName: this.locationEndName,
+      from: this.from,
+      to: this.to,
+      startTime: this.startTime,
+      endTime: this.endTime,
+      customerType: this.customerType
+    },
+    state: {
+      gun: this.gun
+    }
+  });
+}
 }

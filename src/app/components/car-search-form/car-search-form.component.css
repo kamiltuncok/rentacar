@@ -1,0 +1,101 @@
+/* Butonlar için genel stil */
+.btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 16px;
+  display: inline-block;
+  margin-right: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn.active {
+  background-color: #0056b3;
+}
+
+.btn.inactive {
+  background-color: #6c757d;
+  color: white;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.body-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.input-container {
+  flex: 1;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.btn-individual {
+  background-color: #4682B4;
+  color: white;
+  border: none;
+  height: 50px;
+  width: 95px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-individual:hover {
+  background-color: #3b70a1;
+  transform: scale(1.05);
+}
+
+.btn-individual.active {
+  background-color: #4682B4;
+}
+
+.btn-individual.inactive {
+  background-color: #6c757d;
+  color: white;
+}
+
+.content-container {
+  background-color: aliceblue;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  position: relative;
+}
+
+.btn-show-cars {
+  background-color: #4682B4;
+  color: white;
+  border: none;
+  height: 50px;
+  width: 200px;
+  margin-left: 550px;
+  font-size: 18px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-show-cars:hover {
+  background-color: #3b70a1;
+  transform: scale(1.05);
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  z-index: 10;
+}
