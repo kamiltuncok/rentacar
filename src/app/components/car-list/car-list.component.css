@@ -22,3 +22,48 @@
     transform: scale(1.05); /* Hover sırasında butonu büyüt */
   }
   
+  .filter-section {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.filter-group {
+  margin-bottom: 20px;
+}
+
+.filter-group h6 {
+  color: #495057;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.form-check {
+  margin-bottom: 10px;
+}
+
+.form-check-label {
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.label, .value {
+  flex: 1;
+  text-align: center;
+  padding: 5px;
+}
+
+ .text-center {
+    text-align: center;
+    font-weight: bold;
+  }
+
+
+

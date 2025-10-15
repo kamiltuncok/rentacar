@@ -1,3 +1,7 @@
+import { GearService } from './../../services/gear.service';
+import { FuelService } from './../../services/fuel.service';
+import { Fuel } from './../../models/fuel';
+import { Gear } from './../../models/gear';
 import { ToastrService } from 'ngx-toastr';
 import { CarImageService } from './../../services/car-image.service';
 import { CarImage } from './../../models/carImage';
@@ -24,11 +28,17 @@ export class CarListComponent {
   apiUrl = "https://localhost:44306/Uploads/Images/";
   defaultImagePath = 'https://www.araba.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Ftasit-com%2Fimages%2Ff_webp%2Cq_auto%2Fv1694162148%2Fmg-araba-modelleri%2Fmg-araba-modelleri.webp%3F_i%3DAA&w=3840&q=75';
   customerType: number; // Customer type to distinguish between individual and corporate
+    fuels: Fuel[] = [];
+  gears: Gear[] = [];
+  selectedFuelIds: number[] = [];
+  selectedGearIds: number[] = [];
 
   constructor(
     private carDetailService: CarService,
     private carImageService: CarImageService,
     private activatedRoute: ActivatedRoute,
+    private fuelService: FuelService,
+    private gearService: GearService,
     private toastrService: ToastrService,
     private router: Router
   ) { }
@@ -45,10 +55,69 @@ export class CarListComponent {
     
     // URL'den gelen tarihlere göre gun'ı hesapla
     this.calculateGunFromDates();
-    
+    this.getFuels();
+    this.getGears();
     this.getCarByLocationName(this.locationName);
   });
 }
+
+getFuels() {
+    this.fuelService.getFuels().subscribe(response => {
+      this.fuels = response.data;
+    });
+  }
+
+  getGears() {
+    this.gearService.getGears().subscribe(response => {
+      this.gears = response.data;
+    });
+  }
+
+ isFuelSelected(fuelId: number): boolean {
+    return this.selectedFuelIds.includes(fuelId);
+  }
+
+  // Gear checkbox durumunu kontrol et
+  isGearSelected(gearId: number): boolean {
+    return this.selectedGearIds.includes(gearId);
+  }
+
+  onFuelCheckboxChange(event: any, fuelId: number) {
+    if (event.target.checked) {
+      this.selectedFuelIds.push(fuelId);
+    } else {
+      this.selectedFuelIds = this.selectedFuelIds.filter(id => id !== fuelId);
+    }
+    this.applyFilters();
+  }
+
+  onGearCheckboxChange(event: any, gearId: number) {
+    if (event.target.checked) {
+      this.selectedGearIds.push(gearId);
+    } else {
+      this.selectedGearIds = this.selectedGearIds.filter(id => id !== gearId);
+    }
+    this.applyFilters();
+  }
+
+  applyFilters() {
+    // Hem fuel hem gear seçiliyse kombine filtreleme
+    if (this.selectedFuelIds.length > 0 || this.selectedGearIds.length > 0) {
+      this.getCarsByFilters(this.selectedFuelIds, this.selectedGearIds, this.locationName);
+    } else {
+      // Hiç filtre seçilmediyse tüm araçları getir
+      this.getCarByLocationName(this.locationName);
+    }
+  }
+
+  getCarsByFilters(fuelIds: number[], gearIds: number[], locationName: string) {
+    this.dataLoaded = false;
+    this.carDetailService.getCarsByFilters(fuelIds, gearIds, locationName).subscribe(response => {
+      this.carDetails = response.data;
+      this.dataLoaded = true;
+      this.loadCarImages();
+    });
+  }
 
 calculateGunFromDates() {
   if (this.from && this.to) {
@@ -87,6 +156,12 @@ calculateGunFromDates() {
     }
   }
 }
+
+loadCarImages() {
+    for (const car of this.carDetails) {
+      this.getCarImageByColorAndBrandId(car.brandId, car.colorId, car);
+    }
+  }
 
   getCarByLocationName(locationName: string) {
     this.carDetailService.getCarsByLocationName(locationName).subscribe(response => {

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CarDetail } from '../models/carDetail';
@@ -68,4 +68,35 @@ export class CarService {
     const newPath = `${this.apiUrl}cars/carisrented?carId=${carId}`;
     return this.httpClient.post(newPath, {});
   }
+
+  getCarsByFuelAndLocation(fuelId: number, locationName: string): Observable<ListResponseModel<CarDetail>> {
+  const newPath = this.apiUrl + "cars/getcarsbyfuelandlocation?fuelId=" + fuelId + "&locationName=" + encodeURIComponent(locationName);
+  return this.httpClient.get<ListResponseModel<CarDetail>>(newPath);
+}
+
+getCarsByGearAndLocation(gearId: number, locationName: string): Observable<ListResponseModel<CarDetail>> {
+  const newPath = this.apiUrl + "cars/getcarsbygearandlocation?gearId=" + gearId + "&locationName=" + encodeURIComponent(locationName);
+  return this.httpClient.get<ListResponseModel<CarDetail>>(newPath);
+}
+
+getCarsByFilters(fuelIds: number[], gearIds: number[], locationName: string): Observable<ListResponseModel<CarDetail>> {
+  let params = new HttpParams();
+  
+  if (fuelIds && fuelIds.length > 0) {
+    fuelIds.forEach(id => {
+      params = params.append('fuelIds', id.toString());
+    });
+  }
+  
+  if (gearIds && gearIds.length > 0) {
+    gearIds.forEach(id => {
+      params = params.append('gearIds', id.toString());
+    });
+  }
+  
+  params = params.append('locationName', locationName);
+  
+  const newPath = this.apiUrl + "cars/getcarsbygearandfuelfilters";
+  return this.httpClient.get<ListResponseModel<CarDetail>>(newPath, { params });
+}
 }
