@@ -11,5 +11,6 @@ export interface Car{
     isRented:boolean,
     fuelId:number,
     gearId:number,
+    segmentId:number,
     deposit:number,
 }

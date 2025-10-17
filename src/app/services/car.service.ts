@@ -69,17 +69,7 @@ export class CarService {
     return this.httpClient.post(newPath, {});
   }
 
-  getCarsByFuelAndLocation(fuelId: number, locationName: string): Observable<ListResponseModel<CarDetail>> {
-  const newPath = this.apiUrl + "cars/getcarsbyfuelandlocation?fuelId=" + fuelId + "&locationName=" + encodeURIComponent(locationName);
-  return this.httpClient.get<ListResponseModel<CarDetail>>(newPath);
-}
-
-getCarsByGearAndLocation(gearId: number, locationName: string): Observable<ListResponseModel<CarDetail>> {
-  const newPath = this.apiUrl + "cars/getcarsbygearandlocation?gearId=" + gearId + "&locationName=" + encodeURIComponent(locationName);
-  return this.httpClient.get<ListResponseModel<CarDetail>>(newPath);
-}
-
-getCarsByFilters(fuelIds: number[], gearIds: number[], locationName: string): Observable<ListResponseModel<CarDetail>> {
+getCarsByFilters(fuelIds: number[], gearIds: number[], segmentIds: number[], locationName: string): Observable<ListResponseModel<CarDetail>> {
   let params = new HttpParams();
   
   if (fuelIds && fuelIds.length > 0) {
@@ -94,9 +84,15 @@ getCarsByFilters(fuelIds: number[], gearIds: number[], locationName: string): Ob
     });
   }
   
+  if (segmentIds && segmentIds.length > 0) {
+    segmentIds.forEach(id => {
+      params = params.append('segmentIds', id.toString());
+    });
+  }
+  
   params = params.append('locationName', locationName);
   
-  const newPath = this.apiUrl + "cars/getcarsbygearandfuelfilters";
+  const newPath = this.apiUrl + "cars/getcarsbyfilters";
   return this.httpClient.get<ListResponseModel<CarDetail>>(newPath, { params });
 }
 }

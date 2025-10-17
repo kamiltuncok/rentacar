@@ -16,5 +16,6 @@ export interface CarDetail{
     isRented:boolean,
     fuelName:string,
     gearName:string,
+    segmentName:string,
     deposit:number,
 }

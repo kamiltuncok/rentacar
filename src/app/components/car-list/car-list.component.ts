@@ -1,7 +1,9 @@
+import { SegmentService } from './../../services/segment.service';
 import { GearService } from './../../services/gear.service';
 import { FuelService } from './../../services/fuel.service';
 import { Fuel } from './../../models/fuel';
 import { Gear } from './../../models/gear';
+import { Segment } from './../../models/segment';
 import { ToastrService } from 'ngx-toastr';
 import { CarImageService } from './../../services/car-image.service';
 import { CarImage } from './../../models/carImage';
@@ -28,10 +30,12 @@ export class CarListComponent {
   apiUrl = "https://localhost:44306/Uploads/Images/";
   defaultImagePath = 'https://www.araba.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Ftasit-com%2Fimages%2Ff_webp%2Cq_auto%2Fv1694162148%2Fmg-araba-modelleri%2Fmg-araba-modelleri.webp%3F_i%3DAA&w=3840&q=75';
   customerType: number; // Customer type to distinguish between individual and corporate
-    fuels: Fuel[] = [];
+  fuels: Fuel[] = [];
   gears: Gear[] = [];
+  segments: Segment[] = [];
   selectedFuelIds: number[] = [];
   selectedGearIds: number[] = [];
+  selectedSegmentIds: number[] = [];
 
   constructor(
     private carDetailService: CarService,
@@ -39,6 +43,7 @@ export class CarListComponent {
     private activatedRoute: ActivatedRoute,
     private fuelService: FuelService,
     private gearService: GearService,
+    private segmentService: SegmentService,
     private toastrService: ToastrService,
     private router: Router
   ) { }
@@ -57,6 +62,7 @@ export class CarListComponent {
     this.calculateGunFromDates();
     this.getFuels();
     this.getGears();
+    this.getSegments();
     this.getCarByLocationName(this.locationName);
   });
 }
@@ -73,13 +79,33 @@ getFuels() {
     });
   }
 
- isFuelSelected(fuelId: number): boolean {
+  getSegments() {
+    this.segmentService.getSegments().subscribe(response => {
+      this.segments = response.data;
+    });
+  }
+
+ isSegmentSelected(segmentId: number): boolean {
+    return this.selectedSegmentIds.includes(segmentId);
+  }
+
+  // Fuel checkbox durumunu kontrol et
+  isFuelSelected(fuelId: number): boolean {
     return this.selectedFuelIds.includes(fuelId);
   }
 
   // Gear checkbox durumunu kontrol et
   isGearSelected(gearId: number): boolean {
     return this.selectedGearIds.includes(gearId);
+  }
+
+  onSegmentCheckboxChange(event: any, segmentId: number) {
+    if (event.target.checked) {
+      this.selectedSegmentIds.push(segmentId);
+    } else {
+      this.selectedSegmentIds = this.selectedSegmentIds.filter(id => id !== segmentId);
+    }
+    this.applyFilters();
   }
 
   onFuelCheckboxChange(event: any, fuelId: number) {
@@ -101,18 +127,18 @@ getFuels() {
   }
 
   applyFilters() {
-    // Hem fuel hem gear seçiliyse kombine filtreleme
-    if (this.selectedFuelIds.length > 0 || this.selectedGearIds.length > 0) {
-      this.getCarsByFilters(this.selectedFuelIds, this.selectedGearIds, this.locationName);
+    // Segment, fuel veya gear seçiliyse kombine filtreleme
+    if (this.selectedSegmentIds.length > 0 || this.selectedFuelIds.length > 0 || this.selectedGearIds.length > 0) {
+      this.getCarsByFilters(this.selectedFuelIds, this.selectedGearIds,this.selectedSegmentIds, this.locationName);
     } else {
       // Hiç filtre seçilmediyse tüm araçları getir
       this.getCarByLocationName(this.locationName);
     }
   }
 
-  getCarsByFilters(fuelIds: number[], gearIds: number[], locationName: string) {
+  getCarsByFilters(segmentIds: number[], fuelIds: number[], gearIds: number[], locationName: string) {
     this.dataLoaded = false;
-    this.carDetailService.getCarsByFilters(fuelIds, gearIds, locationName).subscribe(response => {
+    this.carDetailService.getCarsByFilters(segmentIds, fuelIds, gearIds, locationName).subscribe(response => {
       this.carDetails = response.data;
       this.dataLoaded = true;
       this.loadCarImages();

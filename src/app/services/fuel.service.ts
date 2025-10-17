@@ -30,10 +30,6 @@ export class FuelService {
     return this.httpClient.get<SingleResponseModel<Fuel>>(newPath);
   }
 
-  getFuelsById(fuelId:number) : Observable<ListResponseModel<Fuel>>{
-    let newPath=this.apiUrl+"getlistbyid?fuelId="+fuelId
-    return this.httpClient.get<ListResponseModel<Fuel>>(newPath);
-  }
 
   update(fuel:Fuel): Observable<ResponseModel>{
     let newUrl = this.apiUrl+"update"
