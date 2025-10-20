@@ -1,3 +1,6 @@
+import { CarService } from 'src/app/services/car.service';
+import { Segment } from './../../models/segment';
+import { SegmentService } from './../../services/segment.service';
 import { ToastrService } from 'ngx-toastr';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
@@ -13,14 +16,20 @@ export class HomeComponent {
   alisOfisiOptions: string[] = [];
   iadeOfisiOptions: string[] = [];
   customerType: string = 'individual';
-  showPopup: boolean = false;
+  showCityPopup: boolean = false;
+  showSegmentPopup: boolean = false;
   selectedCity: string = '';
+  selectedSegment: string = '';
   cityLocations: string[] = [];
+  segments: Segment[] = [];
+  segmentPrices: { [key: number]: string } = {};
 
   constructor(
     private locationService: LocationService,
     private router: Router,
+    private carService:CarService,
     private toastrService: ToastrService,
+    private segmentService:SegmentService
   ) {}
 
   ngOnInit(): void {
@@ -30,6 +39,38 @@ export class HomeComponent {
         this.iadeOfisiOptions = response.data.map((location: Location) => location.locationName);
       }
     });
+
+    this.getSegments();
+  }
+
+   getSegments() {
+    this.segmentService.getSegments().subscribe((response) => {
+      if (response.success) {
+        this.segments = response.data;
+        // Her segment için fiyatları getir
+        this.segments.forEach(segment => {
+          this.getSegmentPrice(segment.segmentId);
+        });
+      }
+    });
+  }
+
+  getSegmentPrice(segmentId: number): string {
+    // Önce cache'ten kontrol et
+    if (this.segmentPrices[segmentId]) {
+      return this.segmentPrices[segmentId];
+    }
+
+    // API'den fiyatı getir
+    this.carService.getLowestPriceBySegment(segmentId).subscribe((response) => {
+      if (response.success && response.data > 0) {
+        this.segmentPrices[segmentId] = response.data + ' TL';
+      } else {
+        this.segmentPrices[segmentId] = 'Fiyat bulunamadı';
+      }
+    });
+
+    return 'Yükleniyor...'; // Default değer
   }
 
  navigateToCarList(searchData: any) {
@@ -58,6 +99,8 @@ export class HomeComponent {
     // gun'ı sessionStorage'a kaydet (sayfa yenileme durumu için)
     sessionStorage.setItem('gun', dayDifference.toString());
 
+    sessionStorage.setItem('selectedSegment', this.selectedSegment);
+
     const queryParams = {
       locationName: locationName,
       locationEndName: locationEndName,
@@ -70,8 +113,12 @@ export class HomeComponent {
 
     this.router.navigate(['home/carlist'], { 
       queryParams: queryParams,
-      state: { gun: dayDifference } // gun state ile de gidiyor
+      state: { gun: dayDifference,
+        segment: this.selectedSegment
+       }
     });
+
+    this.closeSegmentPopup();
   }
   else {
     this.toastrService.error('Lütfen teslim alma ve iade ofisini seçin.', 'Hata');
@@ -80,7 +127,7 @@ export class HomeComponent {
 
   openCityPopup(city: string) {
   this.selectedCity = city;
-  this.showPopup = true;
+  this.showCityPopup = true;
 
   this.locationService.getLocationsByCity(city).subscribe((response) => {
     if (response.success && response.data.length > 0) {
@@ -92,8 +139,18 @@ export class HomeComponent {
   });
 }
 
-  closePopup() {
-    this.showPopup = false;
+openSegmentPopup(segment: string) {
+  this.selectedSegment = segment;
+  this.showSegmentPopup = true;
+}
+
+  closeCityPopup() {
+    this.showCityPopup = false;
     this.selectedCity = '';
   }
+
+  closeSegmentPopup() {
+  this.showSegmentPopup = false;
+  this.selectedSegment = '';
+}
 }

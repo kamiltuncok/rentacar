@@ -65,5 +65,15 @@
     font-weight: bold;
   }
 
+  .form-check-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-check-input:disabled + .form-check-label {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 
 

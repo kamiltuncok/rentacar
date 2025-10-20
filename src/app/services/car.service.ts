@@ -95,4 +95,10 @@ getCarsByFilters(fuelIds: number[], gearIds: number[], segmentIds: number[], loc
   const newPath = this.apiUrl + "cars/getcarsbyfilters";
   return this.httpClient.get<ListResponseModel<CarDetail>>(newPath, { params });
 }
+
+getLowestPriceBySegment(segmentId: number): Observable<SingleResponseModel<number>> {
+    const newPath = this.apiUrl + "cars/getlowestpricebysegment?segmentId=" + segmentId;
+    return this.httpClient.get<SingleResponseModel<number>>(newPath);
+  }
+  
 }

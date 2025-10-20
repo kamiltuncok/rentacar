@@ -37,6 +37,8 @@ export class CarListComponent {
   selectedGearIds: number[] = [];
   selectedSegmentIds: number[] = [];
 
+  isSegmentFilterDisabled: boolean = false;
+
   constructor(
     private carDetailService: CarService,
     private carImageService: CarImageService,
@@ -79,11 +81,32 @@ getFuels() {
     });
   }
 
-  getSegments() {
-    this.segmentService.getSegments().subscribe(response => {
-      this.segments = response.data;
-    });
+ getSegments() {
+  this.segmentService.getSegments().subscribe(response => {
+    this.segments = response.data;
+    
+    // Segmentleri yükledikten sonra seçili segmenti kontrol et
+    this.applySegmentFilter();
+  });
+}
+
+applySegmentFilter() {
+  const storedSegment = sessionStorage.getItem('selectedSegment');
+  if (storedSegment && this.segments.length > 0) {
+    const segment = this.segments.find(s => s.segmentName === storedSegment);
+    if (segment) {
+      // Sadece bu segmenti seç
+      this.selectedSegmentIds = [segment.segmentId];
+      this.isSegmentFilterDisabled = true;
+      
+      // Filtreleme yap
+      this.applyFilters();
+      
+      // Temizle
+      sessionStorage.removeItem('selectedSegment');
+    }
   }
+}
 
  isSegmentSelected(segmentId: number): boolean {
     return this.selectedSegmentIds.includes(segmentId);

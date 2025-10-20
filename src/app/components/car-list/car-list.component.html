@@ -63,19 +63,20 @@
         </div>
 
           <div class="filter-group">
-          <h6>Sınıf</h6>
-          <div *ngFor="let segment of segments" class="form-check">
-            <input class="form-check-input" 
-                   type="checkbox" 
-                   [id]="'segment-' + segment.segmentId"
-                   [value]="segment.segmentId"
-                   [checked]="isSegmentSelected(segment.segmentId)"
-                   (change)="onSegmentCheckboxChange($event, segment.segmentId)">
-            <label class="form-check-label" [for]="'segment-' + segment.segmentId">
-              {{ segment.segmentName }}
-            </label>
-          </div>
-        </div>
+      <h6>Sınıf</h6>
+      <div *ngFor="let segment of segments" class="form-check">
+        <input class="form-check-input" 
+               type="checkbox" 
+               [id]="'segment-' + segment.segmentId"
+               [value]="segment.segmentId"
+               [checked]="isSegmentSelected(segment.segmentId)"
+               [disabled]="isSegmentFilterDisabled"
+               (change)="onSegmentCheckboxChange($event, segment.segmentId)">
+        <label class="form-check-label" [for]="'segment-' + segment.segmentId">
+          {{ segment.segmentName }}
+        </label>
+      </div>
+    </div>
 
       </div>
     </div>

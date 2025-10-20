@@ -7,32 +7,65 @@
 </app-car-search-form>
 
 <!-- Sık Tercih Edilen Şehirler -->
-<div class="popular-cities-section">
+<div class="card-section">
   <h2 class="section-title">Sık Tercih Edilen Şehirler</h2>
-  <div class="city-card-container">
-    <div class="city-card" (click)="openCityPopup('Istanbul')">
+  <div class="card-container">
+    <div class="custom-card" (click)="openCityPopup('Istanbul')">
       <img [src]="'assets/images/istanbul.jpg'" alt="İstanbul">
       <p>İstanbul</p>
     </div>
-    <div class="city-card" (click)="openCityPopup('Ankara')">
+    <div class="custom-card" (click)="openCityPopup('Ankara')">
       <img [src]="'assets/images/ankara.jpg'" alt="Ankara">
       <p>Ankara</p>
     </div>
-    <div class="city-card" (click)="openCityPopup('İzmir')">
+    <div class="custom-card" (click)="openCityPopup('İzmir')">
       <img [src]="'assets/images/izmir.jpg'"  alt="İzmir">
       <p>İzmir</p>
     </div>
   </div>
 </div>
 
-<!-- Popup -->
-<div class="popup-overlay" *ngIf="showPopup"> 
+<!-- Araç Segmentleri -->
+<div class="card-section">
+  <h2 class="section-title">Araç Sınıfları</h2>
+  <div class="card-container">
+    <div *ngFor="let segment of segments" class="segment-card">
+      <div class="segment-header">
+        <h3 class="segment-name">{{ segment.segmentName }}</h3>
+      </div>
+      <div class="segment-image">
+        <img [src]="'assets/images/rentacarpage.png'" [alt]="segment.segmentName">
+      </div>
+      <div class="segment-content">
+        <p class="price-text">{{ getSegmentPrice(segment.segmentId) }}'den başlayan fiyatlarla</p>
+        <button class="segment-button" (click)="openSegmentPopup(segment.segmentName)">
+          Hemen Kirala
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Segment Popup -->
+<div class="popup-overlay" *ngIf="showSegmentPopup"> 
+  <app-car-search-form
+    [alisOfisiOptions]="alisOfisiOptions"
+    [iadeOfisiOptions]="iadeOfisiOptions"
+    [customerType]="customerType"
+    [showCloseButton]="true"
+    (search)="navigateToCarList($event)"
+    (close)="closeSegmentPopup()">
+  </app-car-search-form>
+</div>
+
+<!-- Şehir Popup -->
+<div class="popup-overlay" *ngIf="showCityPopup"> 
   <app-car-search-form
     [alisOfisiOptions]="cityLocations"
     [iadeOfisiOptions]="cityLocations"
     [customerType]="customerType"
     [showCloseButton]="true"
     (search)="navigateToCarList($event)"
-    (close)="closePopup()">
+    (close)="closeCityPopup()">
   </app-car-search-form>
 </div>
