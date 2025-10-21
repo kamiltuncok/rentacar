@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener  } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/models/user';
@@ -21,6 +21,8 @@ export class NaviComponent implements OnInit {
   dataLoaded = false;
   isCorporate = false;
   displayName: string = ''; // Kullanıcı adı veya şirket adı için eklendi
+  isAdmin = false;
+  isDropdownOpen = false;
 
   constructor(
     private authService: AuthService,
@@ -42,39 +44,63 @@ export class NaviComponent implements OnInit {
     this.router.navigate([""]);
   }
 
-  getUserData() {
-    if (this.authService.isAuthenticated()) {
-      const userId = this.authService.getCurrentUserId;
-      const customerType = this.authService.getCustomerType(); // CustomerType kontrolü
+ getUserData() {
+  if (this.authService.isAuthenticated()) {
+    const userId = this.authService.getCurrentUserId;
+    const customerType = this.authService.getCustomerType();
 
-      if (customerType === 'Individual') {
-        this.userService.getUserById(userId).subscribe(
-          (response: { data: User }) => {
-            this.user = response.data;
-            this.displayName = this.user.firstName;
-            this.isCorporate = false;
-            this.dataLoaded = true;
-          },
-          (error: any) => {
-            console.error('Bireysel kullanıcı bilgisi alınamadı:', error);
-          }
-        );
-      } else if (customerType === 'Corporate') {
-        this.corporateUserService.getUserById(userId).subscribe(
-          (response: { data: CorporateUser }) => {
-            this.corporateUser = response.data;
-            this.displayName = this.corporateUser.companyName;
-            this.isCorporate = true;
-            this.dataLoaded = true;
-          },
-          (error: any) => {
-            console.error('Kurumsal kullanıcı bilgisi alınamadı:', error);
-          }
-        );
-      } else {
-        console.error('Geçersiz customerType değeri:', customerType);
-      }
+    // ✅ Admin kontrolü eklendi
+    if (this.authService.isAdmin()) {
+      this.userService.getUserById(userId).subscribe(
+        (response: { data: User }) => {
+          this.user = response.data;
+          this.displayName = this.user.firstName;
+          this.isAdmin = true;
+          this.dataLoaded = true;
+        },
+        (error: any) => {
+          console.error('Admin bilgisi alınamadı:', error);
+          this.displayName = "Admin";
+          this.isAdmin = true;
+          this.dataLoaded = true;
+        }
+      );
+    } else if (customerType === 'Individual') {
+      this.userService.getUserById(userId).subscribe(
+        (response: { data: User }) => {
+          this.user = response.data;
+          this.displayName = this.user.firstName;
+          this.isCorporate = false;
+          this.dataLoaded = true;
+        },
+        (error: any) => {
+          console.error('Bireysel kullanıcı bilgisi alınamadı:', error);
+        }
+      );
+    } else if (customerType === 'Corporate') {
+      this.corporateUserService.getUserById(userId).subscribe(
+        (response: { data: CorporateUser }) => {
+          this.corporateUser = response.data;
+          this.displayName = this.corporateUser.companyName;
+          this.isCorporate = true;
+          this.dataLoaded = true;
+        },
+        (error: any) => {
+          console.error('Kurumsal kullanıcı bilgisi alınamadı:', error);
+        }
+      );
+    } else {
+      console.error('Geçersiz customerType değeri:', customerType);
     }
+  }
+}
+
+  showAdminMenu(): boolean {
+    return this.isAuthenticated() && this.isAdmin;
+  }
+
+  showUserMenu(): boolean {
+    return this.isAuthenticated() && !this.isAdmin;
   }
 
   isAuthenticated() {
@@ -84,4 +110,22 @@ export class NaviComponent implements OnInit {
   getProfileUrl(): string {
     return this.isCorporate ? '/profilecorporate' : '/profile';
   }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+    console.log('Dropdown durumu:', this.isDropdownOpen);
+  }
+
+  closeDropdown() {
+    this.isDropdownOpen = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+onDocumentClick(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  
+  if (!target.closest('.navbar-nav.mr-right')) {
+    this.isDropdownOpen = false;
+  }
+}
 }

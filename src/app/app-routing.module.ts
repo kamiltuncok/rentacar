@@ -1,3 +1,4 @@
+import { AdminGuard } from './guards/admin.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -38,13 +39,13 @@ const routes: Routes = [
   { path: "carDetail/:carId", component: CarDetailComponent },
   { path: "carDetail/:carId/payment", component: PaymentComponent, canActivate: [LoginGuard] },
 
-  { path: "cars/add", component: CarAddComponent },
+  { path: "cars/add", component: CarAddComponent, canActivate: [AdminGuard] },
   { path: "cars/update/:id", component: CarUpdateComponent },
-  { path: "brands/add", component: BrandAddComponent, canActivate: [LoginGuard] },
+  { path: "brands/add", component: BrandAddComponent, canActivate: [AdminGuard] },
   { path: "brands/update/:brandId", component: BrandUpdateComponent },
-  { path: "colors/add", component: ColorAddComponent, canActivate: [LoginGuard] },
+  { path: "colors/add", component: ColorAddComponent, canActivate: [AdminGuard] },
   { path: "colors/update/:colorId", component: ColorUpdateComponent },
-  { path: "carimages/add", component: CarImageAddComponent },
+  { path: "carimages/add", component: CarImageAddComponent, canActivate: [AdminGuard] },
 
   { path: "login", component: LoginComponent },
   { path: "loginforcorporate", component: LoginforcorporateComponent },

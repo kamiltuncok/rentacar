@@ -1,44 +1,53 @@
 <nav class="navbar navbar-expand-lg navbar-mid-color" style="background-color:rgb(80,128,168)">
   <div class="container">
     <!-- Logo kısmı -->
-    <a class="navbar-brand logo-container" href="/">
+    <a class="navbar-brand logo-container" routerLink="/">
       <img src="assets/images/logocar.png" alt="Logo" class="logo-img">
     </a>
     
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a id="" class="navbar-brand" href="/">Anasayfa</a>
+          <a class="navbar-brand" routerLink="/">Anasayfa</a>
         </li>
         <li class="nav-item">
-          <a class="navbar-brand" href="/cars">Arabalar</a>
+          <a class="navbar-brand" routerLink="/cars">Arabalar</a>
         </li>
         <li class="nav-item">
-          <a class="navbar-brand" href="/branches">Şubeler</a>
+          <a class="navbar-brand" routerLink="/branches">Şubeler</a>
         </li>
       </ul>
       
-      <ul *ngIf="isAuthenticated()" class="navbar-nav mr-right">
-        <li class="nav-item">
-          <a class="navbar-brand" href="/cars/add">Araba Ekle</a>
-        </li>
-      </ul>
+      <!-- ✅ ADMIN DROPDOWN - ÇALIŞAN SON HALİ -->
+      <div *ngIf="showAdminMenu()" class="navbar-nav mr-right">
+        <div style="position: relative;">
+          <button class="navbar-brand" (click)="isDropdownOpen = !isDropdownOpen" 
+                  style="border: none; background: none; color: powderblue; cursor: pointer;">
+            Araba Eklemeler ▼
+          </button>
+          
+          <div *ngIf="isDropdownOpen" class="dropdown-menu-custom">
+            <a class="dropdown-item-custom" routerLink="/cars/add" (click)="closeDropdown()">Araba Ekle</a>
+            <a class="dropdown-item-custom" routerLink="/carimages/add" (click)="closeDropdown()">Araba Resmi Ekle</a>
+            <a class="dropdown-item-custom" routerLink="/brands/add" (click)="closeDropdown()">Marka Ekle</a>
+            <a class="dropdown-item-custom" routerLink="/colors/add" (click)="closeDropdown()">Renk Ekle</a>
+          </div>
+        </div>
+      </div>
       
-      <ul *ngIf="isAuthenticated()" class="navbar-nav mr-right">
-        <li class="nav-item">
-          <a class="navbar-brand" href="/carimages/add">Araba Resmi Ekle</a>
-        </li>
-      </ul>
+
       
+      <!-- GİRİŞ YAPMAMIŞ KULLANICILAR -->
       <ul *ngIf="!isAuthenticated()" class="navbar-nav mr-right" id="righta">
         <li class="nav-item">
-          <a class="navbar-brand" href="/login">Giriş</a>
+          <a class="navbar-brand" routerLink="/login">Giriş</a>
         </li>
         <li class="nav-item">
-          <a class="navbar-brand" href="/register">Kayıt ol</a>
+          <a class="navbar-brand" routerLink="/register">Kayıt ol</a>
         </li>
       </ul>
       
+      <!-- PROFİL ve ÇIKIŞ -->
       <ul *ngIf="isAuthenticated()" class="navbar-nav mr-right" id="right">
         <li class="nav-item">
           <a *ngIf="dataLoaded" class="navbar-brand text-blue" [routerLink]="getProfileUrl()">
@@ -47,7 +56,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a (click)="logout()" class="navbar-brand" href="">Çıkış Yap</a>
+          <a (click)="logout()" class="navbar-brand" style="cursor: pointer;">Çıkış Yap</a>
         </li>
       </ul>
     </div>

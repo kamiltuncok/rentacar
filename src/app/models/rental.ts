@@ -12,5 +12,6 @@ export interface Rental {
 
 export enum CustomerType {
     Individual = 0,
-    Corporate = 1
+    Corporate = 1,
+    Admin = 2
 }

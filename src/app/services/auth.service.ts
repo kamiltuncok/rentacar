@@ -83,6 +83,16 @@ export class AuthService {
   
     return customerType;
   }
+
+  registerAdmin(registerModel: RegisterModel) {
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "registeradmin", registerModel);
+  }
+
+
+  isAdmin(): boolean {
+    const customerType = this.getCustomerType();
+    return customerType === 'Admin';
+  }
   
   
 }

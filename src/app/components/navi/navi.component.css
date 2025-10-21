@@ -1,19 +1,62 @@
 .navbar-brand:hover {
-    color: black; /* Color on hover */
+    color: black;
 }
 .navbar-brand {
-    color:powderblue; /* Color on hover */
+    color: powderblue;
 }
 
-#right{
-    margin-left:400px;
+/* ✅ SAĞ HİZALAMA DÜZELTİLDİ */
+#right {
+    margin-left: auto; /* ✅ Otomatik sağa it */
+    display: flex;
+    align-items: center;
 }
-#righta{
-    margin-left:750px;
+
+#righta {
+    margin-left: auto; /* ✅ Otomatik sağa it */
+    display: flex;
+    align-items: center;
 }
 
 .logo-img {
     height: 45px;
 }
 
+/* ✅ DROPDOWN CSS */
+.dropdown-menu-custom {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: rgb(80,128,168);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+  min-width: 200px;
+  z-index: 9999;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.dropdown-item-custom {
+  color: white;
+  padding: 10px 16px;
+  display: block;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+}
+
+.dropdown-item-custom:hover {
+  background-color: rgba(255,255,255,0.2);
+  color: white;
+  text-decoration: none;
+}
+
+.dropdown-item-custom:last-child {
+  border-bottom: none;
+}
+
+/* ✅ NAVBAR DÜZENİ */
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
 
