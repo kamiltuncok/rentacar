@@ -1,23 +1,38 @@
 <div class="container">
-    <div class="row">
-      <div class="col-md-3">
-        <label for="citySelect">Şehir Seçiniz:</label>
-        <select id="citySelect" class="form-control" (change)="onCityChange($event)">
-          <option value="">Tüm Şehirler</option>
-          <option value="Ankara">Ankara</option>
-          <option value="Istanbul">İstanbul</option>
-        </select>
+  <div class="row">
+    <div class="col-md-3">
+      <label for="citySelect">Şehir Seçiniz:</label>
+      <select id="citySelect" class="form-control" (change)="onCityChange($event)">
+        <option value="">Tüm Şehirler</option>
+        <option value="Istanbul">İstanbul</option>
+        <option value="Ankara">Ankara</option>
+        <option value="İzmir">İzmir</option>
+      </select>
+    </div>
+
+    <div class="col-md-9">
+      <!-- ✅ DEBUG BİLGİSİ -->
+      <div class="alert alert-info">
+        Toplam <strong>{{ locations.length }}</strong> şube bulundu
       </div>
-  
-      <div class="col-md-9">
-        <div *ngFor="let location of locations" class="location-item card">
-          <h4>{{ location.locationName }}</h4>
-          <p><strong>Şehir:</strong> {{ location.locationCity }}</p>
-          <p><strong>Adres:</strong> {{ location.address }}</p>
-          <p><strong>Email:</strong> {{ location.email }}</p>
-          <p><strong>Telefon:</strong> {{ location.phoneNumber }}</p>
+
+      <div *ngFor="let location of locations" class="location-item card mb-3">
+        <div class="card-body">
+          <h4 class="card-title">{{ location.locationName }}</h4>
+          <p class="card-text"><strong>Şehir:</strong> {{ location.locationCity }}</p>
+          <p class="card-text"><strong>Adres:</strong> {{ location.address }}</p>
+          <p class="card-text"><strong>Email:</strong> {{ location.email }}</p>
+          <p class="card-text"><strong>Telefon:</strong> {{ location.phoneNumber }}</p>
         </div>
       </div>
     </div>
   </div>
-  
+
+  <!-- HARITA BÖLÜMÜ -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <h3 style="color: aliceblue;">Şubelerimizin Konumları ({{ locations.length }} şube)</h3>
+      <div id="map" style="height: 500px; width: 100%;"></div>
+    </div>
+  </div>
+</div>

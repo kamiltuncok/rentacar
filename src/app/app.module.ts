@@ -40,6 +40,7 @@ import { LoginforcorporateComponent } from './components/loginforcorporate/login
 import { PaymentcorporateComponent } from './components/paymentcorporate/paymentcorporate.component';
 import { BranchesComponent } from './components/branches/branches.component';
 import { CarSearchFormComponent } from './components/car-search-form/car-search-form.component';
+import { LocationAddComponent } from './components/location-add/location-add.component';
 
 
 @NgModule({
@@ -72,7 +73,8 @@ import { CarSearchFormComponent } from './components/car-search-form/car-search-
     LoginforcorporateComponent,
     PaymentcorporateComponent,
     BranchesComponent,
-    CarSearchFormComponent
+    CarSearchFormComponent,
+    LocationAddComponent
   ],
   imports: [
     BrowserModule,

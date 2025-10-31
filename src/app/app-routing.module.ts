@@ -1,3 +1,4 @@
+import { LocationAddComponent } from './components/location-add/location-add.component';
 import { AdminGuard } from './guards/admin.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -46,6 +47,7 @@ const routes: Routes = [
   { path: "colors/add", component: ColorAddComponent, canActivate: [AdminGuard] },
   { path: "colors/update/:colorId", component: ColorUpdateComponent },
   { path: "carimages/add", component: CarImageAddComponent, canActivate: [AdminGuard] },
+  { path: "locations/add", component: LocationAddComponent, canActivate: [AdminGuard] },
 
   { path: "login", component: LoginComponent },
   { path: "loginforcorporate", component: LoginforcorporateComponent },

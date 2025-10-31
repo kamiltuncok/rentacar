@@ -4,5 +4,7 @@ export interface Location{
     locationCity:string,
     address:string,
     email:string,
-    phoneNumber:string
+    phoneNumber:string,
+    latitude: number;
+    longitude: number;
 }

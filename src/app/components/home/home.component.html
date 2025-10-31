@@ -34,10 +34,12 @@
         <h3 class="segment-name">{{ segment.segmentName }}</h3>
       </div>
       <div class="segment-image">
-        <img [src]="'assets/images/rentacarpage.png'" [alt]="segment.segmentName">
+        <img [src]="'assets/images/lux.jpg'" [alt]="segment.segmentName">
       </div>
       <div class="segment-content">
-        <p class="price-text">{{ getSegmentPrice(segment.segmentId) }}'den başlayan fiyatlarla</p>
+       <p class="price-text">
+  <strong>{{ getSegmentPrice(segment.segmentId) }}</strong> 'den başlayan fiyatlarla
+       </p>
         <button class="segment-button" (click)="openSegmentPopup(segment.segmentName)">
           Hemen Kirala
         </button>

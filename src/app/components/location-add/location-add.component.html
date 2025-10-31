@@ -1,0 +1,141 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="text-center">Yeni Şube Ekle</h3>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="addLocation()" #locationForm="ngForm">
+            
+            <!-- Location Name -->
+            <div class="form-group">
+              <label for="locationName">Şube Adı *</label>
+              <input type="text" class="form-control" id="locationName" 
+                     [(ngModel)]="location.locationName" name="locationName" 
+                     required placeholder="Örn: İstanbul Havalimanı">
+            </div>
+
+            <!-- Location City - Listbox -->
+            <div class="form-group">
+              <label for="locationCity">Şehir *</label>
+              <select class="form-control" id="locationCity" 
+                      [(ngModel)]="location.locationCity" name="locationCity" 
+                      required (change)="onCityChange()">
+                <option value="">Şehir Seçiniz</option>
+                <option value="Istanbul">İstanbul</option>
+                <option value="Ankara">Ankara</option>
+                <option value="İzmir">İzmir</option>
+              </select>
+            </div>
+
+            <!-- Address -->
+            <div class="form-group">
+              <label for="address">Adres *</label>
+              <textarea class="form-control" id="address" rows="3"
+                        [(ngModel)]="location.address" name="address" 
+                        required placeholder="Tam adresi giriniz"></textarea>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" class="form-control" id="email" 
+                     [(ngModel)]="location.email" name="email" 
+                     required placeholder="ornek@mail.com">
+            </div>
+
+            <!-- Phone Number -->
+            <div class="form-group">
+              <label for="phoneNumber">Telefon Numarası *</label>
+              <input type="tel" class="form-control" id="phoneNumber" 
+                     [(ngModel)]="location.phoneNumber" name="phoneNumber" 
+                     required placeholder="05XXXXXXXXX">
+            </div>
+
+            <!-- Koordinat Bilgisi -->
+            <div class="alert alert-info">
+              <strong>Konum Seçimi:</strong> Aşağıdaki haritadan şubenin konumunu seçin veya manuel girin.
+              <br><strong>NOT:</strong> Koordinatları <span class="text-danger">nokta (.)</span> ile giriniz. Örn: 41.0082
+            </div>
+
+           <!-- Adres Arama -->
+            <div class="form-group">
+              <label for="addressSearch">Adres Ara</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="addressSearch" 
+                       [(ngModel)]="searchAddress" name="addressSearch" 
+                       placeholder="Adres ara... (Örn: İstiklal Caddesi, Beyoğlu)">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-primary" type="button" 
+                          (click)="searchLocation()" [disabled]="!searchAddress">
+                    <i class="fas fa-search"></i> Ara
+                  </button>
+                </div>
+              </div>
+              <small class="form-text text-muted">
+                Adres yazıp ara butonuna basın veya haritaya tıklayın
+              </small>
+            </div>
+
+            <!-- Koordinat Bilgisi -->
+            <div class="alert alert-info" *ngIf="selectedLocation">
+              <strong>Seçilen Konum:</strong> 
+              {{ selectedLocation.lat | number:'1.4-6' }}, {{ selectedLocation.lng | number:'1.4-6' }}
+              <span *ngIf="foundAddress" class="ml-2 text-success">
+                ✓ {{ foundAddress }}
+              </span>
+            </div>
+
+            <!-- Latitude & Longitude -->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="latitude">Enlem (Latitude) *</label>
+                  <!-- ✅ TYPE'ı "text" YAP -->
+                  <input type="text" class="form-control" id="latitude" 
+                         [(ngModel)]="location.latitude" name="latitude" 
+                         required (change)="onCoordinatesChange()"
+                         placeholder="41.0082 (nokta kullanın)">
+                  <small class="form-text text-muted">Örnek: 41.0082</small>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="longitude">Boylam (Longitude) *</label>
+                  <!-- ✅ TYPE'ı "text" YAP -->
+                  <input type="text" class="form-control" id="longitude" 
+                         [(ngModel)]="location.longitude" name="longitude" 
+                         required (change)="onCoordinatesChange()"
+                         placeholder="28.9784 (nokta kullanın)">
+                  <small class="form-text text-muted">Örnek: 28.9784</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Harita -->
+            <div class="form-group">
+              <label>Konum Seçiniz:</label>
+              <div id="locationMap" style="height: 400px; width: 100%; border: 2px solid #ddd; border-radius: 8px;"></div>
+              <small class="form-text text-muted">
+                Haritaya tıklayarak konum seçin veya yukarıdaki arama kutusundan adres ara
+              </small>
+            </div>
+
+            <!-- Butonlar -->
+            <div class="form-group text-center">
+              <button type="submit" class="btn btn-success mr-2" 
+                      [disabled]="!locationForm.valid || !selectedLocation">
+                Şube Ekle
+              </button>
+              <button type="button" class="btn btn-secondary" routerLink="/branches">
+                İptal
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
