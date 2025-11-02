@@ -1,3 +1,4 @@
+import { RentalComponent } from './components/rental/rental.component';
 import { LocationAddComponent } from './components/location-add/location-add.component';
 import { AdminGuard } from './guards/admin.guard';
 import { NgModule } from '@angular/core';
@@ -30,6 +31,7 @@ const routes: Routes = [
   { path: "home/carlist", component: CarListComponent },
   { path: "home/carlist/payment/:carId", component: PaymentComponent },
   { path: "home/carlist/paymentcorporate/:carId", component: PaymentcorporateComponent },
+  { path: "rentals", component: RentalComponent, canActivate:[LoginGuard] },
 
   { path: "cars", component: CarComponent },
   { path: "cars/brand/:brandId", component: CarComponent },

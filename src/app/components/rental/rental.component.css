@@ -1,0 +1,36 @@
+.card {
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border: none;
+  border-radius: 10px;
+}
+
+.card-header {
+  border-radius: 10px 10px 0 0 !important;
+}
+
+.table th {
+  border-top: none;
+  font-weight: 600;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.4em 0.6em;
+}
+
+/* Responsive tablo */
+@media (max-width: 768px) {
+  .table-responsive {
+    font-size: 0.875rem;
+  }
+  
+  .badge {
+    font-size: 0.7rem;
+  }
+}
+
+/* Loading spinner */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
