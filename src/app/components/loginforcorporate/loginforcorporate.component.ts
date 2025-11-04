@@ -9,10 +9,15 @@ import { Router } from '@angular/router';
   templateUrl: './loginforcorporate.component.html',
   styleUrls: ['./loginforcorporate.component.css']
 })
-export class LoginforcorporateComponent {
+export class LoginforcorporateComponent implements OnInit {
   loginForCorporateForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private toastrService: ToastrService, private router: Router) {}
+  constructor(
+    private formBuilder: FormBuilder, 
+    private authService: AuthService, 
+    private toastrService: ToastrService, 
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.createLoginForm();
@@ -20,8 +25,8 @@ export class LoginforcorporateComponent {
 
   createLoginForm() {
     this.loginForCorporateForm = this.formBuilder.group({
-      email: ["", Validators.required],
-      password: ["", Validators.required]
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", [Validators.required]]
     });
   }
 
@@ -29,13 +34,27 @@ export class LoginforcorporateComponent {
     if (this.loginForCorporateForm.valid) {
       let loginModel = Object.assign({}, this.loginForCorporateForm.value);
 
-      this.authService.loginForCorporate(loginModel).subscribe(response => {
-        this.toastrService.info(response.message);
-        localStorage.setItem("token", response.data.token);
-      }, responseError => {
-        this.toastrService.error(responseError.error);
-      });
+      this.authService.loginForCorporate(loginModel).subscribe(
+        response => {
+          this.toastrService.info(response.message);
+          localStorage.setItem("token", response.data.token);
+          this.router.navigate(['/cars']);
+        }, 
+        error => {
+          this.toastrService.error(error.error?.message || 'Giriş başarısız');
+        }
+      );
+    } else {
+      this.markFormGroupTouched();
+      this.toastrService.warning('Lütfen tüm alanları doğru şekilde doldurun');
     }
+  }
+
+  private markFormGroupTouched() {
+    Object.keys(this.loginForCorporateForm.controls).forEach(key => {
+      const control = this.loginForCorporateForm.get(key);
+      control?.markAsTouched();
+    });
   }
 
   isActive(route: string): boolean {

@@ -1,35 +1,66 @@
-<div class="container" >
-    <div style="background-color: #cedce0;" *ngIf="hideCustomerInfo">
+<div class="container">
+    <!-- Müşteri Bilgileri Formu - Sadece giriş yapmamış kullanıcılar için gösterilecek -->
+    <div style="background-color: #cedce0;" *ngIf="hideCustomerInfo === false">
         <div style="padding: 20px;">
             <form [formGroup]="customerAddForm">
                 <h1>Müşteri Bilgileri</h1>
                 <div>
                     <label>İsim</label>
                     <input type="text" id="firstName" formControlName="firstName" class="form-control">
+                    <div *ngIf="customerAddForm.get('firstName')?.invalid && customerAddForm.get('firstName')?.touched" 
+                         class="text-danger">
+                        İsim alanı zorunludur
+                    </div>
                 </div>
                 <div>
                     <label>Soyisim</label>
                     <input type="text" id="lastName" formControlName="lastName" class="form-control">
+                    <div *ngIf="customerAddForm.get('lastName')?.invalid && customerAddForm.get('lastName')?.touched" 
+                         class="text-danger">
+                        Soyisim alanı zorunludur
+                    </div>
                 </div>
                 <div>
                     <label>TC Kimlik No</label>
                     <input type="text" id="identityNumber" formControlName="identityNumber" class="form-control" maxlength="11">
+                    <div *ngIf="customerAddForm.get('identityNumber')?.invalid && customerAddForm.get('identityNumber')?.touched" 
+                         class="text-danger">
+                        TC Kimlik No alanı zorunludur
+                    </div>
                 </div>
                 <div>
                     <label>Telefon Numarası</label>
                     <input type="text" id="phoneNumber" formControlName="phoneNumber" class="form-control" minlength="11" maxlength="11">
+                    <div *ngIf="customerAddForm.get('phoneNumber')?.invalid && customerAddForm.get('phoneNumber')?.touched" 
+                         class="text-danger">
+                        Telefon numarası alanı zorunludur
+                    </div>
                 </div>
                 <div>
                     <label>E-Posta Adresi</label>
                     <input type="email" id="email" formControlName="email" class="form-control">
+                    <div *ngIf="customerAddForm.get('email')?.invalid && customerAddForm.get('email')?.touched" 
+                         class="text-danger">
+                        Geçerli bir e-posta adresi giriniz
+                    </div>
                 </div>
                 <div>
                     <label>Adres</label>
                     <textarea id="address" formControlName="address" class="form-control" maxlength="140" style="height: 100px;"></textarea>
+                    <div *ngIf="customerAddForm.get('address')?.invalid && customerAddForm.get('address')?.touched" 
+                         class="text-danger">
+                        Adres alanı zorunludur
+                    </div>
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- Giriş yapmış kullanıcı için bilgi mesajı
+    <div *ngIf="isUserAuthenticated" class="alert alert-info">
+        <strong>Kullanıcı Girişi Tespit Edildi</strong><br>
+        Kiralama işlemi mevcut kullanıcı hesabınızla gerçekleştirilecektir.
+    </div> -->
 
     <br>
 
@@ -96,26 +127,6 @@
                                             <option value="2038">2038</option>
                                             <option value="2039">2039</option>
                                             <option value="2040">2040</option>
-                                            <option value="2041">2041</option>
-                                            <option value="2042">2042</option>
-                                            <option value="2043">2043</option>
-                                            <option value="2044">2044</option>
-                                            <option value="2045">2045</option>
-                                            <option value="2046">2046</option>
-                                            <option value="2047">2047</option>
-                                            <option value="2048">2048</option>
-                                            <option value="2049">2049</option>
-                                            <option value="2050">2050</option>
-                                            <option value="2051">2051</option>
-                                            <option value="2052">2052</option>
-                                            <option value="2053">2053</option>
-                                            <option value="2054">2054</option>
-                                            <option value="2055">2055</option>
-                                            <option value="2056">2056</option>
-                                            <option value="2057">2057</option>
-                                            <option value="2058">2058</option>
-                                            <option value="2059">2059</option>
-                                            <option value="2060">2060</option>
                                         </select>
                                         <i class="icon-chevron-down icon"></i>
                                     </div>
@@ -129,7 +140,9 @@
                             </div>
                         </div>
                         <div>
-                            <button type="button" (click)="addCustomerAndRental()" class="btn btn-success btn-xs">Rent</button>
+                            <button type="button" (click)="addCustomerAndRental()" class="btn btn-success btn-xs">
+                                {{ isUserAuthenticated ? 'Kirala' : 'Müşteri Oluştur ve Kirala' }}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -137,4 +150,3 @@
         </div>
     </div>
 </div>
-

@@ -4,11 +4,17 @@
         <a class="btn btn-custom" [routerLink]="['/login']" [ngClass]="{'active': isActive('/login'), 'inactive': !isActive('/login')}">Bireysel</a>
         <a class="btn btn-custom" [routerLink]="['/loginforcorporate']" [ngClass]="{'active': isActive('/loginforcorporate'), 'inactive': !isActive('/loginforcorporate')}">Kurumsal</a>
       </div>
-      <form [formGroup]="loginForCorporateForm">
+      
+      <form [formGroup]="loginForCorporateForm" (ngSubmit)="login()"> <!-- ngSubmit eklendi -->
         <h1 class="h3 mb-3 fw-normal">Kurumsal Giriş Yap</h1>
+        
         <div class="form-floating">
           <input formControlName="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
           <label for="floatingInput">Email</label>
+          <div *ngIf="loginForCorporateForm.get('email')?.invalid && loginForCorporateForm.get('email')?.touched" 
+               class="text-danger small mt-1">
+            Geçerli bir email adresi giriniz
+          </div>
         </div>
 
         <br>
@@ -16,15 +22,24 @@
         <div class="form-floating">
           <input formControlName="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
           <label for="floatingPassword">Şifre</label>
+          <div *ngIf="loginForCorporateForm.get('password')?.invalid && loginForCorporateForm.get('password')?.touched" 
+               class="text-danger small mt-1">
+            Şifre en az 6 karakter olmalıdır
+          </div>
         </div>
+        
         <div class="checkbox mb-3">
           <label>
             <input type="checkbox" value="remember-me"> Beni Hatırla
           </label>
         </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="login()" routerLink="/cars">Giriş Yap</button>
+        
+        <!-- BUTON DÜZELTİLDİ -->
+        <button class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!loginForCorporateForm.valid">
+          Giriş Yap
+        </button>
+        
         <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
       </form>
     </main>
-  </body>
-  
+</body>

@@ -1,32 +1,54 @@
 <div class="container">
-    <!-- Similar structure to the payment page with any corporate-specific details -->
-    <div style="background-color: #cedce0;" *ngIf="hideCustomerInfo">
+    <!-- Kurumsal Müşteri Bilgileri - Sadece giriş yapmamış kullanıcılar için -->
+    <div style="background-color: #cedce0;" *ngIf="hideCustomerInfo === false">
         <div style="padding: 20px;">
             <form [formGroup]="customerAddForm">
                 <h1>Kurumsal Müşteri Bilgileri</h1>
                 <div>
                     <label>Şirket Adı</label>
                     <input type="text" id="companyName" formControlName="companyName" class="form-control">
+                    <div *ngIf="customerAddForm.get('companyName')?.invalid && customerAddForm.get('companyName')?.touched" 
+                         class="text-danger">
+                        Şirket adı alanı zorunludur
+                    </div>
                 </div>
                 <div>
                     <label>Vergi Numarası</label>
                     <input type="text" id="taxNumber" maxlength="10" formControlName="taxNumber" class="form-control">
+                    <div *ngIf="customerAddForm.get('taxNumber')?.invalid && customerAddForm.get('taxNumber')?.touched" 
+                         class="text-danger">
+                        Vergi numarası alanı zorunludur
+                    </div>
                 </div>
                 <div>
                     <label>Telefon Numarası</label>
                     <input type="text" id="phoneNumber" formControlName="phoneNumber" class="form-control" minlength="11" maxlength="11">
+                    <div *ngIf="customerAddForm.get('phoneNumber')?.invalid && customerAddForm.get('phoneNumber')?.touched" 
+                         class="text-danger">
+                        Telefon numarası alanı zorunludur
+                    </div>
                 </div>
                 <div>
                     <label>E-Posta Adresi</label>
                     <input type="email" id="email" formControlName="email" class="form-control">
+                    <div *ngIf="customerAddForm.get('email')?.invalid && customerAddForm.get('email')?.touched" 
+                         class="text-danger">
+                        Geçerli bir e-posta adresi giriniz
+                    </div>
                 </div>
                 <div>
                     <label>Adres</label>
                     <textarea id="address" formControlName="address" class="form-control" maxlength="140" style="height: 100px;"></textarea>
+                    <div *ngIf="customerAddForm.get('address')?.invalid && customerAddForm.get('address')?.touched" 
+                         class="text-danger">
+                        Adres alanı zorunludur
+                    </div>
                 </div>
             </form>
         </div>
     </div>
+
+
 
     <br>
 
@@ -80,7 +102,9 @@
                             </div>
                         </div>
                         <div>
-                            <button type="button" (click)="addCorporateCustomerAndRental()" class="btn btn-success btn-xs">Rent</button>
+                            <button type="button" (click)="addCorporateCustomerAndRental()" class="btn btn-success btn-xs">
+                                {{ isUserAuthenticated ? 'Kirala' : 'Müşteri Oluştur ve Kirala' }}
+                            </button>
                         </div>
                     </div>
                 </div>
