@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from './../../models/location';
 import { LocationService } from 'src/app/services/location.service';
+import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 
 @Component({
@@ -13,17 +14,28 @@ export class BranchesComponent implements OnInit {
   selectedCity: string = '';
   private map: any;
   private markers: L.Marker[] = [];
+  highlightedLocation: string = '';
 
-  constructor(private locationService: LocationService) {}
+  constructor(
+    private locationService: LocationService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.initMap();
     this.getLocations();
+    
+    // Query params'ı dinle
+    this.route.queryParams.subscribe(params => {
+      if (params['location']) {
+        this.highlightedLocation = params['location'];
+        this.highlightLocationOnMap();
+      }
+    });
   }
 
   private initMap(): void {
     this.map = L.map('map').setView([39.9334, 32.8597], 6);
-
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: ''
@@ -35,17 +47,29 @@ export class BranchesComponent implements OnInit {
     this.markers.forEach(marker => this.map.removeLayer(marker));
     this.markers = [];
 
-    // Özel marker ikonu (senin PNG dosyan)
+    // Özel marker ikonu
     const customIcon = L.icon({
-      iconUrl: 'assets/images/location.png', // kendi ikonun
-      iconSize: [40, 40], // boyut (isteğe göre değiştir)
-      iconAnchor: [20, 40], // alt orta noktadan sabitle
-      popupAnchor: [0, -40] // popup’ın konumunu ayarla
+      iconUrl: 'assets/images/location.png',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+      popupAnchor: [0, -40]
     });
 
-    // Marker’ları ekle
+    // Vurgulanan lokasyon için farklı ikon
+    const highlightedIcon = L.icon({
+      iconUrl: 'assets/images/location-highlighted.png', // Vurgulanmış ikon
+      iconSize: [50, 50],
+      iconAnchor: [25, 50],
+      popupAnchor: [0, -50]
+    });
+
+    // Marker'ları ekle
     this.locations.forEach(location => {
-      const marker = L.marker([location.latitude, location.longitude], { icon: customIcon })
+      const isHighlighted = this.highlightedLocation === location.locationName;
+      
+      const marker = L.marker([location.latitude, location.longitude], { 
+        icon: isHighlighted ? highlightedIcon : customIcon 
+      })
         .addTo(this.map)
         .bindPopup(`
           <div style="min-width: 200px;">
@@ -57,6 +81,11 @@ export class BranchesComponent implements OnInit {
           </div>
         `);
 
+      // Vurgulanan marker'ı aç
+      if (isHighlighted) {
+        marker.openPopup();
+      }
+
       this.markers.push(marker);
     });
 
@@ -64,6 +93,13 @@ export class BranchesComponent implements OnInit {
     if (this.markers.length > 0) {
       const group = L.featureGroup(this.markers);
       this.map.fitBounds(group.getBounds().pad(0.1));
+    }
+  }
+
+  private highlightLocationOnMap(): void {
+    if (this.highlightedLocation && this.locations.length > 0) {
+      // Marker'ları yeniden oluştur
+      this.addLocationsToMap();
     }
   }
 

@@ -1,4 +1,18 @@
+
 <div class="container">
+
+  
+  <!-- HARITA BÖLÜMÜ -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <h3 style="color: aliceblue;">Şubelerimizin Konumları ({{ locations.length }} şube)</h3>
+      <div id="map" style="height: 500px; width: 100%;"></div>
+    </div>
+  </div>
+</div>
+
+<br>
+
   <div class="row">
     <div class="col-md-3">
       <label for="citySelect">Şehir Seçiniz:</label>
@@ -27,12 +41,3 @@
       </div>
     </div>
   </div>
-
-  <!-- HARITA BÖLÜMÜ -->
-  <div class="row mt-4">
-    <div class="col-12">
-      <h3 style="color: aliceblue;">Şubelerimizin Konumları ({{ locations.length }} şube)</h3>
-      <div id="map" style="height: 500px; width: 100%;"></div>
-    </div>
-  </div>
-</div>

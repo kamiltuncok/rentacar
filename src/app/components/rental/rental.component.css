@@ -1,36 +1,60 @@
-.card {
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  border: none;
-  border-radius: 10px;
+.rental-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border: 1px solid #e0e0e0;
 }
 
-.card-header {
-  border-radius: 10px 10px 0 0 !important;
+.rental-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.table th {
-  border-top: none;
-  font-weight: 600;
+.card-img-container {
+  height: 200px;
+  overflow: hidden;
+}
+
+.rental-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.rental-card:hover .rental-image {
+  transform: scale(1.05);
+}
+
+.rental-info p {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.location-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 5px;
+}
+
+.location-link:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.card-title {
+  font-size: 1.1rem;
 }
 
 .badge {
   font-size: 0.75rem;
-  padding: 0.4em 0.6em;
+  padding: 0.35em 0.65em;
 }
 
-/* Responsive tablo */
-@media (max-width: 768px) {
-  .table-responsive {
-    font-size: 0.875rem;
-  }
-  
-  .badge {
-    font-size: 0.7rem;
-  }
+.badge-success {
+  background-color: #28a745;
 }
 
-/* Loading spinner */
-.spinner-border {
-  width: 3rem;
-  height: 3rem;
+.badge-warning {
+  background-color: #ffc107;
+  color: #212529;
 }

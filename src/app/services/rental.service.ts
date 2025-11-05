@@ -28,4 +28,10 @@ export class RentalService {
    add(rental:Rental):Observable<ResponseModel>{
     return this.httpClient.post<ResponseModel>(this.apiUrl+"rentals/add",rental)
   }
+
+  getRentalDetailsByUserId(userId: number, customerType: number): Observable<ListResponseModel<RentalDetail>> {
+    let newPath = this.apiUrl + "rentals/getrentalsbyuserid?userId=" + userId + "&customerType=" + customerType;
+    return this.httpClient
+      .get<ListResponseModel<RentalDetail>>(newPath)
+}
 }
