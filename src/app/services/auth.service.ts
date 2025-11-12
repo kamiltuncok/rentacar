@@ -93,6 +93,11 @@ export class AuthService {
     const customerType = this.getCustomerType();
     return customerType === 'Admin';
   }
+
+  isLocationManager(): boolean {
+    const customerType = this.getCustomerType();
+    return customerType === 'LocationManager';
+  }
   
   
 }

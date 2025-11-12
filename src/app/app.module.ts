@@ -41,6 +41,7 @@ import { PaymentcorporateComponent } from './components/paymentcorporate/payment
 import { BranchesComponent } from './components/branches/branches.component';
 import { CarSearchFormComponent } from './components/car-search-form/car-search-form.component';
 import { LocationAddComponent } from './components/location-add/location-add.component';
+import { LocationManagerRentalsComponent } from './components/location-manager-rentals/location-manager-rentals.component';
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import { LocationAddComponent } from './components/location-add/location-add.com
     PaymentcorporateComponent,
     BranchesComponent,
     CarSearchFormComponent,
-    LocationAddComponent
+    LocationAddComponent,
+    LocationManagerRentalsComponent
   ],
   imports: [
     BrowserModule,

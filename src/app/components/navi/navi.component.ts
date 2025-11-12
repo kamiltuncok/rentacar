@@ -22,6 +22,7 @@ export class NaviComponent implements OnInit {
   isCorporate = false;
   displayName: string = ''; // Kullanıcı adı veya şirket adı için eklendi
   isAdmin = false;
+  isLocationManager = false;
   isDropdownOpen = false;
 
   constructor(
@@ -44,63 +45,85 @@ export class NaviComponent implements OnInit {
     this.router.navigate([""]);
   }
 
- getUserData() {
-  if (this.authService.isAuthenticated()) {
-    const userId = this.authService.getCurrentUserId;
-    const customerType = this.authService.getCustomerType();
+  getUserData() {
+    if (this.authService.isAuthenticated()) {
+      const userId = this.authService.getCurrentUserId;
+      const customerType = this.authService.getCustomerType();
 
-    // ✅ Admin kontrolü eklendi
-    if (this.authService.isAdmin()) {
-      this.userService.getUserById(userId).subscribe(
-        (response: { data: User }) => {
-          this.user = response.data;
-          this.displayName = this.user.firstName;
-          this.isAdmin = true;
-          this.dataLoaded = true;
-        },
-        (error: any) => {
-          console.error('Admin bilgisi alınamadı:', error);
-          this.displayName = "Admin";
-          this.isAdmin = true;
-          this.dataLoaded = true;
-        }
-      );
-    } else if (customerType === 'Individual') {
-      this.userService.getUserById(userId).subscribe(
-        (response: { data: User }) => {
-          this.user = response.data;
-          this.displayName = this.user.firstName;
-          this.isCorporate = false;
-          this.dataLoaded = true;
-        },
-        (error: any) => {
-          console.error('Bireysel kullanıcı bilgisi alınamadı:', error);
-        }
-      );
-    } else if (customerType === 'Corporate') {
-      this.corporateUserService.getUserById(userId).subscribe(
-        (response: { data: CorporateUser }) => {
-          this.corporateUser = response.data;
-          this.displayName = this.corporateUser.companyName;
-          this.isCorporate = true;
-          this.dataLoaded = true;
-        },
-        (error: any) => {
-          console.error('Kurumsal kullanıcı bilgisi alınamadı:', error);
-        }
-      );
-    } else {
-      console.error('Geçersiz customerType değeri:', customerType);
+      // ✅ Admin kontrolü
+      if (this.authService.isAdmin()) {
+        this.userService.getUserById(userId).subscribe(
+          (response: { data: User }) => {
+            this.user = response.data;
+            this.displayName = this.user.firstName;
+            this.isAdmin = true;
+            this.dataLoaded = true;
+          },
+          (error: any) => {
+            console.error('Admin bilgisi alınamadı:', error);
+            this.displayName = "Admin";
+            this.isAdmin = true;
+            this.dataLoaded = true;
+          }
+        );
+      } 
+      // ✅ LocationManager kontrolü
+      else if (this.authService.isLocationManager()) {
+        this.userService.getUserById(userId).subscribe(
+          (response: { data: User }) => {
+            this.user = response.data;
+            this.displayName = this.user.firstName;
+            this.isLocationManager = true;
+            this.dataLoaded = true;
+          },
+          (error: any) => {
+            console.error('LocationManager bilgisi alınamadı:', error);
+            this.displayName = "Lokasyon Yöneticisi";
+            this.isLocationManager = true;
+            this.dataLoaded = true;
+          }
+        );
+      }
+      else if (customerType === 'Individual') {
+        this.userService.getUserById(userId).subscribe(
+          (response: { data: User }) => {
+            this.user = response.data;
+            this.displayName = this.user.firstName;
+            this.isCorporate = false;
+            this.dataLoaded = true;
+          },
+          (error: any) => {
+            console.error('Bireysel kullanıcı bilgisi alınamadı:', error);
+          }
+        );
+      } else if (customerType === 'Corporate') {
+        this.corporateUserService.getUserById(userId).subscribe(
+          (response: { data: CorporateUser }) => {
+            this.corporateUser = response.data;
+            this.displayName = this.corporateUser.companyName;
+            this.isCorporate = true;
+            this.dataLoaded = true;
+          },
+          (error: any) => {
+            console.error('Kurumsal kullanıcı bilgisi alınamadı:', error);
+          }
+        );
+      } else {
+        console.error('Geçersiz customerType değeri:', customerType);
+      }
     }
   }
-}
 
   showAdminMenu(): boolean {
     return this.isAuthenticated() && this.isAdmin;
   }
 
+  showLocationManagerMenu(): boolean {
+    return this.isAuthenticated() && this.isLocationManager;
+  }
+
   showUserMenu(): boolean {
-    return this.isAuthenticated() && !this.isAdmin;
+    return this.isAuthenticated() && !this.isAdmin && !this.isLocationManager;
   }
 
   isAuthenticated() {
@@ -108,7 +131,15 @@ export class NaviComponent implements OnInit {
   }
 
   getProfileUrl(): string {
+    if (this.isAdmin) return '/admin-profile';
+    if (this.isLocationManager) return '/location-manager-profile';
     return this.isCorporate ? '/profilecorporate' : '/profile';
+  }
+
+  getUserRoleText(): string {
+    if (this.isAdmin) return 'Admin';
+    if (this.isLocationManager) return 'Lokasyon Yöneticisi';
+    return this.isCorporate ? 'Kurumsal' : 'Bireysel';
   }
 
   toggleDropdown() {
@@ -121,11 +152,11 @@ export class NaviComponent implements OnInit {
   }
 
   @HostListener('document:click', ['$event'])
-onDocumentClick(event: MouseEvent) {
-  const target = event.target as HTMLElement;
-  
-  if (!target.closest('.navbar-nav.mr-right')) {
-    this.isDropdownOpen = false;
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    
+    if (!target.closest('.navbar-nav.mr-right')) {
+      this.isDropdownOpen = false;
+    }
   }
-}
 }

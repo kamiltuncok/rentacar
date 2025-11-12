@@ -1,3 +1,4 @@
+import { LocationManagerRentalsComponent } from './components/location-manager-rentals/location-manager-rentals.component';
 import { RentalComponent } from './components/rental/rental.component';
 import { LocationAddComponent } from './components/location-add/location-add.component';
 import { AdminGuard } from './guards/admin.guard';
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: "home/carlist/payment/:carId", component: PaymentComponent },
   { path: "home/carlist/paymentcorporate/:carId", component: PaymentcorporateComponent },
   { path: "rentals", component: RentalComponent, canActivate:[LoginGuard] },
+  { path: "location-rentals", component: LocationManagerRentalsComponent, canActivate:[LoginGuard] },
 
   { path: "cars", component: CarComponent },
   { path: "cars/brand/:brandId", component: CarComponent },

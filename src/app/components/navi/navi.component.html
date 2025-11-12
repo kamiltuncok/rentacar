@@ -19,6 +19,11 @@
         <li class="nav-item">
           <a class="navbar-brand" routerLink="/rentals">Kiralamalarım</a>
         </li>
+        
+        <!-- LOCATION MANAGER MENÜSÜ -->
+        <li *ngIf="showLocationManagerMenu()" class="nav-item">
+          <a class="navbar-brand" routerLink="/location-rentals">Kiralamaları Yönet</a>
+        </li>
       </ul>
       
       <!-- ✅ ADMIN DROPDOWN - ÇALIŞAN SON HALİ -->
@@ -35,11 +40,10 @@
             <a class="dropdown-item-custom" routerLink="/brands/add" (click)="closeDropdown()">Marka Ekle</a>
             <a class="dropdown-item-custom" routerLink="/colors/add" (click)="closeDropdown()">Renk Ekle</a>
             <a class="dropdown-item-custom" routerLink="/locations/add" (click)="closeDropdown()">Şube Ekle</a>
+            <a class="dropdown-item-custom" routerLink="/location-managers" (click)="closeDropdown()">Lokasyon Yöneticisi Ata</a>
           </div>
         </div>
       </div>
-      
-
       
       <!-- GİRİŞ YAPMAMIŞ KULLANICILAR -->
       <ul *ngIf="!isAuthenticated()" class="navbar-nav mr-right" id="righta">
@@ -56,7 +60,7 @@
         <li class="nav-item">
           <a *ngIf="dataLoaded" class="navbar-brand text-blue" [routerLink]="getProfileUrl()">
             <img [src]="'assets/images/user.png'" width="30" height="30">
-            {{ displayName }}
+            {{ displayName }} ({{ getUserRoleText() }})
           </a>
         </li>
         <li class="nav-item">
