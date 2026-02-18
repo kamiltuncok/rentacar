@@ -12,6 +12,9 @@ import { User } from 'src/app/models/user';
 import { CorporateUser } from 'src/app/models/corporateUser';
 import { Customer } from 'src/app/models/customer';
 import { CorporateCustomer } from 'src/app/models/corporateCustomer';
+import { RentalService } from 'src/app/services/rental.service';
+import { forkJoin, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-location-manager-rentals',
@@ -20,10 +23,18 @@ import { CorporateCustomer } from 'src/app/models/corporateCustomer';
 })
 export class LocationManagerRentalsComponent implements OnInit {
   rentals: RentalDetail[] = [];
+  filteredRentals: RentalDetail[] = [];
   userDetails: { [key: string]: any } = {};
   isLoading: boolean = false;
+  isFiltering: boolean = false;
   userId: number;
   defaultImageUrl: string = "https://localhost:44306/Uploads/Images/default-car-image.jpg";
+
+  filterDate: string = '';
+  filterDateEnd: string = '';
+  dateRangeMode: boolean = false;
+  filterEmail: string = '';
+  filterName: string = '';
 
   constructor(
     private locationOperationClaimService: LocationOperationClaimService,
@@ -32,8 +43,9 @@ export class LocationManagerRentalsComponent implements OnInit {
     private userService: UserService,
     private corporateUserService: CorporateUserService,
     private customerService: CustomerService,
-    private corporateCustomerService: CorporateCustomerService
-  ) {}
+    private corporateCustomerService: CorporateCustomerService,
+    private rentalService: RentalService
+  ) { }
 
   ngOnInit(): void {
     this.getManagedLocationRentals();
@@ -41,7 +53,7 @@ export class LocationManagerRentalsComponent implements OnInit {
 
   getManagedLocationRentals() {
     this.isLoading = true;
-    
+
     this.userId = this.authService.getCurrentUserId;
 
     if (!this.userId) {
@@ -60,6 +72,7 @@ export class LocationManagerRentalsComponent implements OnInit {
       (response) => {
         if (response.success) {
           this.rentals = response.data;
+          this.filteredRentals = [...this.rentals];
           this.loadUserDetails();
         } else {
           this.toastrService.error(response.message, 'Hata');
@@ -71,6 +84,90 @@ export class LocationManagerRentalsComponent implements OnInit {
         this.isLoading = false;
       }
     );
+  }
+
+  applyFilters() {
+    const hasDate = !!this.filterDate;
+    const hasEmail = !!(this.filterEmail && this.filterEmail.trim());
+    const hasName = !!(this.filterName && this.filterName.trim());
+
+    if (!hasDate && !hasEmail && !hasName) {
+      this.toastrService.warning('Lütfen en az bir filtre giriniz.', 'Uyarı');
+      return;
+    }
+
+    // Aralık modunda bitiş tarihi zorunlu
+    if (hasDate && this.dateRangeMode && !this.filterDateEnd) {
+      this.toastrService.warning('Lütfen bitiş tarihini de giriniz.', 'Uyarı');
+      return;
+    }
+
+    // Aralık modunda başlangıç > bitiş kontrolü
+    if (hasDate && this.dateRangeMode && this.filterDateEnd && this.filterDate > this.filterDateEnd) {
+      this.toastrService.warning('Başlangıç tarihi bitiş tarihinden büyük olamaz.', 'Uyarı');
+      return;
+    }
+
+    this.isFiltering = true;
+
+    // Tarih filtresi: tek tarih veya aralık
+    let dateObs: Observable<Set<number>>;
+    if (!hasDate) {
+      dateObs = of(null);
+    } else if (this.dateRangeMode && this.filterDateEnd) {
+      dateObs = this.rentalService.getRentalsByDateRange(this.filterDate, this.filterDateEnd).pipe(
+        map(r => new Set<number>(r.success ? r.data.map((x: any) => x.rentalId) : []))
+      );
+    } else {
+      // Tek tarih: aynı günü aralık olarak gönder
+      dateObs = this.rentalService.getRentalsByDateRange(this.filterDate, this.filterDate).pipe(
+        map(r => new Set<number>(r.success ? r.data.map((x: any) => x.rentalId) : []))
+      );
+    }
+
+    const emailObs: Observable<Set<number>> = hasEmail
+      ? this.rentalService.getRentalsByEmail(this.filterEmail.trim()).pipe(
+        map(r => new Set<number>(r.success ? r.data.map((x: any) => x.rentalId) : []))
+      )
+      : of(null);
+
+    const nameObs: Observable<Set<number>> = hasName
+      ? this.rentalService.getRentalsByName(this.filterName.trim()).pipe(
+        map(r => new Set<number>(r.success ? r.data.map((x: any) => x.rentalId) : []))
+      )
+      : of(null);
+
+    forkJoin([dateObs, emailObs, nameObs]).subscribe(
+      ([dateIds, emailIds, nameIds]) => {
+        // Sadece aktif filtrelerin sonuçlarını kesişime al
+        this.filteredRentals = this.rentals.filter(r => {
+          if (dateIds !== null && !dateIds.has(r.rentalId)) return false;
+          if (emailIds !== null && !emailIds.has(r.rentalId)) return false;
+          if (nameIds !== null && !nameIds.has(r.rentalId)) return false;
+          return true;
+        });
+
+        if (this.filteredRentals.length === 0) {
+          this.toastrService.info('Filtre kriterlerine uygun kiralama bulunamadı.', 'Bilgi');
+        } else {
+          this.toastrService.success(`${this.filteredRentals.length} kiralama bulundu.`, 'Başarılı');
+        }
+        this.isFiltering = false;
+      },
+      (error) => {
+        this.toastrService.error('Filtreleme sırasında bir hata oluştu.', 'Hata');
+        this.isFiltering = false;
+      }
+    );
+  }
+
+  clearFilter() {
+    this.filterDate = '';
+    this.filterDateEnd = '';
+    this.filterEmail = '';
+    this.filterName = '';
+    this.filteredRentals = [...this.rentals];
+    this.toastrService.info('Filtre temizlendi.', 'Bilgi');
   }
 
   loadUserDetails() {
@@ -135,7 +232,7 @@ export class LocationManagerRentalsComponent implements OnInit {
             });
         }
       }
-      
+
       return Promise.resolve();
     });
 
@@ -148,7 +245,7 @@ export class LocationManagerRentalsComponent implements OnInit {
 
   getUserInfo(rental: RentalDetail): any {
     let key: string;
-    
+
     if (rental.userId !== 0) {
       key = `user_${rental.userId}`;
     } else if (rental.customerId !== 0) {
@@ -172,7 +269,7 @@ export class LocationManagerRentalsComponent implements OnInit {
           identityNumber: individualUser.identityNumber,
           address: individualUser.address
         };
-      
+
       case 'CorporateUser':
         const corporateUser = userInfo.data as CorporateUser;
         return {
@@ -184,7 +281,7 @@ export class LocationManagerRentalsComponent implements OnInit {
           taxNumber: corporateUser.taxNumber,
           address: corporateUser.address
         };
-      
+
       case 'IndividualCustomer':
         const individualCustomer = userInfo.data as Customer;
         return {
@@ -196,7 +293,7 @@ export class LocationManagerRentalsComponent implements OnInit {
           identityNumber: individualCustomer.identityNumber,
           address: individualCustomer.address
         };
-      
+
       case 'CorporateCustomer':
         const corporateCustomer = userInfo.data as CorporateCustomer;
         return {
@@ -208,7 +305,7 @@ export class LocationManagerRentalsComponent implements OnInit {
           taxNumber: corporateCustomer.taxNumber,
           address: corporateCustomer.address
         };
-      
+
       default:
         return null;
     }

@@ -1,8 +1,112 @@
 <div class="container mt-4">
   <div class="row">
     <div class="col-12">
-      <h2 class="mb-4">Lokasyon Kiralama Yönetimi</h2>
+      <h2 class="mb-2">Lokasyon Kiralama Yönetimi</h2>
       <p class="text-muted mb-4">Yönettiğiniz lokasyonlardaki tüm kiralama kayıtları</p>
+
+      <!-- Filtre Paneli -->
+      <div class="card filter-card mb-4">
+        <div class="card-body">
+          <h6 class="card-title mb-3">
+            <i class="fas fa-filter mr-2"></i> Filtreleme Seçenekleri
+            <small class="text-muted font-weight-normal ml-2">— Birden fazla filtre aynı anda kullanılabilir</small>
+          </h6>
+
+          <!-- Üst Satır: Tarih (sol) | E-Posta (sağ) -->
+          <div class="row">
+            <!-- SOL: Tarih Filtresi -->
+            <div class="col-md-6 border-right-filter">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="filter-section-label">📅 Kiralama Tarihi</span>
+                <!-- Tek tarih / Aralık toggle -->
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="dateRangeToggle" [(ngModel)]="dateRangeMode"
+                    (change)="filterDateEnd = ''" />
+                  <label class="custom-control-label small" for="dateRangeToggle">Tarih Aralığı Seç</label>
+                </div>
+              </div>
+
+              <!-- Tek Tarih Modu -->
+              <div *ngIf="!dateRangeMode" class="mt-1">
+                <label for="filterDate" class="form-label small text-muted">Kiralama Tarihi</label>
+                <input type="date" id="filterDate" class="form-control" [(ngModel)]="filterDate"
+                  [disabled]="isLoading || isFiltering" />
+              </div>
+
+              <!-- Aralık Modu -->
+              <div *ngIf="dateRangeMode" class="mt-1">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="filterDateStart" class="form-label small text-muted">Başlangıç</label>
+                    <input type="date" id="filterDateStart" class="form-control" [(ngModel)]="filterDate"
+                      [disabled]="isLoading || isFiltering" />
+                  </div>
+                  <div class="col-6">
+                    <label for="filterDateEnd" class="form-label small text-muted">Bitiş</label>
+                    <input type="date" id="filterDateEnd" class="form-control" [(ngModel)]="filterDateEnd"
+                      [min]="filterDate" [disabled]="isLoading || isFiltering || !filterDate" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SAĞ: E-Posta Filtresi -->
+            <div class="col-md-6 mt-3 mt-md-0">
+              <span class="filter-section-label">✉️ E-Posta Adresi</span>
+              <div class="mt-2">
+                <label for="filterEmail" class="form-label small text-muted">Kullanıcı / Kurumsal E-Posta</label>
+                <input type="email" id="filterEmail" class="form-control" placeholder="ornek@email.com"
+                  [(ngModel)]="filterEmail" [disabled]="isLoading || isFiltering" />
+              </div>
+            </div>
+          </div>
+
+          <hr class="filter-divider mt-3">
+
+          <!-- Alt Satır: İsim/Şirket Filtresi (sol) -->
+          <div class="row">
+            <div class="col-md-6">
+              <span class="filter-section-label">👤 Ad Soyad / Şirket Adı</span>
+              <div class="mt-2">
+                <label for="filterName" class="form-label small text-muted">Ad Soyad veya Şirket Adı</label>
+                <input type="text" id="filterName" class="form-control" placeholder="Ahmet Yılmaz veya ABC Ltd."
+                  [(ngModel)]="filterName" [disabled]="isLoading || isFiltering" (keyup.enter)="applyFilters()" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Butonlar -->
+          <div class="row mt-3">
+            <div class="col-12 d-flex align-items-center" style="gap: 0.5rem; flex-wrap: wrap;">
+              <button class="btn btn-primary" (click)="applyFilters()" [disabled]="isLoading || isFiltering">
+                <span *ngIf="isFiltering" class="spinner-border spinner-border-sm mr-1" role="status"></span>
+                <span *ngIf="!isFiltering">🔍</span> Filtrele
+              </button>
+
+              <button class="btn btn-outline-secondary" (click)="clearFilter()" [disabled]="isLoading || isFiltering">
+                ✕ Temizle
+              </button>
+
+              <!-- Aktif filtre etiketleri -->
+              <ng-container *ngIf="filterDate">
+                <span *ngIf="!dateRangeMode" class="badge filter-badge ml-1">
+                  📅 {{ filterDate | date:'dd.MM.yyyy' }}
+                </span>
+                <span *ngIf="dateRangeMode" class="badge filter-badge ml-1">
+                  📅 {{ filterDate | date:'dd.MM.yyyy' }}
+                  <span *ngIf="filterDateEnd"> — {{ filterDateEnd | date:'dd.MM.yyyy' }}</span>
+                </span>
+              </ng-container>
+              <span *ngIf="filterEmail" class="badge filter-badge-email ml-1">
+                ✉️ {{ filterEmail }}
+              </span>
+              <span *ngIf="filterName" class="badge filter-badge-name ml-1">
+                👤 {{ filterName }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Loading Spinner -->
       <div *ngIf="isLoading" class="text-center">
@@ -13,23 +117,18 @@
       </div>
 
       <!-- No Rentals Message -->
-      <div *ngIf="!isLoading && rentals.length === 0" class="alert alert-info">
-        <h4 class="alert-heading">Henüz kiralama kaydı bulunmuyor</h4>
-        <p class="mb-0">Yönettiğiniz lokasyonlarda henüz kiralama yapılmamış.</p>
+      <div *ngIf="!isLoading && filteredRentals.length === 0" class="alert alert-info">
+        <h4 class="alert-heading">Kiralama bulunamadı</h4>
+        <p class="mb-0">Filtre kriterlerinizi değiştirerek tekrar deneyebilirsiniz.</p>
       </div>
 
       <!-- Rentals List -->
-      <div *ngIf="!isLoading && rentals.length > 0" class="row">
-        <div class="col-md-6 col-lg-4 mb-4" *ngFor="let rental of rentals">
+      <div *ngIf="!isLoading && filteredRentals.length > 0" class="row">
+        <div class="col-md-6 col-lg-4 mb-4" *ngFor="let rental of filteredRentals">
           <div class="card rental-card h-100">
-            <!-- Resim -->
             <div class="card-img-container">
-              <img 
-                src="assets/images/lux.jpg" 
-                class="card-img-top rental-image" 
-                alt="{{ rental.brandName }}"
-                (error)="setDefaultImage($event)"
-              >
+              <img src="assets/images/lux.jpg" class="card-img-top rental-image" alt="{{ rental.brandName }}"
+                (error)="setDefaultImage($event)">
             </div>
 
             <div class="card-header bg-primary text-white">
@@ -40,10 +139,9 @@
                 </span>
               </div>
             </div>
-            
+
             <div class="card-body">
               <div class="rental-info">
-                <!-- Araç Bilgileri -->
                 <h6 class="text-primary mb-3">Araç Bilgileri</h6>
                 <p><strong>Model:</strong> {{ rental.modelYear }} {{ rental.brandName }}</p>
                 <p><strong>Renk:</strong> {{ rental.colorName }}</p>
@@ -52,45 +150,44 @@
                 <p><strong>Vites:</strong> {{ rental.gearName }}</p>
                 <p><strong>Günlük Ücret:</strong> {{ rental.dailyPrice | currency:'TRY':'symbol' }}</p>
                 <p><strong>Depozito:</strong> {{ rental.deposit | currency:'TRY':'symbol' }}</p>
-                
+
                 <hr>
-                
-                <!-- Kullanıcı Bilgileri kısmında şu değişiklik: -->
-<div *ngIf="getUserInfo(rental); else loadingUser">
-  <p><strong>Ad Soyad/Şirket:</strong> {{ getUserInfo(rental).name }}</p>
-  <p><strong>Email:</strong> {{ getUserInfo(rental).email }}</p>
-  <p><strong>Telefon:</strong> {{ getUserInfo(rental).phone }}</p>
-  <p><strong>Adres:</strong> {{ getUserInfo(rental).address }}</p>
-  <p *ngIf="getUserInfo(rental).type === 'Individual'">
-    <strong>TC Kimlik:</strong> {{ getUserInfo(rental).identityNumber }}
-  </p>
-  <p *ngIf="getUserInfo(rental).type === 'Corporate'">
-    <strong>Vergi No:</strong> {{ getUserInfo(rental).taxNumber }}
-  </p>
-  <p><strong>Kaynak:</strong> {{ getUserInfo(rental).source === 'User' ? 'Kullanıcı' : 'Müşteri' }}</p>
-</div>
+
+                <div *ngIf="getUserInfo(rental); else loadingUser">
+                  <p><strong>Ad Soyad/Şirket:</strong> {{ getUserInfo(rental).name }}</p>
+                  <p><strong>Email:</strong> {{ getUserInfo(rental).email }}</p>
+                  <p><strong>Telefon:</strong> {{ getUserInfo(rental).phone }}</p>
+                  <p><strong>Adres:</strong> {{ getUserInfo(rental).address }}</p>
+                  <p *ngIf="getUserInfo(rental).type === 'Individual'">
+                    <strong>TC Kimlik:</strong> {{ getUserInfo(rental).identityNumber }}
+                  </p>
+                  <p *ngIf="getUserInfo(rental).type === 'Corporate'">
+                    <strong>Vergi No:</strong> {{ getUserInfo(rental).taxNumber }}
+                  </p>
+                  <p><strong>Kaynak:</strong> {{ getUserInfo(rental).source === 'User' ? 'Kullanıcı' : 'Müşteri' }}</p>
+                </div>
                 <ng-template #loadingUser>
                   <p class="text-muted">Kullanıcı bilgileri yükleniyor...</p>
                 </ng-template>
-                
+
                 <p><strong>Kullanıcı ID:</strong> {{ rental.userId }}</p>
-                
+
                 <hr>
-                
-                <!-- Kiralama Bilgileri -->
+
                 <h6 class="text-primary mb-3">Kiralama Bilgileri</h6>
                 <p><strong>Kiralama Tarihi:</strong> {{ formatDate(rental.rentDate) }}</p>
                 <p *ngIf="rental.returnDate">
                   <strong>İade Tarihi:</strong> {{ formatDate(rental.returnDate) }}
                 </p>
                 <p>
-                  <strong>Başlangıç Lokasyonu:</strong> 
-                  <a [routerLink]="['/branches']" [queryParams]="{location: rental.startLocation}" class="location-link">
+                  <strong>Başlangıç Lokasyonu:</strong>
+                  <a [routerLink]="['/branches']" [queryParams]="{location: rental.startLocation}"
+                    class="location-link">
                     {{ rental.startLocation }}
                   </a>
                 </p>
                 <p>
-                  <strong>Bitiş Lokasyonu:</strong> 
+                  <strong>Bitiş Lokasyonu:</strong>
                   <a [routerLink]="['/branches']" [queryParams]="{location: rental.endLocation}" class="location-link">
                     {{ rental.endLocation }}
                   </a>
