@@ -1,9 +1,4 @@
-
-
-<ul class="list-group">
-    <li (click)="clearCurrentColor()" routerLink="/cars">Tüm Renkler</li>
-    <li (click)="setCurrentColor(color)"
-    routerLink="/cars/color/{{color.colorId}}"
-    *ngFor="let color of colors" [class]="getCurrentColorClass(color)">{{color.colorName}}</li>
-  </ul>
-
+<select class="filter-dropdown" (change)="onColorChange($event)">
+  <option value="">Tüm Renkler</option>
+  <option *ngFor="let color of colors" [value]="color.colorId">{{ color.colorName }}</option>
+</select>

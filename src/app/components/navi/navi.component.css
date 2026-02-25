@@ -1,62 +1,201 @@
-.navbar-brand:hover {
-    color: black;
-}
-.navbar-brand {
-    color: powderblue;
-}
-
-/* ✅ SAĞ HİZALAMA DÜZELTİLDİ */
-#right {
-    margin-left: auto; /* ✅ Otomatik sağa it */
-    display: flex;
-    align-items: center;
+/* ─── Navbar Root ─────────────────────────── */
+.g-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  height: 64px;
+  display: flex;
+  align-items: center;
 }
 
-#righta {
-    margin-left: auto; /* ✅ Otomatik sağa it */
-    display: flex;
-    align-items: center;
+.g-nav__inner {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 }
 
-.logo-img {
-    height: 45px;
-}
-
-/* ✅ DROPDOWN CSS */
-.dropdown-menu-custom {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: rgb(80,128,168);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 4px;
-  min-width: 200px;
-  z-index: 9999;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-}
-
-.dropdown-item-custom {
-  color: white;
-  padding: 10px 16px;
-  display: block;
+/* Brand */
+.g-nav__brand {
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+
+.g-nav__logo {
+  height: 36px;
+}
+
+/* Center nav links */
+.g-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+
+.g-nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  height: 36px;
+  padding: 0 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: none;
+  transition: background 150ms ease, color 150ms ease;
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
   cursor: pointer;
 }
 
-.dropdown-item-custom:hover {
-  background-color: rgba(255,255,255,0.2);
-  color: white;
-  text-decoration: none;
+.g-nav__link:hover {
+  background: #f1f5f9;
+  color: #0f172a;
 }
 
-.dropdown-item-custom:last-child {
+.g-nav__link--active {
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+/* Right side */
+.g-nav__right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Auth links */
+.g-nav__auth-link {
+  height: 36px;
+  padding: 0 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 150ms;
+}
+
+.g-nav__auth-link:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.g-nav__auth-btn {
+  height: 36px;
+  padding: 0 1rem;
+  display: inline-flex;
+  align-items: center;
+  background: #1d4ed8;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 150ms;
+}
+
+.g-nav__auth-btn:hover {
+  background: #1e40af;
+  color: #fff;
+}
+
+/* User info */
+.g-nav__user {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 36px;
+  padding: 0 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: none;
+  transition: background 150ms;
+}
+
+.g-nav__user:hover {
+  background: #f1f5f9;
+}
+
+.g-nav__user img {
+  border-radius: 50%;
+}
+
+.g-nav__role-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+}
+
+/* Dropdown */
+.g-nav__dropdown-wrap {
+  position: relative;
+}
+
+.g-nav__dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.g-nav__dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.1);
+  min-width: 200px;
+  z-index: 200;
+  overflow: hidden;
+}
+
+.g-nav__dropdown-item {
+  display: block;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: none;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 150ms, color 150ms;
+}
+
+.g-nav__dropdown-item:last-child {
   border-bottom: none;
 }
 
-/* ✅ NAVBAR DÜZENİ */
-.navbar-nav {
-    display: flex;
-    align-items: center;
+.g-nav__dropdown-item:hover {
+  background: #f8fafc;
+  color: #0f172a;
 }
 
+@media (max-width: 768px) {
+  .g-nav__links {
+    display: none;
+  }
+}

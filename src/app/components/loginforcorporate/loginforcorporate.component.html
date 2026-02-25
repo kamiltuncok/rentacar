@@ -1,45 +1,36 @@
-<body class="text-center">
-    <main class="form-signin w-100 m-auto">
-      <div class="button-container mb-3">
-        <a class="btn btn-custom" [routerLink]="['/login']" [ngClass]="{'active': isActive('/login'), 'inactive': !isActive('/login')}">Bireysel</a>
-        <a class="btn btn-custom" [routerLink]="['/loginforcorporate']" [ngClass]="{'active': isActive('/loginforcorporate'), 'inactive': !isActive('/loginforcorporate')}">Kurumsal</a>
-      </div>
-      
-      <form [formGroup]="loginForCorporateForm" (ngSubmit)="login()"> <!-- ngSubmit eklendi -->
-        <h1 class="h3 mb-3 fw-normal">Kurumsal Giriş Yap</h1>
-        
-        <div class="form-floating">
-          <input formControlName="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-          <label for="floatingInput">Email</label>
-          <div *ngIf="loginForCorporateForm.get('email')?.invalid && loginForCorporateForm.get('email')?.touched" 
-               class="text-danger small mt-1">
-            Geçerli bir email adresi giriniz
-          </div>
-        </div>
+<div class="auth-page">
+  <div class="auth-card">
 
-        <br>
-        
-        <div class="form-floating">
-          <input formControlName="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
-          <label for="floatingPassword">Şifre</label>
-          <div *ngIf="loginForCorporateForm.get('password')?.invalid && loginForCorporateForm.get('password')?.touched" 
-               class="text-danger small mt-1">
-            Şifre en az 6 karakter olmalıdır
-          </div>
-        </div>
-        
-        <div class="checkbox mb-3">
-          <label>
-            <input type="checkbox" value="remember-me"> Beni Hatırla
-          </label>
-        </div>
-        
-        <!-- BUTON DÜZELTİLDİ -->
-        <button class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!loginForCorporateForm.valid">
-          Giriş Yap
-        </button>
-        
-        <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
-      </form>
-    </main>
-</body>
+    <div class="auth-card__logo">
+      <img src="assets/images/logocar.png" alt="RentACar">
+    </div>
+
+    <div class="auth-tab-group">
+      <a class="auth-tab" [routerLink]="['/login']" [class.active]="isActive('/login')">Bireysel</a>
+      <a class="auth-tab" [routerLink]="['/loginforcorporate']"
+        [class.active]="isActive('/loginforcorporate')">Kurumsal</a>
+    </div>
+
+    <h2 class="auth-card__title">Kurumsal Giriş</h2>
+
+    <form [formGroup]="loginForCorporateForm">
+
+      <div class="auth-field">
+        <label for="corpEmail">E-posta</label>
+        <input id="corpEmail" formControlName="email" type="email" placeholder="sirket@email.com">
+      </div>
+
+      <div class="auth-field">
+        <label for="corpPassword">Şifre</label>
+        <input id="corpPassword" formControlName="password" type="password" placeholder="••••••••">
+      </div>
+
+      <button class="auth-submit" type="submit" (click)="login()">Giriş Yap</button>
+    </form>
+
+    <div class="auth-footer">
+      Hesabınız yok mu? <a routerLink="/registerforcorporate" style="color:#1d4ed8;font-weight:600;">Kayıt Ol</a>
+    </div>
+
+  </div>
+</div>

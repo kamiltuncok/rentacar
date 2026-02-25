@@ -1,61 +1,62 @@
-<body class="text-center">
-    
-    <main class="form-signin w-100 m-auto">
-      <div class="button-container mb-3">
-        <a class="btn btn-custom" [routerLink]="['/register']" [ngClass]="{'active': isActive('/register'), 'inactive': !isActive('/register')}">Bireysel</a>
-        <a class="btn btn-custom" [routerLink]="['/registerforcorporate']" [ngClass]="{'active': isActive('/registerforcorporate'), 'inactive': !isActive('/registerforcorporate')}">Kurumsal</a>
+<div class="auth-page">
+  <div class="auth-card">
+
+    <div class="auth-card__logo">
+      <img src="assets/images/logocar.png" alt="RentACar">
     </div>
-      <form [formGroup]="registerForm">
 
-        <h1 class="h3 mb-3 fw-normal">Bireysel Kayıt Ol</h1>
+    <div class="auth-tab-group">
+      <a class="auth-tab" [routerLink]="['/register']" [class.active]="isActive('/register')">Bireysel</a>
+      <a class="auth-tab" [routerLink]="['/registerforcorporate']"
+        [class.active]="isActive('/registerforcorporate')">Kurumsal</a>
+    </div>
 
-        <div class="form-floating">
-            <input formControlName="firstName" type="firstName" class="form-control" id="FirstName" placeholder="FirstName">
-            <label for="floatingfirstname">Ad</label>
-          </div>
-          <br>
+    <h2 class="auth-card__title">Hesap Oluştur</h2>
 
-          <div class="form-floating">
-            <input formControlName="lastName" type="lastName" class="form-control" id="LastName" placeholder="LastName">
-            <label for="floatinglastname">Soyad</label>
-          </div>
-          <br>
-    
-        <div class="form-floating">
-          <input formControlName="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-          <label for="floatingInput">Email</label>
+    <form [formGroup]="registerForm">
+
+      <div class="auth-fields-row">
+        <div class="auth-field">
+          <label for="regFirstName">Ad</label>
+          <input id="regFirstName" formControlName="firstName" type="text" placeholder="Adınız">
         </div>
-        <br>
-
-        <div class="form-floating">
-          <input formControlName="identityNumber" type="identityNumber" maxlength="11" class="form-control" id="floatingInput" placeholder="12345678901">
-          <label for="floatingInput">Tc Kimlik No</label>
+        <div class="auth-field">
+          <label for="regLastName">Soyad</label>
+          <input id="regLastName" formControlName="lastName" type="text" placeholder="Soyadınız">
         </div>
-        <br>
+      </div>
 
-        <div class="form-floating">
-          <input formControlName="phoneNumber" type="phoneNumber" maxlength="11" class="form-control" id="floatingInput" placeholder="05324685421">
-          <label for="floatingInput">Telefon Numarası</label>
-        </div>
-        <br>
+      <div class="auth-field">
+        <label for="regEmail">E-posta</label>
+        <input id="regEmail" formControlName="email" type="email" placeholder="ornek@email.com">
+      </div>
 
-        <div class="form-floating">
-          <input formControlName="address" type="address" class="form-control" id="floatingInput" placeholder="Cumhuriyet Mahallesi ...">
-          <label for="floatingInput">Adres</label>
-        </div>
-        <br>
+      <div class="auth-field">
+        <label for="regId">TC Kimlik No</label>
+        <input id="regId" formControlName="identityNumber" type="text" maxlength="11" placeholder="12345678901">
+      </div>
 
-        <div class="form-floating">
-          <input formControlName="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
-          <label for="floatingPassword">Şifre</label>
-        </div>
-        <br>
-    
-        <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="register()" routerLink="/cars">Kaydol</button>
-        <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
-      </form>
-    </main>
-    
-    
-        
-      </body>
+      <div class="auth-field">
+        <label for="regPhone">Telefon</label>
+        <input id="regPhone" formControlName="phoneNumber" type="text" maxlength="11" placeholder="05XXXXXXXXX">
+      </div>
+
+      <div class="auth-field">
+        <label for="regAddress">Adres</label>
+        <input id="regAddress" formControlName="address" type="text" placeholder="Mahalle, cadde, no…">
+      </div>
+
+      <div class="auth-field">
+        <label for="regPassword">Şifre</label>
+        <input id="regPassword" formControlName="password" type="password" placeholder="••••••••">
+      </div>
+
+      <button class="auth-submit" type="submit" (click)="register()">Kayıt Ol</button>
+    </form>
+
+    <div class="auth-footer">
+      Zaten hesabınız var mı? <a routerLink="/login" style="color:#1d4ed8;font-weight:600;">Giriş Yap</a>
+    </div>
+
+  </div>
+</div>

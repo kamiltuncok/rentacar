@@ -336,4 +336,47 @@ export class LocationManagerRentalsComponent implements OnInit {
       default: return 'Bilinmiyor';
     }
   }
+
+  confirmReturn(rental: RentalDetail) {
+    if (rental.isReturned) {
+      this.toastrService.info('Bu kiralama zaten teslim edildi.', 'Bilgi');
+      return;
+    }
+    const confirmed = confirm(`#${rental.rentalId} numaralı kiralama teslim alındı olarak işaretlensin mi?\n\nAraç: ${rental.brandName} (${rental.modelYear})`);
+    if (!confirmed) return;
+
+    this.rentalService.markAsReturned(rental.rentalId).subscribe(
+      (res) => {
+        if (res.success) {
+          rental.isReturned = true;
+          this.toastrService.success('Araç teslim alındı olarak işaretlendi.', 'Başarılı');
+        } else {
+          this.toastrService.error(res.message || 'İşlem başarısız.', 'Hata');
+        }
+      },
+      (err) => {
+        this.toastrService.error('Sunucu hatası oluştu.', 'Hata');
+      }
+    );
+  }
+
+  confirmDelete(rental: RentalDetail) {
+    const confirmed = confirm(`#${rental.rentalId} numaralı kiralama silinsin mi?\n\nBu işlem geri alınamaz.\nAraç: ${rental.brandName} (${rental.modelYear})`);
+    if (!confirmed) return;
+
+    this.rentalService.deleteAndFreeCar(rental.rentalId).subscribe(
+      (res) => {
+        if (res.success) {
+          this.rentals = this.rentals.filter(r => r.rentalId !== rental.rentalId);
+          this.filteredRentals = this.filteredRentals.filter(r => r.rentalId !== rental.rentalId);
+          this.toastrService.success('Kiralama silindi, araç serbest bırakıldı.', 'Başarılı');
+        } else {
+          this.toastrService.error(res.message || 'Silme işlemi başarısız.', 'Hata');
+        }
+      },
+      (err) => {
+        this.toastrService.error('Sunucu hatası oluştu.', 'Hata');
+      }
+    );
+  }
 }

@@ -19,12 +19,12 @@ export class BranchesComponent implements OnInit {
   constructor(
     private locationService: LocationService,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initMap();
     this.getLocations();
-    
+
     // Query params'ı dinle
     this.route.queryParams.subscribe(params => {
       if (params['location']) {
@@ -66,9 +66,9 @@ export class BranchesComponent implements OnInit {
     // Marker'ları ekle
     this.locations.forEach(location => {
       const isHighlighted = this.highlightedLocation === location.locationName;
-      
-      const marker = L.marker([location.latitude, location.longitude], { 
-        icon: isHighlighted ? highlightedIcon : customIcon 
+
+      const marker = L.marker([location.latitude, location.longitude], {
+        icon: isHighlighted ? highlightedIcon : customIcon
       })
         .addTo(this.map)
         .bindPopup(`
@@ -123,6 +123,12 @@ export class BranchesComponent implements OnInit {
 
   onCityChange(event: any): void {
     const city = event.target.value;
+    this.selectedCity = city;
+    this.getLocationsByCity(city);
+  }
+
+  filterByCity(city: string): void {
+    this.selectedCity = city;
     this.getLocationsByCity(city);
   }
 }

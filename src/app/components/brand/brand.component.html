@@ -1,10 +1,4 @@
-
-
-   <ul class="list-group">
-    <li (click)="clearCurrentBrand()" routerLink="/cars">Tüm Markalar</li>
-    <li (click)="setCurrentBrand(brand)"
-    routerLink="/cars/brand/{{brand.brandId}}"
-    *ngFor="let brand of brands"
-     [class]="getCurrentBrandClass(brand)">{{brand.brandName}}</li>
-  </ul>
-
+<select class="filter-dropdown" (change)="onBrandChange($event)">
+   <option value="">Tüm Markalar</option>
+   <option *ngFor="let brand of brands" [value]="brand.brandId">{{ brand.brandName }}</option>
+</select>

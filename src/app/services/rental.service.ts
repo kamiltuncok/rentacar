@@ -54,4 +54,18 @@ export class RentalService {
     let newPath = this.apiUrl + "rentals/getbydaterange?startDate=" + startDate + "&endDate=" + endDate;
     return this.httpClient.get<ListResponseModel<RentalDetail>>(newPath);
   }
+
+  markAsReturned(rentalId: number): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.apiUrl + "rentals/markasreturned?rentalId=" + rentalId,
+      {}
+    );
+  }
+
+  deleteAndFreeCar(rentalId: number): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.apiUrl + "rentals/deleteandfreecardendpoint?rentalId=" + rentalId,
+      {}
+    );
+  }
 }

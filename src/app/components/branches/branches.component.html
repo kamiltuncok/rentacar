@@ -1,43 +1,108 @@
+<div class="branches-page">
+  <div class="branches-inner">
 
-<div class="container">
-
-  
-  <!-- HARITA BÖLÜMÜ -->
-  <div class="row mt-4">
-    <div class="col-12">
-      <h3 style="color: aliceblue;">Şubelerimizin Konumları ({{ locations.length }} şube)</h3>
-      <div id="map" style="height: 500px; width: 100%;"></div>
-    </div>
-  </div>
-</div>
-
-<br>
-
-  <div class="row">
-    <div class="col-md-3">
-      <label for="citySelect">Şehir Seçiniz:</label>
-      <select id="citySelect" class="form-control" (change)="onCityChange($event)">
-        <option value="">Tüm Şehirler</option>
-        <option value="Istanbul">İstanbul</option>
-        <option value="Ankara">Ankara</option>
-        <option value="İzmir">İzmir</option>
-      </select>
+    <!-- Page Header -->
+    <div class="g-page-header">
+      <span class="g-eyebrow">Şube Ağımız</span>
+      <h1 class="g-page-title">Şubeler</h1>
+      <p class="g-page-subtitle">{{ locations.length }} aktif şubemizden size en yakın noktayı bulun.</p>
     </div>
 
-    <div class="col-md-9">
-      <!-- ✅ DEBUG BİLGİSİ -->
-      <div class="alert alert-info">
-        Toplam <strong>{{ locations.length }}</strong> şube bulundu
+    <!-- Map Section -->
+    <div class="branches-map-card">
+      <div class="branches-map-card__head">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+          <circle cx="12" cy="10" r="3" />
+        </svg>
+        Harita Görünümü
       </div>
+      <div id="map" class="branches-map"></div>
+    </div>
 
-      <div *ngFor="let location of locations" class="location-item card mb-3">
-        <div class="card-body">
-          <h4 class="card-title">{{ location.locationName }}</h4>
-          <p class="card-text"><strong>Şehir:</strong> {{ location.locationCity }}</p>
-          <p class="card-text"><strong>Adres:</strong> {{ location.address }}</p>
-          <p class="card-text"><strong>Email:</strong> {{ location.email }}</p>
-          <p class="card-text"><strong>Telefon:</strong> {{ location.phoneNumber }}</p>
+    <!-- Filter + List -->
+    <div class="branches-content">
+
+      <!-- City Filter -->
+      <div class="branches-filter">
+        <span class="branches-filter__label">Şehir Filtrele</span>
+        <div class="branches-pill-group">
+          <button class="branches-pill" [class.branches-pill--active]="selectedCity === ''"
+            (click)="filterByCity('')">Tümü</button>
+          <button class="branches-pill" [class.branches-pill--active]="selectedCity === 'Istanbul'"
+            (click)="filterByCity('Istanbul')">İstanbul</button>
+          <button class="branches-pill" [class.branches-pill--active]="selectedCity === 'Ankara'"
+            (click)="filterByCity('Ankara')">Ankara</button>
+          <button class="branches-pill" [class.branches-pill--active]="selectedCity === 'İzmir'"
+            (click)="filterByCity('İzmir')">İzmir</button>
         </div>
       </div>
+
+      <!-- Location Cards -->
+      <div class="location-grid">
+
+        <div *ngIf="locations.length === 0" class="g-empty-state">
+          <div class="g-empty-state__icon">📍</div>
+          <div class="g-empty-state__title">Şube bulunamadı</div>
+          <p class="g-empty-state__text">Farklı bir şehir deneyin.</p>
+        </div>
+
+        <div *ngFor="let location of locations" class="location-card">
+          <div class="location-card__head">
+            <div class="location-card__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="location-card__name">{{ location.locationName }}</h3>
+              <span class="location-card__city">{{ location.locationCity }}</span>
+            </div>
+          </div>
+
+          <dl class="location-card__details">
+            <div class="location-card__detail-row">
+              <dt>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 12h18" />
+                  <path d="M3 6h18" />
+                  <path d="M3 18h18" />
+                </svg>
+                Adres
+              </dt>
+              <dd>{{ location.address }}</dd>
+            </div>
+            <div class="location-card__detail-row">
+              <dt>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+                E-posta
+              </dt>
+              <dd>{{ location.email }}</dd>
+            </div>
+            <div class="location-card__detail-row">
+              <dt>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.72a16 16 0 0 0 5.06 5.06l.93-.93a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 20.92 15z" />
+                </svg>
+                Telefon
+              </dt>
+              <dd>{{ location.phoneNumber }}</dd>
+            </div>
+          </dl>
+        </div>
+
+      </div>
     </div>
+
   </div>
+</div>

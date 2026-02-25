@@ -1,73 +1,65 @@
-<nav class="navbar navbar-expand-lg navbar-mid-color" style="background-color:rgb(80,128,168)">
-  <div class="container">
-    <!-- Logo kısmı -->
-    <a class="navbar-brand logo-container" routerLink="/">
-      <img src="assets/images/logocar.png" alt="Logo" class="logo-img">
+<!-- Premium Navbar -->
+<nav class="g-nav">
+  <div class="g-nav__inner">
+
+    <!-- Brand -->
+    <a class="g-nav__brand" routerLink="/">
+      <img src="assets/images/logocar.png" alt="RentACar Logo" class="g-nav__logo">
     </a>
-    
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="navbar-brand" routerLink="/">Anasayfa</a>
-        </li>
-        <li class="nav-item">
-          <a class="navbar-brand" routerLink="/cars">Arabalar</a>
-        </li>
-        <li class="nav-item">
-          <a class="navbar-brand" routerLink="/branches">Şubeler</a>
-        </li>
-        <li class="nav-item">
-          <a class="navbar-brand" routerLink="/rentals">Kiralamalarım</a>
-        </li>
-        
-        <!-- LOCATION MANAGER MENÜSÜ -->
-        <li *ngIf="showLocationManagerMenu()" class="nav-item">
-          <a class="navbar-brand" routerLink="/location-rentals">Kiralamaları Yönet</a>
-        </li>
-      </ul>
-      
-      <!-- ✅ ADMIN DROPDOWN - ÇALIŞAN SON HALİ -->
-      <div *ngIf="showAdminMenu()" class="navbar-nav mr-right">
-        <div style="position: relative;">
-          <button class="navbar-brand" (click)="isDropdownOpen = !isDropdownOpen" 
-                  style="border: none; background: none; color: powderblue; cursor: pointer;">
-            Araba Eklemeler ▼
-          </button>
-          
-          <div *ngIf="isDropdownOpen" class="dropdown-menu-custom">
-            <a class="dropdown-item-custom" routerLink="/cars/add" (click)="closeDropdown()">Araba Ekle</a>
-            <a class="dropdown-item-custom" routerLink="/carimages/add" (click)="closeDropdown()">Araba Resmi Ekle</a>
-            <a class="dropdown-item-custom" routerLink="/brands/add" (click)="closeDropdown()">Marka Ekle</a>
-            <a class="dropdown-item-custom" routerLink="/colors/add" (click)="closeDropdown()">Renk Ekle</a>
-            <a class="dropdown-item-custom" routerLink="/locations/add" (click)="closeDropdown()">Şube Ekle</a>
-            <a class="dropdown-item-custom" routerLink="/location-managers" (click)="closeDropdown()">Lokasyon Yöneticisi Ata</a>
-          </div>
+
+    <!-- Center Links -->
+    <ul class="g-nav__links">
+      <li><a class="g-nav__link" routerLink="/" routerLinkActive="g-nav__link--active"
+          [routerLinkActiveOptions]="{exact:true}">Anasayfa</a></li>
+      <li><a class="g-nav__link" routerLink="/cars" routerLinkActive="g-nav__link--active">Arabalar</a></li>
+      <li><a class="g-nav__link" routerLink="/branches" routerLinkActive="g-nav__link--active">Şubeler</a></li>
+      <li><a class="g-nav__link" routerLink="/rentals" routerLinkActive="g-nav__link--active">Kiralamalarım</a></li>
+      <li *ngIf="showLocationManagerMenu()">
+        <a class="g-nav__link" routerLink="/location-rentals" routerLinkActive="g-nav__link--active">Kiralamaları
+          Yönet</a>
+      </li>
+    </ul>
+
+    <!-- Right side -->
+    <div class="g-nav__right">
+
+      <!-- Admin Dropdown -->
+      <div *ngIf="showAdminMenu()" class="g-nav__dropdown-wrap">
+        <button class="g-nav__link g-nav__dropdown-trigger" (click)="isDropdownOpen = !isDropdownOpen">
+          Admin
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+        <div *ngIf="isDropdownOpen" class="g-nav__dropdown">
+          <a class="g-nav__dropdown-item" routerLink="/cars/add" (click)="closeDropdown()">Araba Ekle</a>
+          <a class="g-nav__dropdown-item" routerLink="/carimages/add" (click)="closeDropdown()">Araba Resmi Ekle</a>
+          <a class="g-nav__dropdown-item" routerLink="/brands/add" (click)="closeDropdown()">Marka Ekle</a>
+          <a class="g-nav__dropdown-item" routerLink="/colors/add" (click)="closeDropdown()">Renk Ekle</a>
+          <a class="g-nav__dropdown-item" routerLink="/locations/add" (click)="closeDropdown()">Şube Ekle</a>
+          <a class="g-nav__dropdown-item" routerLink="/location-managers" (click)="closeDropdown()">Lokasyon Yöneticisi
+            Ata</a>
         </div>
       </div>
-      
-      <!-- GİRİŞ YAPMAMIŞ KULLANICILAR -->
-      <ul *ngIf="!isAuthenticated()" class="navbar-nav mr-right" id="righta">
-        <li class="nav-item">
-          <a class="navbar-brand" routerLink="/login">Giriş</a>
-        </li>
-        <li class="nav-item">
-          <a class="navbar-brand" routerLink="/register">Kayıt ol</a>
-        </li>
-      </ul>
-      
-      <!-- PROFİL ve ÇIKIŞ -->
-      <ul *ngIf="isAuthenticated()" class="navbar-nav mr-right" id="right">
-        <li class="nav-item">
-          <a *ngIf="dataLoaded" class="navbar-brand text-blue" [routerLink]="getProfileUrl()">
-            <img [src]="'assets/images/user.png'" width="30" height="30">
-            {{ displayName }} ({{ getUserRoleText() }})
-          </a>
-        </li>
-        <li class="nav-item">
-          <a (click)="logout()" class="navbar-brand" style="cursor: pointer;">Çıkış Yap</a>
-        </li>
-      </ul>
+
+      <!-- Auth — guest -->
+      <ng-container *ngIf="!isAuthenticated()">
+        <a class="g-nav__auth-link" routerLink="/login">Giriş</a>
+        <a class="g-nav__auth-btn" routerLink="/register">Kayıt Ol</a>
+      </ng-container>
+
+      <!-- Auth — logged in -->
+      <ng-container *ngIf="isAuthenticated()">
+        <a *ngIf="dataLoaded" class="g-nav__user" [routerLink]="getProfileUrl()">
+          <img src="assets/images/user.png" width="26" height="26" alt="profil">
+          <span>{{ displayName }}</span>
+          <span class="g-nav__role-badge">{{ getUserRoleText() }}</span>
+        </a>
+        <button class="g-nav__link" style="background:none;border:none;cursor:pointer;"
+          (click)="logout()">Çıkış</button>
+      </ng-container>
     </div>
+
   </div>
 </nav>
-<br>

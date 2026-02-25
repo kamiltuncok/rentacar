@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Brand } from 'src/app/models/brand';
 import { BrandService } from 'src/app/services/brand.service';
 import { CarService } from 'src/app/services/car.service';
@@ -16,8 +17,9 @@ export class BrandComponent implements OnInit {
 
   constructor(
     private brandService: BrandService,
-    private carService: CarService
-  ) {}
+    private carService: CarService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.getBrands();
@@ -27,6 +29,15 @@ export class BrandComponent implements OnInit {
     this.brandService.getBrands().subscribe(response => {
       this.brands = response.data;
     });
+  }
+
+  onBrandChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    if (value) {
+      this.router.navigate(['/cars/brand', value]);
+    } else {
+      this.router.navigate(['/cars']);
+    }
   }
 
   setCurrentBrand(brand: Brand) {

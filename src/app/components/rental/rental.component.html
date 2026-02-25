@@ -1,81 +1,97 @@
-<div class="container mt-4">
-  <div class="row">
-    <div class="col-12">
-      <h2 class="mb-4">Kiralama Geçmişim</h2>
+<div class="rental-page">
+  <div class="rental-inner">
 
-      <!-- Loading Spinner -->
-      <div *ngIf="isLoading" class="text-center">
-        <div class="spinner-border text-primary" role="status">
-          <span class="sr-only">Yükleniyor...</span>
+    <!-- Page Header -->
+    <div class="g-page-header">
+      <span class="g-eyebrow">Hesabım</span>
+      <h1 class="g-page-title">Kiralama Geçmişim</h1>
+      <p class="g-page-subtitle" *ngIf="!isLoading">{{ rentals.length }} kiralama kaydı</p>
+    </div>
+
+    <!-- Spinner -->
+    <div *ngIf="isLoading" class="g-spinner-wrap">
+      <div class="g-spinner"></div>
+      <p class="g-spinner-text">Kiralamalar yükleniyor…</p>
+    </div>
+
+    <!-- Empty -->
+    <div *ngIf="!isLoading && rentals.length === 0" class="g-empty-state">
+      <div class="g-empty-state__icon">🚗</div>
+      <div class="g-empty-state__title">Henüz kiralama yapmamışsınız</div>
+      <p class="g-empty-state__text">Araç kiraladığınızda burada görünecektir.</p>
+    </div>
+
+    <!-- Rental Cards -->
+    <div *ngIf="!isLoading && rentals.length > 0" class="rental-grid">
+      <div class="rental-card" *ngFor="let rental of rentals">
+
+        <!-- Media -->
+        <div class="rental-card__media">
+          <img src="assets/images/lux.jpg" [alt]="rental.brandName" (error)="setDefaultImage($event)">
+          <span class="rental-card__status-pill" [class.rental-card__status-pill--active]="!rental.isReturned">
+            {{ rental.isReturned ? 'Tamamlandı' : 'Aktif' }}
+          </span>
         </div>
-        <p class="mt-2">Kiralama bilgileri yükleniyor...</p>
-      </div>
 
-      <!-- No Rentals Message -->
-      <div *ngIf="!isLoading && rentals.length === 0" class="alert alert-info">
-        <h4 class="alert-heading">Henüz kiralama yapmamışsınız</h4>
-        <p class="mb-0">Araç kiraladığınızda burada görünecektir.</p>
-      </div>
-
-      <!-- Rentals List -->
-      <div *ngIf="!isLoading && rentals.length > 0" class="row">
-        <div class="col-md-6 col-lg-4 mb-4" *ngFor="let rental of rentals">
-          <div class="card rental-card h-100">
-            <!-- Resim -->
-            <div class="card-img-container">
-              <img 
-                src="assets/images/lux.jpg" 
-                class="card-img-top rental-image" 
-                alt="{{ rental.brandName }}"
-                (error)="setDefaultImage($event)"
-              >
-            </div>
-
-            <div class="card-header bg-primary text-white">
-              <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">{{ rental.brandName }}</h5>
-                <span [class]="'badge ' + getStatusClass(rental.isReturned)">
-                  {{ getStatusText(rental.isReturned) }}
-                </span>
-              </div>
-            </div>
-            
-            <div class="card-body">
-              <div class="rental-info">
-                <p><strong>Model:</strong> {{ rental.modelYear }} {{ rental.brandName }}</p>
-                <p><strong>Renk:</strong> {{ rental.colorName }}</p>
-                <p><strong>Segment:</strong> {{ rental.segmentName }}</p>
-                <p><strong>Yakıt:</strong> {{ rental.fuelName }}</p>
-                <p><strong>Vites:</strong> {{ rental.gearName }}</p>
-                <p><strong>Günlük Ücret:</strong> {{ rental.dailyPrice | currency:'TRY':'symbol' }}</p>
-                <p><strong>Depozito:</strong> {{ rental.deposit | currency:'TRY':'symbol' }}</p>
-                <hr>
-                <p><strong>Kiralama Tarihi:</strong> {{ formatDate(rental.rentDate) }}</p>
-                <p *ngIf="rental.returnDate">
-                  <strong>İade Tarihi:</strong> {{ formatDate(rental.returnDate) }}
-                </p>
-                <p>
-                  <strong>Başlangıç Lokasyonu:</strong> 
-                  <a [routerLink]="['/branches']" [queryParams]="{location: rental.startLocation}" class="location-link">
-                    {{ rental.startLocation }}
-                  </a>
-                </p>
-                <p>
-                  <strong>Bitiş Lokasyonu:</strong> 
-                  <a [routerLink]="['/branches']" [queryParams]="{location: rental.endLocation}" class="location-link">
-                    {{ rental.endLocation }}
-                  </a>
-                </p>
-              </div>
-            </div>
-            <div class="card-footer bg-light">
-              <small class="text-muted">
-                Kiralama ID: {{ rental.rentalId }} | Araç ID: {{ rental.carId }}
-              </small>
-            </div>
+        <!-- Content -->
+        <div class="rental-card__content">
+          <div class="rental-card__brand">{{ rental.brandName }}</div>
+          <div class="rental-card__meta">{{ rental.modelYear }} · {{ rental.colorName }} · {{ rental.segmentName }}
           </div>
+
+          <dl class="rental-card__specs">
+            <div class="rental-spec-row">
+              <dt>Yakıt</dt>
+              <dd>{{ rental.fuelName }}</dd>
+            </div>
+            <div class="rental-spec-row">
+              <dt>Vites</dt>
+              <dd>{{ rental.gearName }}</dd>
+            </div>
+            <div class="rental-spec-row">
+              <dt>Günlük</dt>
+              <dd class="rental-price">{{ rental.dailyPrice | currency:'TRY':'symbol':'1.0-0' }}</dd>
+            </div>
+            <div class="rental-spec-row">
+              <dt>Depozito</dt>
+              <dd>{{ rental.deposit | currency:'TRY':'symbol':'1.0-0' }}</dd>
+            </div>
+            <div class="rental-spec-row rental-spec-row--divider">
+              <dt>Kiralama</dt>
+              <dd>{{ formatDate(rental.rentDate) }}</dd>
+            </div>
+            <div *ngIf="rental.returnDate" class="rental-spec-row">
+              <dt>İade</dt>
+              <dd>{{ formatDate(rental.returnDate) }}</dd>
+            </div>
+            <div class="rental-spec-row">
+              <dt>Alış</dt>
+              <dd>
+                <a [routerLink]="['/branches']" [queryParams]="{location: rental.startLocation}"
+                  class="rental-location-link">
+                  {{ rental.startLocation }}
+                </a>
+              </dd>
+            </div>
+            <div class="rental-spec-row">
+              <dt>İade Yeri</dt>
+              <dd>
+                <a [routerLink]="['/branches']" [queryParams]="{location: rental.endLocation}"
+                  class="rental-location-link">
+                  {{ rental.endLocation }}
+                </a>
+              </dd>
+            </div>
+          </dl>
         </div>
+
+        <!-- Footer -->
+        <div class="rental-card__footer">
+          <span class="rental-card__id">#{{ rental.rentalId }} · Araç {{ rental.carId }}</span>
+        </div>
+
       </div>
     </div>
+
   </div>
 </div>
