@@ -3,11 +3,13 @@ import { ToastrService } from 'ngx-toastr';
 import { CarDetail } from 'src/app/models/carDetail';
 import { CartItem } from 'src/app/models/cartItem';
 import { CartService } from 'src/app/services/cart.service';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-cart-summary',
-  templateUrl: './cart-summary.component.html',
-  styleUrls: ['./cart-summary.component.css']
+    selector: 'app-cart-summary',
+    templateUrl: './cart-summary.component.html',
+    styleUrls: ['./cart-summary.component.css'],
+    imports: [NgIf, NgFor]
 })
 export class CartSummaryComponent implements OnInit {
   cartItems: CartItem[]=[];

@@ -1,16 +1,18 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CarDetail } from 'src/app/models/carDetail';
 import { CarImage } from 'src/app/models/carImage';
 import { CarImageService } from 'src/app/services/car-image.service';
 import { CarService } from 'src/app/services/car.service';
 import { CartService } from 'src/app/services/cart.service';
+import { NgIf, UpperCasePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-car-detail',
-  templateUrl: './car-detail.component.html',
-  styleUrls: ['./car-detail.component.css']
+    selector: 'app-car-detail',
+    templateUrl: './car-detail.component.html',
+    styleUrls: ['./car-detail.component.css'],
+    imports: [NgIf, RouterLink, UpperCasePipe]
 })
 export class CarDetailComponent {
   carDetails: CarDetail[] = [];

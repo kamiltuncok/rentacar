@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { formatDate } from '@angular/common';
+import { formatDate, NgIf } from '@angular/common';
 
 import { CarDetail } from 'src/app/models/carDetail';
 import { CustomerType } from './../../models/rental';
@@ -19,9 +19,10 @@ interface ErrorModel {
 }
 
 @Component({
-  selector: 'app-payment',
-  templateUrl: './payment.component.html',
-  styleUrls: ['./payment.component.css']
+    selector: 'app-payment',
+    templateUrl: './payment.component.html',
+    styleUrls: ['./payment.component.css'],
+    imports: [NgIf, FormsModule, ReactiveFormsModule]
 })
 export class PaymentComponent implements OnInit {
   carDetail: CarDetail;

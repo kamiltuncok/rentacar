@@ -4,11 +4,14 @@ import { RentalService } from 'src/app/services/rental.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { CustomerType } from 'src/app/models/rental';
+import { NgIf, NgFor, CurrencyPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-rental',
-  templateUrl: './rental.component.html',
-  styleUrls: ['./rental.component.css']
+    selector: 'app-rental',
+    templateUrl: './rental.component.html',
+    styleUrls: ['./rental.component.css'],
+    imports: [NgIf, NgFor, RouterLink, CurrencyPipe]
 })
 export class RentalComponent implements OnInit {
   rentals: RentalDetail[] = [];

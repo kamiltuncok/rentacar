@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CarService } from 'src/app/services/car.service';
 import { BrandService } from 'src/app/services/brand.service';
@@ -10,11 +10,13 @@ import { Brand } from './../../models/brand';
 import { Color } from './../../models/color';
 import { Location } from './../../models/location';
 import { Fuel } from './../../models/fuel';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-car-add',
-  templateUrl: './car-add.component.html',
-  styleUrls: ['./car-add.component.css']
+    selector: 'app-car-add',
+    templateUrl: './car-add.component.html',
+    styleUrls: ['./car-add.component.css'],
+    imports: [FormsModule, ReactiveFormsModule, NgFor]
 })
 export class CarAddComponent implements OnInit {
   carAddForm: FormGroup;

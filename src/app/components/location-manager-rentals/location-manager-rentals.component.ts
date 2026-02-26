@@ -15,11 +15,15 @@ import { CorporateCustomer } from 'src/app/models/corporateCustomer';
 import { RentalService } from 'src/app/services/rental.service';
 import { forkJoin, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { FormsModule } from '@angular/forms';
+import { NgIf, NgFor, CurrencyPipe, DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-location-manager-rentals',
-  templateUrl: './location-manager-rentals.component.html',
-  styleUrls: ['./location-manager-rentals.component.css']
+    selector: 'app-location-manager-rentals',
+    templateUrl: './location-manager-rentals.component.html',
+    styleUrls: ['./location-manager-rentals.component.css'],
+    imports: [FormsModule, NgIf, NgFor, RouterLink, CurrencyPipe, DatePipe]
 })
 export class LocationManagerRentalsComponent implements OnInit {
   rentals: RentalDetail[] = [];

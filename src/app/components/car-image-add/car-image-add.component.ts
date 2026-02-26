@@ -4,13 +4,15 @@ import { ToastrService } from 'ngx-toastr';
 import { ColorService } from './../../services/color.service';
 import { BrandService } from './../../services/brand.service';
 import { CarImageService } from './../../services/car-image.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-car-image-add',
-  templateUrl: './car-image-add.component.html',
-  styleUrls: ['./car-image-add.component.css']
+    selector: 'app-car-image-add',
+    templateUrl: './car-image-add.component.html',
+    styleUrls: ['./car-image-add.component.css'],
+    imports: [FormsModule, ReactiveFormsModule, NgFor]
 })
 export class CarImageAddComponent implements OnInit {
   carImageAddForm: FormGroup;

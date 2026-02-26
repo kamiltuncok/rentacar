@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Brand } from 'src/app/models/brand';
 import { CarDetail } from 'src/app/models/carDetail';
@@ -8,11 +8,15 @@ import { BrandService } from 'src/app/services/brand.service';
 import { CarService } from 'src/app/services/car.service';
 import { CartService } from 'src/app/services/cart.service';
 import { ColorService } from 'src/app/services/color.service';
+import { FormsModule } from '@angular/forms';
+import { NgFor, NgIf, CurrencyPipe } from '@angular/common';
+import { FilterPipePipe } from '../../pipes/filter-pipe.pipe';
 
 @Component({
-  selector: 'app-car',
-  templateUrl: './car.component.html',
-  styleUrls: ['./car.component.css']
+    selector: 'app-car',
+    templateUrl: './car.component.html',
+    styleUrls: ['./car.component.css'],
+    imports: [FormsModule, NgFor, NgIf, RouterLink, CurrencyPipe, FilterPipePipe]
 })
 export class CarComponent implements OnInit {
   allCars: CarDetail[] = [];

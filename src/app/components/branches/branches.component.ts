@@ -3,11 +3,13 @@ import { Location } from './../../models/location';
 import { LocationService } from 'src/app/services/location.service';
 import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-branches',
-  templateUrl: './branches.component.html',
-  styleUrls: ['./branches.component.css']
+    selector: 'app-branches',
+    templateUrl: './branches.component.html',
+    styleUrls: ['./branches.component.css'],
+    imports: [NgIf, NgFor]
 })
 export class BranchesComponent implements OnInit {
   locations: Location[] = [];

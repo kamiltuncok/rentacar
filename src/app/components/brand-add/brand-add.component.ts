@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { BrandService } from 'src/app/services/brand.service';
 
 @Component({
-  selector: 'app-brand-add',
-  templateUrl: './brand-add.component.html',
-  styleUrls: ['./brand-add.component.css']
+    selector: 'app-brand-add',
+    templateUrl: './brand-add.component.html',
+    styleUrls: ['./brand-add.component.css'],
+    imports: [FormsModule, ReactiveFormsModule]
 })
 export class BrandAddComponent implements OnInit {
   brandAddForm:FormGroup;

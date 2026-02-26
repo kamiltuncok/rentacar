@@ -2,22 +2,23 @@ import { CustomerType } from './../../models/rental';
 import { CorporateUserService } from 'src/app/services/corporate-user.service';
 import { CorporateCustomerService } from './../../services/corporate-customer.service';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CarService } from 'src/app/services/car.service';
 import { RentalService } from 'src/app/services/rental.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { formatDate } from '@angular/common';
+import { formatDate, NgIf } from '@angular/common';
 
 interface ErrorModel {
   ErrorMessage: string;
 }
 
 @Component({
-  selector: 'app-paymentcorporate',
-  templateUrl: './paymentcorporate.component.html',
-  styleUrls: ['./paymentcorporate.component.css']
+    selector: 'app-paymentcorporate',
+    templateUrl: './paymentcorporate.component.html',
+    styleUrls: ['./paymentcorporate.component.css'],
+    imports: [NgIf, FormsModule, ReactiveFormsModule]
 })
 export class PaymentcorporateComponent implements OnInit {
   carDetail: any;

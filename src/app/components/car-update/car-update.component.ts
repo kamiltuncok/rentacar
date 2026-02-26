@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CarDetail } from 'src/app/models/carDetail';
 import { CarService } from 'src/app/services/car.service';
 
 @Component({
-  selector: 'app-car-update',
-  templateUrl: './car-update.component.html',
-  styleUrls: ['./car-update.component.css'],
+    selector: 'app-car-update',
+    templateUrl: './car-update.component.html',
+    styleUrls: ['./car-update.component.css'],
+    imports: [FormsModule, ReactiveFormsModule]
 })
 export class CarUpdateComponent implements OnInit {
   car = new FormGroup({

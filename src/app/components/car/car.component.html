@@ -82,7 +82,7 @@
       <div class="car-card__media">
         <img src="assets/images/lux.jpg" [alt]="car.brandName">
         <span class="car-card__status-pill" [class.car-card__status-pill--rented]="car.returnDATE==null">
-          {{ car.returnDATE != null ? 'Müsait' : 'Kirada' }}
+          {{ car.isRented == false ? 'Müsait' : 'Kirada' }}
         </span>
       </div>
 

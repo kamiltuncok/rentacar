@@ -1,29 +1,21 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class LoginGuard implements CanActivate {
+export const loginGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const toastrService = inject(ToastrService);
+  const router = inject(Router);
 
-  constructor (private authService:AuthService,
-   private toastrService:ToastrService,
-   private router:Router) {}
- 
-   canActivate(
-     route: ActivatedRouteSnapshot,
-     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-     if (this.authService.isAuthenticated()) {
-       return true;
-     }
-     else{
-       this.router.navigate(["login"]);
-       this.toastrService.info("Sisteme Giriş Yapmalısınız");
-       return false;
-     }
-   
-     }
- }
+  if (authService.isAuthenticated()) {
+    return true;
+  }
+
+  router.navigate(['login']);
+  toastrService.info('Sisteme Giriş Yapmalısınız');
+  return false;
+};
+
+// Keep class export for backward compatibility with existing route references
+export const LoginGuard = loginGuard;

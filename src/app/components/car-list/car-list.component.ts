@@ -11,11 +11,13 @@ import { CarDetail } from './../../models/carDetail';
 import { CarService } from 'src/app/services/car.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component } from '@angular/core';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-car-list',
-  templateUrl: './car-list.component.html',
-  styleUrls: ['./car-list.component.css']
+    selector: 'app-car-list',
+    templateUrl: './car-list.component.html',
+    styleUrls: ['./car-list.component.css'],
+    imports: [NgIf, NgFor]
 })
 export class CarListComponent {
   carDetails: CarDetail[] = [];

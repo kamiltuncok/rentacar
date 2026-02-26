@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Brand } from 'src/app/models/brand';
@@ -7,9 +7,10 @@ import { BrandService } from 'src/app/services/brand.service';
 import { CarService } from 'src/app/services/car.service';
 
 @Component({
-  selector: 'app-brand-update',
-  templateUrl: './brand-update.component.html',
-  styleUrls: ['./brand-update.component.css']
+    selector: 'app-brand-update',
+    templateUrl: './brand-update.component.html',
+    styleUrls: ['./brand-update.component.css'],
+    imports: [FormsModule, ReactiveFormsModule]
 })
 export class BrandUpdateComponent implements OnInit {
   updateFormGroup: FormGroup;

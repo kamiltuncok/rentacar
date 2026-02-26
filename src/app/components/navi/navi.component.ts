@@ -1,5 +1,5 @@
-import { Component, OnInit, HostListener  } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/models/user';
 import { CorporateUser } from './../../models/corporateUser';
@@ -8,11 +8,13 @@ import { AuthService } from 'src/app/services/auth.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { UserService } from 'src/app/services/user.service';
 import { CorporateUserService } from 'src/app/services/corporate-user.service';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-navi',
   templateUrl: './navi.component.html',
-  styleUrls: ['./navi.component.css']
+  styleUrls: ['./navi.component.css'],
+  imports: [RouterLink, RouterLinkActive, NgIf]
 })
 export class NaviComponent implements OnInit {
 
@@ -66,7 +68,7 @@ export class NaviComponent implements OnInit {
             this.dataLoaded = true;
           }
         );
-      } 
+      }
       // ✅ LocationManager kontrolü
       else if (this.authService.isLocationManager()) {
         this.userService.getUserById(userId).subscribe(
@@ -154,8 +156,8 @@ export class NaviComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    
-    if (!target.closest('.navbar-nav.mr-right')) {
+
+    if (!target.closest('.g-nav__dropdown-wrap')) {
       this.isDropdownOpen = false;
     }
   }

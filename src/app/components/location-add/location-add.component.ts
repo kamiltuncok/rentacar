@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Location } from 'src/app/models/location';
 import { LocationService } from 'src/app/services/location.service';
 import * as L from 'leaflet';
+import { FormsModule } from '@angular/forms';
+import { NgIf, DecimalPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-location-add',
-  templateUrl: './location-add.component.html',
-  styleUrls: ['./location-add.component.css']
+    selector: 'app-location-add',
+    templateUrl: './location-add.component.html',
+    styleUrls: ['./location-add.component.css'],
+    imports: [FormsModule, NgIf, RouterLink, DecimalPipe]
 })
 export class LocationAddComponent implements OnInit {
 

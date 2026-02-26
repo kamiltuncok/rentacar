@@ -3,11 +3,14 @@ import { Router } from '@angular/router';
 import { Brand } from 'src/app/models/brand';
 import { BrandService } from 'src/app/services/brand.service';
 import { CarService } from 'src/app/services/car.service';
+import { FormsModule } from '@angular/forms';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-brand',
-  templateUrl: './brand.component.html',
-  styleUrls: ['./brand.component.css']
+    selector: 'app-brand',
+    templateUrl: './brand.component.html',
+    styleUrls: ['./brand.component.css'],
+    imports: [FormsModule, NgFor]
 })
 export class BrandComponent implements OnInit {
   brands: Brand[] = [];

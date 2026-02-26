@@ -6,11 +6,14 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from './../../models/location';
 import { LocationService } from './../../services/location.service';
+import { CarSearchFormComponent } from '../car-search-form/car-search-form.component';
+import { NgFor, NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.css'],
+    imports: [CarSearchFormComponent, NgFor, NgIf]
 })
 export class HomeComponent {
   alisOfisiOptions: string[] = [];

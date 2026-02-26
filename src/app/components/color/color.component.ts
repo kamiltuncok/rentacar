@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Color } from 'src/app/models/color';
 import { ColorService } from 'src/app/services/color.service';
+import { FormsModule } from '@angular/forms';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-color',
-  templateUrl: './color.component.html',
-  styleUrls: ['./color.component.css']
+    selector: 'app-color',
+    templateUrl: './color.component.html',
+    styleUrls: ['./color.component.css'],
+    imports: [FormsModule, NgFor]
 })
 export class ColorComponent implements OnInit {
   colors: Color[] = [];
