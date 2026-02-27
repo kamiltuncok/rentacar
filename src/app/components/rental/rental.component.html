@@ -28,8 +28,10 @@
         <!-- Media -->
         <div class="rental-card__media">
           <img src="assets/images/lux.jpg" [alt]="rental.brandName" (error)="setDefaultImage($event)">
-          <span class="rental-card__status-pill" [class.rental-card__status-pill--active]="!rental.isReturned">
-            {{ rental.isReturned ? 'Tamamlandı' : 'Aktif' }}
+          <span class="rental-card__status-pill" [class.rental-card__status-pill--active]="rental.status === 1"
+            [class.rental-card__status-pill--completed]="rental.status === 2"
+            [class.rental-card__status-pill--cancelled]="rental.status === 3">
+            {{ rental.status === 1 ? 'Aktif' : rental.status === 2 ? 'Tamamlandı' : 'İptal' }}
           </span>
         </div>
 
@@ -41,6 +43,10 @@
 
           <dl class="rental-card__specs">
             <div class="rental-spec-row">
+              <dt>Plaka</dt>
+              <dd>{{ rental.plateNumber }}</dd>
+            </div>
+            <div class="rental-spec-row">
               <dt>Yakıt</dt>
               <dd>{{ rental.fuelName }}</dd>
             </div>
@@ -49,45 +55,59 @@
               <dd>{{ rental.gearName }}</dd>
             </div>
             <div class="rental-spec-row">
-              <dt>Günlük</dt>
-              <dd class="rental-price">{{ rental.dailyPrice | currency:'TRY':'symbol':'1.0-0' }}</dd>
+              <dt>Günlük Fiyat</dt>
+              <dd class="rental-price">{{ rental.rentedDailyPrice | currency:'TRY':'symbol':'1.0-0' }}</dd>
+            </div>
+            <div class="rental-spec-row">
+              <dt>Toplam</dt>
+              <dd class="rental-price rental-price--total">{{ rental.totalPrice | currency:'TRY':'symbol':'1.0-0' }}
+              </dd>
             </div>
             <div class="rental-spec-row">
               <dt>Depozito</dt>
-              <dd>{{ rental.deposit | currency:'TRY':'symbol':'1.0-0' }}</dd>
+              <dd>{{ rental.depositAmount | currency:'TRY':'symbol':'1.0-0' }}
+                <span class="deposit-status-badge deposit-status-badge--{{ rental.depositStatus }}">
+                  {{ rental.depositStatus === 1 ? 'Bloke' : rental.depositStatus === 3 ? 'İade Edildi'
+                  : rental.depositStatus === 2 ? 'Kesildi' : 'Kısmi İade' }}
+                </span>
+              </dd>
             </div>
             <div class="rental-spec-row rental-spec-row--divider">
-              <dt>Kiralama</dt>
-              <dd>{{ formatDate(rental.rentDate) }}</dd>
-            </div>
-            <div *ngIf="rental.returnDate" class="rental-spec-row">
-              <dt>İade</dt>
-              <dd>{{ formatDate(rental.returnDate) }}</dd>
+              <dt>Başlangıç</dt>
+              <dd>{{ formatDate(rental.startDate) }}</dd>
             </div>
             <div class="rental-spec-row">
-              <dt>Alış</dt>
+              <dt>Bitiş</dt>
+              <dd>{{ formatDate(rental.endDate) }}</dd>
+            </div>
+            <div class="rental-spec-row">
+              <dt>Alış Yeri</dt>
               <dd>
-                <a [routerLink]="['/branches']" [queryParams]="{location: rental.startLocation}"
+                <a [routerLink]="['/branches']" [queryParams]="{location: rental.startLocationName}"
                   class="rental-location-link">
-                  {{ rental.startLocation }}
+                  {{ rental.startLocationName }} – {{ rental.startLocationCity }}
                 </a>
               </dd>
             </div>
             <div class="rental-spec-row">
               <dt>İade Yeri</dt>
               <dd>
-                <a [routerLink]="['/branches']" [queryParams]="{location: rental.endLocation}"
+                <a [routerLink]="['/branches']" [queryParams]="{location: rental.endLocationName}"
                   class="rental-location-link">
-                  {{ rental.endLocation }}
+                  {{ rental.endLocationName }} – {{ rental.endLocationCity }}
                 </a>
               </dd>
+            </div>
+            <div *ngIf="rental.depositRefundedDate" class="rental-spec-row">
+              <dt>Depozito İade</dt>
+              <dd>{{ formatDate(rental.depositRefundedDate) }}</dd>
             </div>
           </dl>
         </div>
 
         <!-- Footer -->
         <div class="rental-card__footer">
-          <span class="rental-card__id">#{{ rental.rentalId }} · Araç {{ rental.carId }}</span>
+          <span class="rental-card__id">#{{ rental.id }} · Araç {{ rental.carId }}</span>
         </div>
 
       </div>

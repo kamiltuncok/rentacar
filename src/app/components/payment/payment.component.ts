@@ -5,24 +5,21 @@ import { ToastrService } from 'ngx-toastr';
 import { formatDate, NgIf } from '@angular/common';
 
 import { CarDetail } from 'src/app/models/carDetail';
-import { CustomerType } from './../../models/rental';
 
 import { CarService } from 'src/app/services/car.service';
-import { CartService } from 'src/app/services/cart.service';
 import { IndividualCustomerService } from './../../services/individual-customer.service';
 import { RentalService } from './../../services/rental.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { UserService } from 'src/app/services/user.service';
 
 interface ErrorModel {
   ErrorMessage: string;
 }
 
 @Component({
-    selector: 'app-payment',
-    templateUrl: './payment.component.html',
-    styleUrls: ['./payment.component.css'],
-    imports: [NgIf, FormsModule, ReactiveFormsModule]
+  selector: 'app-payment',
+  templateUrl: './payment.component.html',
+  styleUrls: ['./payment.component.css'],
+  imports: [NgIf, FormsModule, ReactiveFormsModule]
 })
 export class PaymentComponent implements OnInit {
   carDetail: CarDetail;
@@ -35,22 +32,21 @@ export class PaymentComponent implements OnInit {
   GettingCarId: number;
   locationName: string;
   locationEndName: string;
+  startLocationId: number = 1;
+  endLocationId: number = 1;
   hideCustomerInfo: boolean = true;
-  customerType: CustomerType;
   isUserAuthenticated: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private carService: CarService,
-    private cartService: CartService,
     private formBuilder: FormBuilder,
     private customerService: IndividualCustomerService,
     private rentalService: RentalService,
     private authService: AuthService,
     private toastrService: ToastrService,
-    private userService: UserService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params) => {
@@ -65,6 +61,8 @@ export class PaymentComponent implements OnInit {
 
       this.locationName = queryParams['locationName'];
       this.locationEndName = queryParams['locationEndName'];
+      this.startLocationId = Number(queryParams['startLocationId']) || 1;
+      this.endLocationId = Number(queryParams['endLocationId']) || 1;
 
       this.rentdate = `${from} ${startTime}`;
       this.returndate = `${to} ${endTime}`;
@@ -77,7 +75,7 @@ export class PaymentComponent implements OnInit {
   getCarById(carId: number) {
     this.carService.getCarDetailById(carId).subscribe((response) => {
       this.carDetail = response.data;
-      this.GettingCarId = this.carDetail.carId;
+      this.GettingCarId = this.carDetail.id;
       this.createRentalForm();
     });
   }
@@ -94,63 +92,44 @@ export class PaymentComponent implements OnInit {
   }
 
   createRentalForm() {
-    const formattedRentDate = formatDate(this.rentdate, 'yyyy-MM-ddTHH:mm:ss.SSSZ', 'en-US');
-    const formattedReturnDate = formatDate(this.returndate, 'yyyy-MM-ddTHH:mm:ss.SSSZ', 'en-US');
+    const formattedStart = formatDate(this.rentdate, 'yyyy-MM-ddTHH:mm:ss', 'en-US');
+    const formattedEnd = formatDate(this.returndate, 'yyyy-MM-ddTHH:mm:ss', 'en-US');
 
-    const formattedRentDateWithoutOffset = formattedRentDate.replace(/[+-]\d{4}$/, 'Z');
-    const formattedReturnDateWithoutOffset = formattedReturnDate.replace(/[+-]\d{4}$/, 'Z');
-
-    // Tüm numeric alanları number olarak tanımla
     this.rentalForm = this.formBuilder.group({
       carId: [this.GettingCarId || 0, Validators.required],
       customerId: [0, Validators.required],
-      userId: [0, Validators.required],
-      rentDate: [formattedRentDateWithoutOffset, Validators.required],
-      returnDate: [formattedReturnDateWithoutOffset, Validators.required],
-      startLocation: [this.locationName, Validators.required],
-      endLocation: [this.locationEndName, Validators.required],
-      isReturned: [false, Validators.required],
-      customerType: [CustomerType.Individual, Validators.required]
+      startLocationId: [this.startLocationId, Validators.required],
+      endLocationId: [this.endLocationId, Validators.required],
+      startDate: [formattedStart, Validators.required],
+      endDate: [formattedEnd, Validators.required],
+      rentedDailyPrice: [this.carDetail?.dailyPrice || 0],
+      totalPrice: [0],
+      depositAmount: [this.carDetail?.deposit || 0]
     });
 
     this.updateRentalFormBasedOnAuth();
   }
 
-checkAuthentication() {
-  this.isUserAuthenticated = this.authService.isAuthenticated();
-  const userType = this.authService.getCustomerType();
-  
-  if (this.isUserAuthenticated && userType === "Individual") {
-    this.hideCustomerInfo = true;
-  } else {
-    this.hideCustomerInfo = false;
-  }
+  checkAuthentication() {
+    this.isUserAuthenticated = this.authService.isAuthenticated();
+    const userType = this.authService.getCustomerType();
 
-  if (this.rentalForm) {
-    this.updateRentalFormBasedOnAuth();
-  }
-}
-
-  updateRentalFormBasedOnAuth() {
-    if (this.isUserAuthenticated && this.userId) {
-      // userId'yi NUMBER olarak set et
-      this.rentalForm.patchValue({
-        userId: Number(this.userId), // String'i number'a çevir
-        customerId: 0
-      });
-
+    if (this.isUserAuthenticated && userType === 'Individual') {
+      this.hideCustomerInfo = true;
     } else {
-      this.rentalForm.patchValue({
-        userId: 0,
-        customerId: 0
-      });
+      this.hideCustomerInfo = false;
+    }
 
+    if (this.rentalForm) {
+      this.updateRentalFormBasedOnAuth();
     }
   }
 
-  addCustomerAndRental() {
+  updateRentalFormBasedOnAuth() {
+    this.rentalForm?.patchValue({ customerId: 0 });
+  }
 
-    
+  addCustomerAndRental() {
     if (this.isUserAuthenticated) {
       this.addRentalEntry();
     } else {
@@ -159,25 +138,15 @@ checkAuthentication() {
   }
 
   addCustomerThenRental() {
-
-    
     if (this.customerAddForm.valid) {
       const customerModel = Object.assign({}, this.customerAddForm.value);
 
-      
       this.customerService.add(customerModel).subscribe(
         (response: any) => {
           if (response.success) {
-            this.customerId = response.data.customerId;
+            this.customerId = response.data.id;
             this.toastrService.success('Müşteri Eklendi', 'Başarılı');
-            
-            // customerId'yi NUMBER olarak set et
-            this.rentalForm.patchValue({
-              customerId: Number(this.customerId),
-              userId: 0
-            });
-            
-
+            this.rentalForm.patchValue({ customerId: Number(this.customerId) });
             this.addRentalEntry();
           }
         },
@@ -192,34 +161,24 @@ checkAuthentication() {
   }
 
   addRentalEntry() {
-    
-    // Form değerlerini number'a çevir
     const formValue = this.rentalForm.value;
     const rentalModel = {
       ...formValue,
       carId: Number(formValue.carId),
-      customerId: Number(formValue.customerId),
-      userId: Number(formValue.userId),
-      customerType: Number(formValue.customerType)
+      customerId: Number(formValue.customerId)
     };
-    
-    
+
     if (this.rentalForm.valid) {
       this.rentalService.add(rentalModel).subscribe(
         (response: any) => {
           if (response.success) {
             this.toastrService.success('Kiralama Başarılı', 'Tebrikler');
-            this.carService.carisrented(rentalModel.carId).subscribe(() => {
-            });
             this.router.navigate(['/success']);
           } else {
             this.toastrService.error(response.message || 'Kiralama işlemi başarısız', 'Hata');
           }
         },
         (responseError: any) => {
-          // Daha detaylı hata bilgisi
-          if (responseError.error?.errors) {
-          }
           this.handleError(responseError, 'Kiralama işlemi sırasında bir hata oluştu.');
         }
       );
@@ -229,20 +188,7 @@ checkAuthentication() {
     }
   }
 
-  getFormValidationErrors() {
-    const errors: any = {};
-    Object.keys(this.rentalForm.controls).forEach(key => {
-      const controlErrors = this.rentalForm.get(key)?.errors;
-      if (controlErrors) {
-        errors[key] = controlErrors;
-      }
-    });
-    return errors;
-  }
-
   handleError(responseError: any, defaultMessage: string) {
-    
-    // Validation errors detaylı gösterim
     if (responseError.error?.errors) {
       const validationErrors = responseError.error.errors;
       Object.keys(validationErrors).forEach(key => {
@@ -250,15 +196,8 @@ checkAuthentication() {
           this.toastrService.error(`${key}: ${err}`, 'Doğrulama Hatası');
         });
       });
-    }
-    else if (responseError.error?.Errors && responseError.error.Errors.length > 0) {
-      responseError.error.Errors.forEach((err: ErrorModel) => {
-        this.toastrService.error(err.ErrorMessage, 'Doğrulama Hatası');
-      });
     } else if (responseError.error?.message) {
       this.toastrService.error(responseError.error.message, 'Hata');
-    } else if (responseError.status === 400) {
-      this.toastrService.error('Geçersiz istek. Lütfen bilgilerinizi kontrol edin.', 'Hata');
     } else {
       this.toastrService.error(defaultMessage, 'Hata');
     }
@@ -266,8 +205,7 @@ checkAuthentication() {
 
   markFormGroupTouched(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(key => {
-      const control = formGroup.get(key);
-      control?.markAsTouched();
+      formGroup.get(key)?.markAsTouched();
     });
   }
 }

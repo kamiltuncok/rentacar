@@ -20,26 +20,22 @@
       <div class="value">{{ gun }}</div>
     </div>
   </div>
-   
+
   <hr style="border: 0.5px solid black;">
-  
+
   <!-- Ana İçerik -->
   <div class="row">
     <!-- Filtreleme Sidebar -->
     <div class="col-lg-3 col-md-3 col-sm-4">
       <div class="filter-section">
         <h5>Filtrele</h5>
-        
+
         <!-- Yakıt Tipi Filtresi -->
         <div class="filter-group">
           <h6>Yakıt Tipi</h6>
           <div *ngFor="let fuel of fuels" class="form-check">
-            <input class="form-check-input" 
-                   type="checkbox" 
-                   [id]="'fuel-' + fuel.fuelId"
-                   [value]="fuel.fuelId"
-                   [checked]="isFuelSelected(fuel.fuelId)"
-                   (change)="onFuelCheckboxChange($event, fuel.fuelId)">
+            <input class="form-check-input" type="checkbox" [id]="'fuel-' + fuel.fuelId" [value]="fuel.fuelId"
+              [checked]="isFuelSelected(fuel.fuelId)" (change)="onFuelCheckboxChange($event, fuel.fuelId)">
             <label class="form-check-label" [for]="'fuel-' + fuel.fuelId">
               {{ fuel.fuelName }}
             </label>
@@ -50,33 +46,25 @@
         <div class="filter-group">
           <h6>Vites Tipi</h6>
           <div *ngFor="let gear of gears" class="form-check">
-            <input class="form-check-input" 
-                   type="checkbox" 
-                   [id]="'gear-' + gear.gearId"
-                   [value]="gear.gearId"
-                   [checked]="isGearSelected(gear.gearId)"
-                   (change)="onGearCheckboxChange($event, gear.gearId)">
+            <input class="form-check-input" type="checkbox" [id]="'gear-' + gear.gearId" [value]="gear.gearId"
+              [checked]="isGearSelected(gear.gearId)" (change)="onGearCheckboxChange($event, gear.gearId)">
             <label class="form-check-label" [for]="'gear-' + gear.gearId">
               {{ gear.gearName }}
             </label>
           </div>
         </div>
 
-          <div class="filter-group">
-      <h6>Sınıf</h6>
-      <div *ngFor="let segment of segments" class="form-check">
-        <input class="form-check-input" 
-               type="checkbox" 
-               [id]="'segment-' + segment.segmentId"
-               [value]="segment.segmentId"
-               [checked]="isSegmentSelected(segment.segmentId)"
-               [disabled]="isSegmentFilterDisabled"
-               (change)="onSegmentCheckboxChange($event, segment.segmentId)">
-        <label class="form-check-label" [for]="'segment-' + segment.segmentId">
-          {{ segment.segmentName }}
-        </label>
-      </div>
-    </div>
+        <div class="filter-group">
+          <h6>Sınıf</h6>
+          <div *ngFor="let segment of segments" class="form-check">
+            <input class="form-check-input" type="checkbox" [id]="'segment-' + segment.segmentId"
+              [value]="segment.segmentId" [checked]="isSegmentSelected(segment.segmentId)"
+              [disabled]="isSegmentFilterDisabled" (change)="onSegmentCheckboxChange($event, segment.segmentId)">
+            <label class="form-check-label" [for]="'segment-' + segment.segmentId">
+              {{ segment.segmentName }}
+            </label>
+          </div>
+        </div>
 
       </div>
     </div>
@@ -87,68 +75,47 @@
         <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let car of carDetails">
           <div class="card" style="margin-bottom: 20px;">
             <div class="card-body">
-              <img
-                *ngIf="car.imagePath && car.imagePath.length > 0; else otherContent"
-                [src]="getImagePath(car)"
-                class="card-img-top"
-                alt="..."
-                style="height: 200px; object-fit: cover; width: 100%;"
-              />
+              <img *ngIf="car.imagePath && car.imagePath.length > 0; else otherContent" [src]="getImagePath(car)"
+                class="card-img-top" alt="..." style="height: 200px; object-fit: cover; width: 100%;" />
               <ng-template #otherContent>
                 <div class="picsum-img-wrapper">
-                  <img
-                    [src]="defaultImagePath"
-                    class="card-img-top"
-                    alt="..."
-                    style="height: 200px; object-fit: cover; width: 100%;"
-                  />
+                  <img [src]="defaultImagePath" class="card-img-top" alt="..."
+                    style="height: 200px; object-fit: cover; width: 100%;" />
                 </div>
               </ng-template>
-             <div class="card-body">
+              <div class="card-body">
                 <h5 class="card-title">{{car.description}}</h5>
                 <div class="d-flex align-items-center mb-2">
-                    <div class="d-flex align-items-center">
-                        <img
-                            [src]="'assets/images/gas-station.png'"
-                            alt="{{car.fuelName}}"
-                            style="height: 24px; width: auto; margin-right: 6px;"
-                        />
-                        <span>{{car.fuelName}}</span>
-                    </div>
-                    <div class="d-flex align-items-center ms-auto">
-                        <img
-                            [src]="'assets/images/manual-transmission.png'"
-                            alt="{{car.gearName}}"
-                            style="height: 24px; width: auto; margin-right: 6px;"
-                        />
-                        <span>{{car.gearName}}</span>
-                    </div>
+                  <div class="d-flex align-items-center">
+                    <img [src]="'assets/images/gas-station.png'" alt="{{car.fuelName}}"
+                      style="height: 24px; width: auto; margin-right: 6px;" />
+                    <span>{{car.fuelName}}</span>
+                  </div>
+                  <div class="d-flex align-items-center ms-auto">
+                    <img [src]="'assets/images/manual-transmission.png'" alt="{{car.gearName}}"
+                      style="height: 24px; width: auto; margin-right: 6px;" />
+                    <span>{{car.gearName}}</span>
+                  </div>
                 </div>
 
                 <div class="d-flex align-items-center mb-3">
                   <div class="d-flex align-items-center">
-                      <img
-                          [src]="'assets/images/deposit.png'"
-                          alt="{{car.deposit}}"
-                          style="height: 24px; width: auto; margin-right: 6px;"
-                      />
-                      <span>Depozito: {{car.deposit}}₺</span>
+                    <img [src]="'assets/images/deposit.png'" alt="{{car.deposit}}"
+                      style="height: 24px; width: auto; margin-right: 6px;" />
+                    <span>Depozito: {{car.deposit}}₺</span>
                   </div>
                   <div class="d-flex align-items-center ms-auto">
-                      <img
-                          [src]="'assets/images/money.png'"
-                          alt="Günlük Fiyat"
-                          style="height: 24px; width: auto; margin-right: 6px;"
-                      />
-                      <span>Günlük Fiyat: {{car.dailyPrice}}₺</span>
+                    <img [src]="'assets/images/money.png'" alt="Günlük Fiyat"
+                      style="height: 24px; width: auto; margin-right: 6px;" />
+                    <span>Günlük Fiyat: {{car.dailyPrice}}₺</span>
                   </div>
                 </div>
-                
+
                 <p class="text-center">
-                    {{gun}} Günlük Fiyat:{{car.dailyPrice * gun}}₺
+                  {{gun}} Günlük Fiyat:{{car.dailyPrice * gun}}₺
                 </p>
                 <div class="d-flex justify-content-center">
-                  <a (click)="navigateToPayment(car.carId)" type="button" class="btn btn-success">Kirala</a>
+                  <a (click)="navigateToPayment(car.id)" type="button" class="btn btn-success">Kirala</a>
                 </div>
               </div>
             </div>

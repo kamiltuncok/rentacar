@@ -81,8 +81,9 @@
       <!-- Car media -->
       <div class="car-card__media">
         <img src="assets/images/lux.jpg" [alt]="car.brandName">
-        <span class="car-card__status-pill" [class.car-card__status-pill--rented]="car.returnDATE==null">
-          {{ car.isRented == false ? 'Müsait' : 'Kirada' }}
+        <span class="car-card__status-pill" [class.car-card__status-pill--rented]="car.status !== 0">
+          {{ car.status === 0 ? 'Müsait' : car.status === 1 ? 'Kirada' : car.status === 2 ?
+          'Bakımda' : 'Rezerve' }}
         </span>
       </div>
 
@@ -113,7 +114,7 @@
 
       <!-- Car Footer -->
       <div class="car-card__footer">
-        <a [routerLink]="'carDetail/' + car.carId" class="btn-primary-solid">Detay</a>
+        <a [routerLink]="'carDetail/' + car.id" class="btn-primary-solid">Detay</a>
       </div>
     </div>
 

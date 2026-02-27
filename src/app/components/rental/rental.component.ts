@@ -8,10 +8,10 @@ import { NgIf, NgFor, CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'app-rental',
-    templateUrl: './rental.component.html',
-    styleUrls: ['./rental.component.css'],
-    imports: [NgIf, NgFor, RouterLink, CurrencyPipe]
+  selector: 'app-rental',
+  templateUrl: './rental.component.html',
+  styleUrls: ['./rental.component.css'],
+  imports: [NgIf, NgFor, RouterLink, CurrencyPipe]
 })
 export class RentalComponent implements OnInit {
   rentals: RentalDetail[] = [];
@@ -24,7 +24,7 @@ export class RentalComponent implements OnInit {
     private rentalService: RentalService,
     private authService: AuthService,
     private toastrService: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getUserRentals();
@@ -32,7 +32,7 @@ export class RentalComponent implements OnInit {
 
   getUserRentals() {
     this.isLoading = true;
-    
+
     this.userId = this.authService.getCurrentUserId;
     this.customerType = this.authService.getCustomerType();
 
@@ -74,11 +74,15 @@ export class RentalComponent implements OnInit {
     return new Date(date).toLocaleDateString('tr-TR');
   }
 
-  getStatusClass(isReturned: boolean): string {
-    return isReturned ? 'badge-success' : 'badge-warning';
+  getStatusClass(status: number): string {
+    if (status === 1) return 'badge-warning';
+    if (status === 2) return 'badge-success';
+    return 'badge-danger';
   }
 
-  getStatusText(isReturned: boolean): string {
-    return isReturned ? 'Teslim Edildi' : 'Aktif Kiralama';
+  getStatusText(status: number): string {
+    if (status === 1) return 'Aktif Kiralama';
+    if (status === 2) return 'Tamamlandı';
+    return 'İptal Edildi';
   }
 }

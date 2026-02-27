@@ -8,15 +8,15 @@ import { FormsModule } from '@angular/forms';
 import { NgIf, DecimalPipe } from '@angular/common';
 
 @Component({
-    selector: 'app-location-add',
-    templateUrl: './location-add.component.html',
-    styleUrls: ['./location-add.component.css'],
-    imports: [FormsModule, NgIf, RouterLink, DecimalPipe]
+  selector: 'app-location-add',
+  templateUrl: './location-add.component.html',
+  styleUrls: ['./location-add.component.css'],
+  imports: [FormsModule, NgIf, RouterLink, DecimalPipe]
 })
 export class LocationAddComponent implements OnInit {
 
   location: Location = {
-    locationId: 0,
+    id: 0,
     locationName: '',
     locationCity: '',
     address: '',
@@ -81,7 +81,7 @@ export class LocationAddComponent implements OnInit {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.searchAddress + ', Türkiye')}&limit=1`
       );
-      
+
       const data = await response.json();
 
       if (data && data.length > 0) {
@@ -141,12 +141,12 @@ export class LocationAddComponent implements OnInit {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1&accept-language=tr`
       );
-      
+
       const data = await response.json();
 
       if (data && data.display_name) {
         this.foundAddress = data.display_name;
-        
+
         // Adres bilgisini location'a da yaz (eğer boşsa)
         if (!this.location.address) {
           this.location.address = data.display_name;
@@ -195,13 +195,13 @@ export class LocationAddComponent implements OnInit {
     if (this.location.locationCity && this.cityCenters[this.location.locationCity]) {
       const center = this.cityCenters[this.location.locationCity];
       this.map.setView(center, 10);
-      
+
       // Şehir değişince koordinatları sıfırla
       this.location.latitude = 0;
       this.location.longitude = 0;
       this.selectedLocation = null;
       this.foundAddress = '';
-      
+
       if (this.marker) {
         this.map.removeLayer(this.marker);
         this.marker = null;
@@ -212,7 +212,7 @@ export class LocationAddComponent implements OnInit {
   onCoordinatesChange(): void {
     // ✅ VIRGÜLÜ NOKTAYA ÇEVİR
     this.convertCommaToDot();
-    
+
     if (this.location.latitude && this.location.longitude) {
       this.selectedLocation = {
         lat: this.location.latitude,
@@ -226,7 +226,7 @@ export class LocationAddComponent implements OnInit {
   // ✅ VIRGÜLÜ NOKTAYA ÇEVİREN METOT
   private convertCommaToDot(): void {
     console.log('🔧 convertCommaToDot çalıştı');
-    
+
     // Latitude kontrolü
     if (typeof this.location.latitude === 'string') {
       const originalLat = this.location.latitude;
@@ -235,7 +235,7 @@ export class LocationAddComponent implements OnInit {
     } else if (typeof this.location.latitude === 'number') {
       console.log('📍 Latitude zaten number:', this.location.latitude);
     }
-    
+
     // Longitude kontrolü
     if (typeof this.location.longitude === 'string') {
       const originalLng = this.location.longitude;
@@ -249,12 +249,12 @@ export class LocationAddComponent implements OnInit {
   addLocation() {
     // ✅ VIRGÜLÜ NOKTAYA ÇEVİR (EK GÜVENLİK)
     this.convertCommaToDot();
-    
+
     // ✅ DEBUG: Değerleri kontrol et
     console.log('🎯 FINAL VALUES - addLocation():');
     console.log('Latitude:', this.location.latitude, 'Type:', typeof this.location.latitude);
     console.log('Longitude:', this.location.longitude, 'Type:', typeof this.location.longitude);
-    
+
     if (this.isFormValid()) {
       this.locationService.add(this.location).subscribe(
         (response) => {
@@ -298,13 +298,13 @@ export class LocationAddComponent implements OnInit {
       this.toastrService.warning('Lütfen haritadan bir konum seçin');
       return false;
     }
-    
+
     // ✅ EK KONTROL: Koordinatlar number mı?
     if (typeof this.location.latitude !== 'number' || typeof this.location.longitude !== 'number') {
       this.toastrService.warning('Koordinatlar geçerli sayılar olmalıdır');
       return false;
     }
-    
+
     return true;
   }
 }

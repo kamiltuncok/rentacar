@@ -1,19 +1,34 @@
 export interface Rental {
-    rentalId: number;
+    id: number;
     carId: number;
     customerId: number;
-    userId:number;
-    rentDate: Date;
-    returnDate: Date | null;
-    startLocation: string;
-    endLocation: string;
-    isReturned: boolean;
-    customerType: CustomerType;
+    startLocationId: number;
+    endLocationId: number;
+    startDate: Date;
+    endDate: Date;
+    rentedDailyPrice: number;
+    totalPrice: number;
+    depositAmount: number;
+    depositStatus: DepositStatus;
+    depositDeductedAmount: number;
+    depositRefundedDate: Date | null;
+    status: RentalStatus;
+}
+
+export enum RentalStatus {
+    Active = 1,
+    Completed = 2,
+    Cancelled = 3
+}
+
+export enum DepositStatus {
+    Blocked = 1,
+    Charged = 2,
+    Refunded = 3,
+    PartiallyRefunded = 4
 }
 
 export enum CustomerType {
-    Individual = 0,
-    Corporate = 1,
-    Admin = 2,
-    LocationManager=3
+    Individual = 1,
+    Corporate = 2
 }

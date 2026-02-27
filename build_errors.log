@@ -1,0 +1,100 @@
+﻿npx : Node.js version v21.7.2 detected.
+At line:1 char:1
++ npx ng build --configuration=development 2>&1 | Out-File -Encoding ut ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Node.js version v21.7.2 detected.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Odd numbered Node.js versions will not enter LTS status and should not be used for production. For more information, pl
+ease see https://nodejs.org/en/about/previous-releases/.
+- Generating browser application bundles (phase: setup)...
+ÔêÜ Browser application bundle generation complete.
+ÔêÜ Browser application bundle generation complete.
+- Copying assets...
+ÔêÜ Copying assets complete.
+- Generating index html...
+ÔêÜ Index html generation complete.
+
+[1mInitial chunk files[22m                                                                     [2m | [22m[1mNames[22m                                                                 [2m | [22m [1mRaw size[22m
+[32mvendor.js[39m                                                                               [2m | [22m[2mvendor[22m                                                                [2m | [22m  [36m3.11 MB[39m[2m | [22m
+[32mstyles.css[39m                                                                              [2m | [22m[2mstyles[22m                                                                [2m | [22m[36m258.66 kB[39m[2m | [22m
+[32mscripts.js[39m                                                                              [2m | [22m[2mscripts[22m                                                               [2m | [22m[36m168.07 kB[39m[2m | [22m
+[32mpolyfills.js[39m                                                                            [2m | [22m[2mpolyfills[22m                                                             [2m | [22m[36m116.12 kB[39m[2m | [22m
+[32mmain.js[39m                                                                                 [2m | [22m[2mmain[22m                                                                  [2m | [22m [36m99.94 kB[39m[2m | [22m
+[32mruntime.js[39m                                                                              [2m | [22m[2mruntime[22m                                                               [2m | [22m [36m13.01 kB[39m[2m | [22m
+
+[1m [22m                                                                                       [2m | [22m[1mInitial total[22m                                                         [2m | [22m  [1m3.77 MB[22m
+
+[1mLazy chunk files[22m                                                                        [2m | [22m[1mNames[22m                                                                 [2m | [22m [1mRaw size[22m
+[32mdefault-src_app_services_location_service_ts-node_modules_leaflet_dist_leaflet-src_js.js[39m[2m | [22m[2mcomponents-location-add-location-add-component[22m                        [2m | [22m[36m460.58 kB[39m[2m | [22m
+[32mdefault-node_modules_angular_forms_fesm2022_forms_mjs.js[39m                                [2m | [22m[2mcomponents-home-home-component[22m                                        [2m | [22m[36m312.87 kB[39m[2m | [22m
+[32msrc_app_components_location-manager-rentals_location-manager-rentals_component_ts.js[39m    [2m | [22m[2mcomponents-location-manager-rentals-location-manager-rentals-component[22m[2m | [22m[36m144.78 kB[39m[2m | [22m
+[32msrc_app_components_car_car_component_ts.js[39m                                              [2m | [22m[2mcomponents-car-car-component[22m                                          [2m | [22m [36m78.41 kB[39m[2m | [22m
+[32msrc_app_components_home_home_component_ts.js[39m                                            [2m | [22m[2mcomponents-home-home-component[22m                                        [2m | [22m [36m73.78 kB[39m[2m | [22m
+[32msrc_app_components_location-add_location-add_component_ts.js[39m                            [2m | [22m[2mcomponents-location-add-location-add-component[22m                        [2m | [22m [36m41.07 kB[39m[2m | [22m
+[32msrc_app_components_car-list_car-list_component_ts.js[39m                                    [2m | [22m[2mcomponents-car-list-car-list-component[22m                                [2m | [22m [36m40.68 kB[39m[2m | [22m
+[32msrc_app_components_profile_profile_component_ts.js[39m                                      [2m | [22m[2mcomponents-profile-profile-component[22m                                  [2m | [22m [36m40.15 kB[39m[2m | [22m
+[32msrc_app_components_payment_payment_component_ts.js[39m                                      [2m | [22m[2mcomponents-payment-payment-component[22m                                  [2m | [22m [36m38.81 kB[39m[2m | [22m
+[32msrc_app_components_rental_rental_component_ts.js[39m                                        [2m | [22m[2mcomponents-rental-rental-component[22m                                    [2m | [22m [36m38.57 kB[39m[2m | [22m
+[32msrc_app_components_branches_branches_component_ts.js[39m                                    [2m | [22m[2mcomponents-branches-branches-component[22m                                [2m | [22m [36m35.78 kB[39m[2m | [22m
+[32msrc_app_components_paymentcorporate_paymentcorporate_component_ts.js[39m                    [2m | [22m[2mcomponents-paymentcorporate-paymentcorporate-component[22m                [2m | [22m [36m30.55 kB[39m[2m | [22m
+[32msrc_app_components_car-add_car-add_component_ts.js[39m                                      [2m | [22m[2mcomponents-car-add-car-add-component[22m                                  [2m | [22m [36m24.98 kB[39m[2m | [22m
+[32mcommon.js[39m                                                                               [2m | [22m[2mcommon[22m                                                                [2m | [22m [36m21.34 kB[39m[2m | [22m
+[32msrc_app_components_car-detail_car-detail_component_ts.js[39m                                [2m | [22m[2mcomponents-car-detail-car-detail-component[22m                            [2m | [22m [36m18.42 kB[39m[2m | [22m
+[32msrc_app_components_register_register_component_ts.js[39m                                    [2m | [22m[2mcomponents-register-register-component[22m                                [2m | [22m [36m13.65 kB[39m[2m | [22m
+[32msrc_app_components_registerforcorporate_registerforcorporate_component_ts.js[39m            [2m | [22m[2mcomponents-registerforcorporate-registerforcorporate-component[22m        [2m | [22m [36m12.43 kB[39m[2m | [22m
+[32msrc_app_components_car-image-add_car-image-add_component_ts.js[39m                          [2m | [22m[2mcomponents-car-image-add-car-image-add-component[22m                      [2m | [22m [36m10.96 kB[39m[2m | [22m
+[32msrc_app_components_loginforcorporate_loginforcorporate_component_ts.js[39m                  [2m | [22m[2mcomponents-loginforcorporate-loginforcorporate-component[22m              [2m | [22m  [36m9.93 kB[39m[2m | [22m
+[32msrc_app_components_car-update_car-update_component_ts.js[39m                                [2m | [22m[2mcomponents-car-update-car-update-component[22m                            [2m | [22m  [36m9.41 kB[39m[2m | [22m
+[32msrc_app_components_login_login_component_ts.js[39m                                          [2m | [22m[2mcomponents-login-login-component[22m                                      [2m | [22m  [36m9.21 kB[39m[2m | [22m
+[32msrc_app_components_brand-update_brand-update_component_ts.js[39m                            [2m | [22m[2mcomponents-brand-update-brand-update-component[22m                        [2m | [22m  [36m6.22 kB[39m[2m | [22m
+[32msrc_app_components_brand-add_brand-add_component_ts.js[39m                                  [2m | [22m[2mcomponents-brand-add-brand-add-component[22m                              [2m | [22m  [36m6.00 kB[39m[2m | [22m
+[32msrc_app_components_color-add_color-add_component_ts.js[39m                                  [2m | [22m[2mcomponents-color-add-color-add-component[22m                              [2m | [22m  [36m6.00 kB[39m[2m | [22m
+[32msrc_app_components_color-update_color-update_component_ts.js[39m                            [2m | [22m[2mcomponents-color-update-color-update-component[22m                        [2m | [22m  [36m5.67 kB[39m[2m | [22m
+
+Build at: 2026-02-27T03:25:33.775Z - Hash: 4210a53b14750eaf - Time: 4863ms
+[1m[33m
+Warning: [96msrc/app/components/rental/rental.component.ts[0m:[93m14[0m:[93m52[0m - [93mwarning[0m[90m NG8113:
+ [0mLowerCasePipe is not used within the template of RentalComponent
+
+[7m14[0m   imports: [NgIf, NgFor, RouterLink, CurrencyPipe, LowerCasePipe]
+[7m  [0m [93m                                                   ~~~~~~~~~~~~~[0m
+
+
+Warning: C:/Users/MONSTER/OneDrive/Belgeler/GitHub/rentacar/src/app/components/brand/brand.component.ts is part of the 
+TypeScript compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+Warning: C:/Users/MONSTER/OneDrive/Belgeler/GitHub/rentacar/src/app/components/cart-summary/cart-summary.component.ts i
+s part of the TypeScript compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+Warning: C:/Users/MONSTER/OneDrive/Belgeler/GitHub/rentacar/src/app/components/color/color.component.ts is part of the 
+TypeScript compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+Warning: C:/Users/MONSTER/OneDrive/Belgeler/GitHub/rentacar/src/app/components/customer/customer.component.ts is part o
+f the TypeScript compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+Warning: C:/Users/MONSTER/OneDrive/Belgeler/GitHub/rentacar/src/app/models/payment.ts is part of the TypeScript compila
+tion but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+Warning: C:/Users/MONSTER/OneDrive/Belgeler/GitHub/rentacar/src/app/pipes/filter-brand.pipe.ts is part of the TypeScrip
+t compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+Warning: C:/Users/MONSTER/OneDrive/Belgeler/GitHub/rentacar/src/app/pipes/filter-color.pipe.ts is part of the TypeScrip
+t compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+Warning: C:/Users/MONSTER/OneDrive/Belgeler/GitHub/rentacar/src/app/services/payment.service.ts is part of the TypeScri
+pt compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+Warning: C:\Users\MONSTER\OneDrive\Belgeler\GitHub\rentacar\src\app\components\branches\branches.component.ts depends o
+n 'leaflet'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+[39m[22m

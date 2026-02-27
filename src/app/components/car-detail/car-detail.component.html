@@ -1,12 +1,11 @@
 <br>
-<div class="container" *ngIf="carDetail" >
+<div class="container" *ngIf="carDetail">
     <div class="row">
         <div class="col-md-5">
             <div class="card" style="margin-bottom: 15px;">
                 <div class="card-body">
-
-
-                      <img *ngIf="carImage;else otherContent" src="{{ getImagePath(carImage) }}" class="card-img-top" alt="..." />
+                    <img *ngIf="carImage;else otherContent" src="{{ getImagePath(carImage) }}" class="card-img-top"
+                        alt="..." />
                     <ng-template #otherContent>
                         <div class="picsum-img-wrapper">
                             <img src="{{defaultImagePath}}" class="card-img-top" alt="..." />
@@ -19,28 +18,51 @@
             <div class="row">
                 <div class="card"
                     style="margin-bottom: 15px; margin-right: 15px; margin-left: 15px; width: 100%; height: auto;">
-
-                    <div >
+                    <div>
                         <div>
                             <div class="card-header">
                                 <b>{{carDetail.brandName}} {{carDetail.modelYear}}</b>
+                                <span class="badge ms-2" [class.bg-success]="carDetail.status === 0"
+                                    [class.bg-danger]="carDetail.status === 1"
+                                    [class.bg-warning]="carDetail.status === 2"
+                                    [class.bg-info]="carDetail.status === 3">
+                                    {{ carDetail.status === 0 ? 'Müsait' : carDetail.status === 1 ?
+                                    'Kirada' : carDetail.status === 2 ? 'Bakımda' : 'Rezerve' }}
+                                </span>
                             </div>
                             <br>
-                             <div class="" >  
-
-                                <p class="card-text"><b>Araba: </b> {{carDetail.description | uppercase}}</p>
-                                <hr/>
-                                <p class="card-text"><b>Brand: </b> {{carDetail.brandName}}</p>
+                            <div>
+                                <p class="card-text"><b>Araç: </b> {{carDetail.description | uppercase}}</p>
+                                <hr />
+                                <p class="card-text"><b>Marka: </b> {{carDetail.brandName}}</p>
                                 <hr>
-                                <p class="card-text"><b>Color: </b>{{carDetail.colorName}}</p>
+                                <p class="card-text"><b>Renk: </b>{{carDetail.colorName}}</p>
                                 <hr>
-                                <p class="card-text"><b>Model: </b>{{carDetail.modelYear}}</p>
+                                <p class="card-text"><b>Segment: </b>{{carDetail.segmentName}}</p>
                                 <hr>
-                                <p class="card-text"><b>Daily Price: </b> {{carDetail.dailyPrice}}</p>
+                                <p class="card-text"><b>Yakıt: </b>{{carDetail.fuelName}}</p>
                                 <hr>
-                                <a routerLink="payment"   type="button"
-                                    class="btn btn-primary">Rent</a>  
-                                    
+                                <p class="card-text"><b>Vites: </b>{{carDetail.gearName}}</p>
+                                <hr>
+                                <p class="card-text"><b>Model Yılı: </b>{{carDetail.modelYear}}</p>
+                                <hr>
+                                <p class="card-text"><b>Plaka: </b>{{carDetail.plateNumber}}</p>
+                                <hr>
+                                <p class="card-text"><b>Kilometre: </b>{{carDetail.km | number}} km</p>
+                                <hr>
+                                <p class="card-text"><b>Konum: </b>{{carDetail.locationName}} –
+                                    {{carDetail.locationCity}}</p>
+                                <hr>
+                                <p class="card-text"><b>Günlük Ücret: </b>{{carDetail.dailyPrice |
+                                    currency:'TRY':'symbol':'1.0-0'}}</p>
+                                <hr>
+                                <p class="card-text"><b>Depozito: </b>{{carDetail.deposit |
+                                    currency:'TRY':'symbol':'1.0-0'}}</p>
+                                <hr>
+                                <a routerLink="payment" *ngIf="carDetail.status === 0" type="button"
+                                    class="btn btn-primary">Kirala</a>
+                                <span *ngIf="carDetail.status !== 0" class="text-danger fw-bold">Bu araç şu an
+                                    müsait değil</span>
                             </div>
                         </div>
                     </div>

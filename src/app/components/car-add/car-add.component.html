@@ -1,68 +1,94 @@
-      <div class="card">
-        <div class="card-header">
-          <h5 class="title">Araç Ekle</h5>
-        </div>
-        <div class="card-body">
-          <form [formGroup]="carAddForm">
-            <div class="mb-3">
-              <label for="brandName">Marka</label>
-              <div class="form-group">
-                <select id="brandName" formControlName="brandName" class="form-control">
-                  <option value="">Marka Seçiniz</option>
-                  <option *ngFor="let brand of brands" [value]="brand.brandName">{{ brand.brandName }}</option>
-                </select>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="colorName">Renk</label>
-              <div class="form-group">
-                <select id="colorName" formControlName="colorName" class="form-control">
-                  <option value="">Renk Seçiniz</option>
-                  <option *ngFor="let color of colors" [value]="color.colorName">{{ color.colorName }}</option>
-                </select>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="locationName">Lokasyon</label>
-              <div class="form-group">
-                <select id="locationName" formControlName="locationName" class="form-control">
-                  <option value="">Lokasyon Seçiniz</option>
-                  <option *ngFor="let location of locations" [value]="location.locationName">{{ location.locationName }}</option>
-                </select>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="fuelName">Yakıt Türü</label>
-              <div class="form-group">
-                <select id="fuelName" formControlName="fuelName" class="form-control">
-                  <option value="">Yakıt Türü Seçiniz</option>
-                  <option *ngFor="let fuel of fuels" [value]="fuel.fuelName">{{ fuel.fuelName }}</option>
-                </select>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="modelYear">Model Yılı</label>
-              <div class="form-group">
-                <input type="number" id="modelYear" formControlName="modelYear" class="form-control" placeholder="Model Yılı">
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="dailyPrice">Günlük Ücret</label>
-              <div class="form-group">
-                <input type="number" id="dailyPrice" formControlName="dailyPrice" class="form-control" placeholder="Günlük Ücret">
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="description">Araç Adı</label>
-              <div class="form-group">
-                <input type="text" id="description" formControlName="description" class="form-control" placeholder="Araç Adı">
-              </div>
-            </div>
-          </form>
-          <div class="card-footer">
-            <button class="btn btn-fill btn-primary" (click)="add()">Araç Ekle</button>
-          </div>
-        </div>
+<div class="card">
+  <div class="card-header">
+    <h5 class="title">Araç Ekle</h5>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="carAddForm">
+
+      <div class="mb-3">
+        <label for="brandId">Marka</label>
+        <select id="brandId" formControlName="brandId" class="form-control">
+          <option value="">Marka Seçiniz</option>
+          <option *ngFor="let brand of brands" [value]="brand.brandId">{{ brand.brandName }}</option>
+        </select>
       </div>
 
+      <div class="mb-3">
+        <label for="colorId">Renk</label>
+        <select id="colorId" formControlName="colorId" class="form-control">
+          <option value="">Renk Seçiniz</option>
+          <option *ngFor="let color of colors" [value]="color.colorId">{{ color.colorName }}</option>
+        </select>
+      </div>
 
+      <div class="mb-3">
+        <label for="currentLocationId">Lokasyon</label>
+        <select id="currentLocationId" formControlName="currentLocationId" class="form-control">
+          <option value="">Lokasyon Seçiniz</option>
+          <option *ngFor="let location of locations" [value]="location.id">{{ location.locationName }} – {{
+            location.locationCity }}</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="fuelId">Yakıt Türü</label>
+        <select id="fuelId" formControlName="fuelId" class="form-control">
+          <option value="">Yakıt Türü Seçiniz</option>
+          <option *ngFor="let fuel of fuels" [value]="fuel.fuelId">{{ fuel.fuelName }}</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="gearId">Vites</label>
+        <select id="gearId" formControlName="gearId" class="form-control">
+          <option value="">Vites Seçiniz</option>
+          <option *ngFor="let gear of gears" [value]="gear.gearId">{{ gear.gearName }}</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="segmentId">Segment</label>
+        <select id="segmentId" formControlName="segmentId" class="form-control">
+          <option value="">Segment Seçiniz</option>
+          <option *ngFor="let segment of segments" [value]="segment.segmentId">{{ segment.segmentName }}</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="plateNumber">Plaka</label>
+        <input type="text" id="plateNumber" formControlName="plateNumber" class="form-control"
+          placeholder="Örn: 34ABC001">
+      </div>
+
+      <div class="mb-3">
+        <label for="modelYear">Model Yılı</label>
+        <input type="number" id="modelYear" formControlName="modelYear" class="form-control" placeholder="Örn: 2023">
+      </div>
+
+      <div class="mb-3">
+        <label for="km">Kilometre</label>
+        <input type="number" id="km" formControlName="km" class="form-control" placeholder="Örn: 15000">
+      </div>
+
+      <div class="mb-3">
+        <label for="dailyPrice">Günlük Ücret (₺)</label>
+        <input type="number" id="dailyPrice" formControlName="dailyPrice" class="form-control" placeholder="Örn: 950">
+      </div>
+
+      <div class="mb-3">
+        <label for="deposit">Depozito (₺)</label>
+        <input type="number" id="deposit" formControlName="deposit" class="form-control" placeholder="Örn: 3500">
+      </div>
+
+      <div class="mb-3">
+        <label for="description">Araç Açıklaması</label>
+        <input type="text" id="description" formControlName="description" class="form-control"
+          placeholder="Örn: Toyota Corolla - Ekonomik Sedan">
+      </div>
+
+    </form>
+    <div class="card-footer">
+      <button class="btn btn-fill btn-primary" (click)="add()">Araç Ekle</button>
+    </div>
+  </div>
+</div>

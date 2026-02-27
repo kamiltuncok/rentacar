@@ -20,10 +20,10 @@ import { NgIf, NgFor, CurrencyPipe, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'app-location-manager-rentals',
-    templateUrl: './location-manager-rentals.component.html',
-    styleUrls: ['./location-manager-rentals.component.css'],
-    imports: [FormsModule, NgIf, NgFor, RouterLink, CurrencyPipe, DatePipe]
+  selector: 'app-location-manager-rentals',
+  templateUrl: './location-manager-rentals.component.html',
+  styleUrls: ['./location-manager-rentals.component.css'],
+  imports: [FormsModule, NgIf, NgFor, RouterLink, CurrencyPipe, DatePipe]
 })
 export class LocationManagerRentalsComponent implements OnInit {
   rentals: RentalDetail[] = [];
@@ -145,9 +145,9 @@ export class LocationManagerRentalsComponent implements OnInit {
       ([dateIds, emailIds, nameIds]) => {
         // Sadece aktif filtrelerin sonuçlarını kesişime al
         this.filteredRentals = this.rentals.filter(r => {
-          if (dateIds !== null && !dateIds.has(r.rentalId)) return false;
-          if (emailIds !== null && !emailIds.has(r.rentalId)) return false;
-          if (nameIds !== null && !nameIds.has(r.rentalId)) return false;
+          if (dateIds !== null && !dateIds.has(r.id)) return false;
+          if (emailIds !== null && !emailIds.has(r.id)) return false;
+          if (nameIds !== null && !nameIds.has(r.id)) return false;
           return true;
         });
 
@@ -177,59 +177,14 @@ export class LocationManagerRentalsComponent implements OnInit {
   loadUserDetails() {
     const promises = this.rentals.map((rental) => {
       // Senaryo 1: UserId ≠ 0 ve CustomerType = Individual
-      if (rental.userId !== 0 && rental.customerType === CustomerType.Individual) {
-        const key = `user_${rental.userId}`;
-        if (!this.userDetails[key]) {
-          return this.userService.getUserById(rental.userId).toPromise()
-            .then(result => {
-              if (result && result.success) {
-                this.userDetails[key] = {
-                  type: 'IndividualUser',
-                  data: result.data
-                };
-              }
-            });
-        }
-      }
-      // Senaryo 2: UserId ≠ 0 ve CustomerType = Corporate
-      else if (rental.userId !== 0 && rental.customerType === CustomerType.Corporate) {
-        const key = `user_${rental.userId}`;
-        if (!this.userDetails[key]) {
-          return this.corporateUserService.getUserById(rental.userId).toPromise()
-            .then(result => {
-              if (result && result.success) {
-                this.userDetails[key] = {
-                  type: 'CorporateUser',
-                  data: result.data
-                };
-              }
-            });
-        }
-      }
-      // Senaryo 3: CustomerId ≠ 0 ve CustomerType = Individual
-      else if (rental.customerId !== 0 && rental.customerType === CustomerType.Individual) {
+      if (rental.customerId !== 0) {
         const key = `customer_${rental.customerId}`;
         if (!this.userDetails[key]) {
           return this.customerService.getCustomerById(rental.customerId).toPromise()
             .then(result => {
               if (result && result.success) {
                 this.userDetails[key] = {
-                  type: 'IndividualCustomer',
-                  data: result.data
-                };
-              }
-            });
-        }
-      }
-      // Senaryo 4: CustomerId ≠ 0 ve CustomerType = Corporate
-      else if (rental.customerId !== 0 && rental.customerType === CustomerType.Corporate) {
-        const key = `customer_${rental.customerId}`;
-        if (!this.userDetails[key]) {
-          return this.corporateCustomerService.getCustomerById(rental.customerId).toPromise()
-            .then(result => {
-              if (result && result.success) {
-                this.userDetails[key] = {
-                  type: 'CorporateCustomer',
+                  type: result.data.customerType === 2 ? 'CorporateCustomer' : 'IndividualCustomer',
                   data: result.data
                 };
               }
@@ -248,15 +203,8 @@ export class LocationManagerRentalsComponent implements OnInit {
   }
 
   getUserInfo(rental: RentalDetail): any {
-    let key: string;
-
-    if (rental.userId !== 0) {
-      key = `user_${rental.userId}`;
-    } else if (rental.customerId !== 0) {
-      key = `customer_${rental.customerId}`;
-    } else {
-      return null;
-    }
+    const key = `customer_${rental.customerId}`;
+    if (!key) return null;
 
     const userInfo = this.userDetails[key];
     if (!userInfo) return null;
@@ -291,10 +239,10 @@ export class LocationManagerRentalsComponent implements OnInit {
         return {
           type: 'Individual',
           source: 'Customer',
-          name: `${individualCustomer.firstName} ${individualCustomer.lastName}`,
+          name: individualCustomer.email,
           email: individualCustomer.email,
           phone: individualCustomer.phoneNumber,
-          identityNumber: individualCustomer.identityNumber,
+          identityNumber: '',
           address: individualCustomer.address
         };
 
@@ -323,36 +271,34 @@ export class LocationManagerRentalsComponent implements OnInit {
     return new Date(date).toLocaleDateString('tr-TR');
   }
 
-  getStatusClass(isReturned: boolean): string {
-    return isReturned ? 'badge-success' : 'badge-warning';
+  getStatusClass(status: number): string {
+    return status === 2 ? 'badge-success' : 'badge-warning';
   }
 
-  getStatusText(isReturned: boolean): string {
-    return isReturned ? 'Teslim Edildi' : 'Aktif Kiralama';
+  getStatusText(status: number): string {
+    return status === 2 ? 'Teslim Edildi' : 'Aktif Kiralama';
   }
 
   getCustomerTypeText(customerType: number): string {
     switch (customerType) {
-      case CustomerType.Individual: return 'Bireysel';
-      case CustomerType.Corporate: return 'Kurumsal';
-      case CustomerType.Admin: return 'Admin';
-      case CustomerType.LocationManager: return 'Lokasyon Yöneticisi';
+      case 1: return 'Bireysel';
+      case 2: return 'Kurumsal';
       default: return 'Bilinmiyor';
     }
   }
 
   confirmReturn(rental: RentalDetail) {
-    if (rental.isReturned) {
+    if (rental.status === 2) {
       this.toastrService.info('Bu kiralama zaten teslim edildi.', 'Bilgi');
       return;
     }
-    const confirmed = confirm(`#${rental.rentalId} numaralı kiralama teslim alındı olarak işaretlensin mi?\n\nAraç: ${rental.brandName} (${rental.modelYear})`);
+    const confirmed = confirm(`#${rental.id} numaralı kiralama teslim alındı olarak işaretlensin mi?\n\nAraç: ${rental.brandName} (${rental.modelYear})`);
     if (!confirmed) return;
 
-    this.rentalService.markAsReturned(rental.rentalId).subscribe(
+    this.rentalService.markAsReturned(rental.id).subscribe(
       (res) => {
         if (res.success) {
-          rental.isReturned = true;
+          rental.status = 2 as any;
           this.toastrService.success('Araç teslim alındı olarak işaretlendi.', 'Başarılı');
         } else {
           this.toastrService.error(res.message || 'İşlem başarısız.', 'Hata');
@@ -365,14 +311,14 @@ export class LocationManagerRentalsComponent implements OnInit {
   }
 
   confirmDelete(rental: RentalDetail) {
-    const confirmed = confirm(`#${rental.rentalId} numaralı kiralama silinsin mi?\n\nBu işlem geri alınamaz.\nAraç: ${rental.brandName} (${rental.modelYear})`);
+    const confirmed = confirm(`#${rental.id} numaralı kiralama silinsin mi?\n\nBu işlem geri alınamaz.\nAraç: ${rental.brandName} (${rental.modelYear})`);
     if (!confirmed) return;
 
-    this.rentalService.deleteAndFreeCar(rental.rentalId).subscribe(
+    this.rentalService.deleteAndFreeCar(rental.id).subscribe(
       (res) => {
         if (res.success) {
-          this.rentals = this.rentals.filter(r => r.rentalId !== rental.rentalId);
-          this.filteredRentals = this.filteredRentals.filter(r => r.rentalId !== rental.rentalId);
+          this.rentals = this.rentals.filter(r => r.id !== rental.id);
+          this.filteredRentals = this.filteredRentals.filter(r => r.id !== rental.id);
           this.toastrService.success('Kiralama silindi, araç serbest bırakıldı.', 'Başarılı');
         } else {
           this.toastrService.error(res.message || 'Silme işlemi başarısız.', 'Hata');

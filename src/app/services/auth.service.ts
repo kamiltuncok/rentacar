@@ -16,42 +16,42 @@ import { LocalStorageService } from './local-storage.service';
 })
 export class AuthService {
 
-  constructor(private httpClient:HttpClient,
-    private localStorageService:LocalStorageService,
+  constructor(private httpClient: HttpClient,
+    private localStorageService: LocalStorageService,
     private jwtHelperService: JwtHelperService) { }
 
-  apiUrl="https://localhost:44306/api/auth/"
+  apiUrl = "https://localhost:44306/api/auth/"
 
-  login(loginModel:LoginModel){
-    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl+"login",loginModel)
+  login(loginModel: LoginModel) {
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "login", loginModel)
   }
 
-  loginForCorporate(loginModel:LoginModel){
-    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl+"loginforcorporate",loginModel)
+  loginForCorporate(loginModel: LoginModel) {
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "loginforcorporate", loginModel)
   }
 
-  logOut(){
+  logOut() {
     this.localStorageService.remove("token");
   }
 
-  register(registerModel:RegisterModel){
-    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl+"register",registerModel)
+  register(registerModel: RegisterModel) {
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "register", registerModel)
   }
 
-  registerForCorporate(registerForCorporateModel:RegisterForCorporateModel){
-    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl+"registerforcorporate",registerForCorporateModel)
+  registerForCorporate(registerForCorporateModel: RegisterForCorporateModel) {
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "registerforcorporate", registerForCorporateModel)
   }
 
-  updatePassword(userPasswordModel:UserPasswordModel){
+  updatePassword(userPasswordModel: UserPasswordModel) {
     let newUrl = this.apiUrl + "updatepassword";
     return this.httpClient.post<ResponseModel>(newUrl, userPasswordModel)
   }
 
-  isAuthenticated(){
+  isAuthenticated() {
     if (localStorage.getItem("token")) {
       return true;
     }
-    else{
+    else {
       return false;
     }
   }
@@ -61,7 +61,7 @@ export class AuthService {
     const decodedToken = this.jwtHelperService.decodeToken(token);
     return decodedToken;
   }
-  
+
 
   get getCurrentUserId() {
     let decodedToken = this.getDecodedToken;
@@ -75,12 +75,12 @@ export class AuthService {
   getCustomerType(): string | null {
     const decodedToken = this.getDecodedToken;
     const customerType = decodedToken['customerType'];
-  
+
     if (!customerType) {
       console.error('CustomerType bilgisi alınamadı.');
       return null;
     }
-  
+
     return customerType;
   }
 
@@ -89,15 +89,34 @@ export class AuthService {
   }
 
 
+  getRoles(): string[] {
+    const decodedToken = this.getDecodedToken;
+    if (!decodedToken) return [];
+
+    let roleClaimKey = Object.keys(decodedToken).find((t) =>
+      t.endsWith('/role')
+    );
+
+    if (roleClaimKey && decodedToken[roleClaimKey]) {
+      let roles = decodedToken[roleClaimKey];
+      // Eğer tek bir rol varsa string döner, birden fazla rol varsa dizi döner.
+      if (typeof roles === 'string') {
+        return [roles.toLowerCase()];
+      }
+      return roles.map((r: string) => r.toLowerCase());
+    }
+    return [];
+  }
+
   isAdmin(): boolean {
-    const customerType = this.getCustomerType();
-    return customerType === 'Admin';
+    const roles = this.getRoles();
+    return roles.includes('admin');
   }
 
   isLocationManager(): boolean {
-    const customerType = this.getCustomerType();
-    return customerType === 'LocationManager';
+    const roles = this.getRoles();
+    return roles.includes('locationmanager') || roles.includes('location.manager') || roles.includes('location manager');
   }
-  
-  
+
+
 }

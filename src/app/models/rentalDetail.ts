@@ -1,24 +1,30 @@
-import { CustomerType } from './rental';
+import { RentalStatus, DepositStatus } from './rental';
+
 export interface RentalDetail {
-    rentalId: number;
+    id: number;
     carId: number;
     customerId: number;
-    userId: number;
     brandName: string;
     colorName: string;
     segmentName: string;
     fuelName: string;
     gearName: string;
-    locationName: string;
+    startLocationName: string;
+    startLocationCity: string;
+    endLocationName: string;
+    endLocationCity: string;
     fullName: string;
+    email: string;
     modelYear: number;
-    dailyPrice: number;
+    plateNumber: string;
     description: string;
-    rentDate: Date;
-    returnDate: Date;
-    startLocation: string;
-    endLocation: string;
-    isReturned: boolean;
-    deposit: number;
-    customerType:CustomerType;
+    startDate: Date;
+    endDate: Date;
+    rentedDailyPrice: number;
+    totalPrice: number;
+    depositAmount: number;
+    depositStatus: DepositStatus;
+    depositDeductedAmount: number;
+    depositRefundedDate: Date | null;
+    status: RentalStatus;
 }

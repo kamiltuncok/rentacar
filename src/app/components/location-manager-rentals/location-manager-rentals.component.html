@@ -151,8 +151,9 @@
           <!-- Car image + status pill -->
           <div class="card-media">
             <img src="assets/images/lux.jpg" alt="{{ rental.brandName }}" (error)="setDefaultImage($event)" />
-            <span [class]="rental.isReturned ? 'card-status card-status--returned' : 'card-status card-status--active'">
-              {{ rental.isReturned ? '✓ Teslim Edildi' : '● Aktif' }}
+            <span
+              [class]="rental.status === 2 ? 'card-status card-status--returned' : 'card-status card-status--active'">
+              {{ rental.status === 2 ? '✓ Teslim Edildi' : rental.status === 1 ? '● Aktif' : 'İptal' }}
             </span>
           </div>
 
@@ -175,9 +176,9 @@
                 <dt>Vites</dt>
                 <dd>{{ rental.gearName }}</dd>
                 <dt>Günlük</dt>
-                <dd>{{ rental.dailyPrice | currency:'TRY':'symbol':'1.0-0' }}</dd>
+                <dd>{{ rental.rentedDailyPrice | currency:'TRY':'symbol':'1.0-0' }}</dd>
                 <dt>Depozito</dt>
-                <dd>{{ rental.deposit | currency:'TRY':'symbol':'1.0-0' }}</dd>
+                <dd>{{ rental.depositAmount | currency:'TRY':'symbol':'1.0-0' }}</dd>
               </dl>
             </div>
 
@@ -212,20 +213,21 @@
               <p class="card-section-label">Kiralama Detayları</p>
               <dl class="card-info-table">
                 <dt>Başlangıç</dt>
-                <dd>{{ formatDate(rental.rentDate) }}</dd>
-                <dt *ngIf="rental.returnDate">İade</dt>
-                <dd *ngIf="rental.returnDate">{{ formatDate(rental.returnDate) }}</dd>
+                <dd>{{ formatDate(rental.startDate) }}</dd>
+                <dt>Bitiş</dt>
+                <dd>{{ formatDate(rental.endDate) }}</dd>
                 <dt>Alış</dt>
                 <dd>
                   <a class="location-link" [routerLink]="['/branches']"
-                    [queryParams]="{location: rental.startLocation}">
-                    {{ rental.startLocation }}
+                    [queryParams]="{location: rental.startLocationName}">
+                    {{ rental.startLocationName }} – {{ rental.startLocationCity }}
                   </a>
                 </dd>
                 <dt>Bırakış</dt>
                 <dd>
-                  <a class="location-link" [routerLink]="['/branches']" [queryParams]="{location: rental.endLocation}">
-                    {{ rental.endLocation }}
+                  <a class="location-link" [routerLink]="['/branches']"
+                    [queryParams]="{location: rental.endLocationName}">
+                    {{ rental.endLocationName }} – {{ rental.endLocationCity }}
                   </a>
                 </dd>
               </dl>
@@ -234,16 +236,16 @@
 
           <!-- Footer strip -->
           <div class="card-footer-strip">
-            <span class="card-footer-strip__meta">#{{ rental.rentalId }} · {{ rental.locationName }}</span>
+            <span class="card-footer-strip__meta">#{{ rental.id }} · {{ rental.startLocationName }}</span>
             <div class="card-actions">
-              <button class="card-action-btn card-action-btn--return" [disabled]="rental.isReturned"
-                [title]="rental.isReturned ? 'Zaten teslim edildi' : 'Teslim alındı olarak işaretle'"
+              <button class="card-action-btn card-action-btn--return" [disabled]="rental.status === 2"
+                [title]="rental.status === 2 ? 'Zaten teslim edildi' : 'Teslim alındı olarak işaretle'"
                 (click)="confirmReturn(rental)">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                   stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
-                {{ rental.isReturned ? 'Teslim Edildi' : 'Teslim Alındı' }}
+                {{ rental.status === 2 ? 'Teslim Edildi' : 'Teslim Alındı' }}
               </button>
               <button class="card-action-btn card-action-btn--delete" title="Kiralamayı sil"
                 (click)="confirmDelete(rental)">

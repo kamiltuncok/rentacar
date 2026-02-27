@@ -1,22 +1,23 @@
-import { CarImage } from "./carImage";
+import { CarImage } from './carImage';
+import { CarStatus } from './car';
 
 export interface CarDetail {
-    id: number,
-    description: string,
-    carId: number,
-    brandName: string,
-    colorName: string,
-    locationName: string,
-    dailyPrice: number,
-    modelYear: string,
-    brandId: number,
-    colorId: number,
-    imagePath: CarImage[],
-    returnDATE: Date,
-    isRented: boolean,
-    fuelName: string,
-    gearName: string,
-    segmentName: string,
-    deposit: number,
-    locationCity: string,
+    id: number;
+    description: string;
+    brandName: string;
+    colorName: string;
+    locationName: string;
+    locationCity: string;
+    dailyPrice: number;
+    deposit: number;
+    modelYear: number;
+    brandId: number;
+    colorId: number;
+    plateNumber: string;
+    km: number;
+    status: CarStatus;
+    fuelName: string;
+    gearName: string;
+    segmentName: string;
+    imagePath: CarImage[];
 }
