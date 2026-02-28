@@ -54,10 +54,7 @@ export const routes: Routes = [
         path: 'home/carlist/payment/:carId',
         loadComponent: () => import('./components/payment/payment.component').then(m => m.PaymentComponent),
     },
-    {
-        path: 'home/carlist/paymentcorporate/:carId',
-        loadComponent: () => import('./components/paymentcorporate/paymentcorporate.component').then(m => m.PaymentcorporateComponent),
-    },
+
 
     // ─── Rentals (lazy, auth required) ───
     {

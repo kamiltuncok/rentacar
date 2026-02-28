@@ -1,98 +1,39 @@
 <div class="container">
-    <!-- Müşteri Bilgileri Formu - Sadece giriş yapmamış kullanıcılar için gösterilecek -->
-    <div style="background-color: #cedce0;" *ngIf="hideCustomerInfo === false">
-        <div style="padding: 20px;">
-            <form [formGroup]="customerAddForm">
-                <h1>Müşteri Bilgileri</h1>
-                <div>
-                    <label>İsim</label>
-                    <input type="text" id="firstName" formControlName="firstName" class="form-control">
-                    <div *ngIf="customerAddForm.get('firstName')?.invalid && customerAddForm.get('firstName')?.touched" 
-                         class="text-danger">
-                        İsim alanı zorunludur
-                    </div>
-                </div>
-                <div>
-                    <label>Soyisim</label>
-                    <input type="text" id="lastName" formControlName="lastName" class="form-control">
-                    <div *ngIf="customerAddForm.get('lastName')?.invalid && customerAddForm.get('lastName')?.touched" 
-                         class="text-danger">
-                        Soyisim alanı zorunludur
-                    </div>
-                </div>
-                <div>
-                    <label>TC Kimlik No</label>
-                    <input type="text" id="identityNumber" formControlName="identityNumber" class="form-control" maxlength="11">
-                    <div *ngIf="customerAddForm.get('identityNumber')?.invalid && customerAddForm.get('identityNumber')?.touched" 
-                         class="text-danger">
-                        TC Kimlik No alanı zorunludur
-                    </div>
-                </div>
-                <div>
-                    <label>Telefon Numarası</label>
-                    <input type="text" id="phoneNumber" formControlName="phoneNumber" class="form-control" minlength="11" maxlength="11">
-                    <div *ngIf="customerAddForm.get('phoneNumber')?.invalid && customerAddForm.get('phoneNumber')?.touched" 
-                         class="text-danger">
-                        Telefon numarası alanı zorunludur
-                    </div>
-                </div>
-                <div>
-                    <label>E-Posta Adresi</label>
-                    <input type="email" id="email" formControlName="email" class="form-control">
-                    <div *ngIf="customerAddForm.get('email')?.invalid && customerAddForm.get('email')?.touched" 
-                         class="text-danger">
-                        Geçerli bir e-posta adresi giriniz
-                    </div>
-                </div>
-                <div>
-                    <label>Adres</label>
-                    <textarea id="address" formControlName="address" class="form-control" maxlength="140" style="height: 100px;"></textarea>
-                    <div *ngIf="customerAddForm.get('address')?.invalid && customerAddForm.get('address')?.touched" 
-                         class="text-danger">
-                        Adres alanı zorunludur
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Giriş yapmış kullanıcı için bilgi mesajı
-    <div *ngIf="isUserAuthenticated" class="alert alert-info">
-        <strong>Kullanıcı Girişi Tespit Edildi</strong><br>
-        Kiralama işlemi mevcut kullanıcı hesabınızla gerçekleştirilecektir.
-    </div> -->
-
-    <br>
-
-    <div class="row">
+    <div class="row pt-4">
         <div class="container p-0" style="border: 1px solid black; padding: 0.5px; display: flex;">
             <!-- Left Side - Payment Information -->
-            <div style="flex: 1;">
+            <div style="flex: 1;" *ngIf="isUserAuthenticated">
                 <div class="card px-4" style="background-color: #cedce0;">
                     <h3>Ödeme Bilgileri</h3>
                     <hr style="border: 0.5px solid black;">
                     <div style="position: absolute; top: 0; right: 0; margin-top: 65px; margin-right: 10px;">
-                        <img src="https://bertanuzun.com/wp-content/uploads/2020/03/kredi-karti.png" width="400" height="250" alt="Responsive image">
+                        <img src="https://bertanuzun.com/wp-content/uploads/2020/03/kredi-karti.png" width="400"
+                            height="250" alt="Kredi Kartı">
                     </div>
-                    <div class="row gx-3">
+                    <div class="row gx-3" [formGroup]="paymentForm">
                         <div class="col-12">
                             <div class="d-flex flex-column">
                                 <p class="text mb-1" style="height: 40px;">Kart İsmi</p>
-                                <input id="cardHolder" class="form-control mb-3" required type="text" placeholder="Name" style="height: 40px; width: 400px;">
+                                <input formControlName="cardHolder" class="form-control mb-3" type="text"
+                                    placeholder="Ad Soyad" style="height: 40px; width: 400px;"
+                                    [class.is-invalid]="paymentForm.get('cardHolder')?.invalid && paymentForm.get('cardHolder')?.touched">
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="d-flex flex-column">
                                 <p class="text mb-1" style="height: 40px;">Kart Numarası</p>
-                                <input id="cardNumber" required class="form-control mb-3" type="text" placeholder="1234 5678 9876 5432" maxlength="16" style="height: 40px; width: 400px;">
+                                <input formControlName="cardNumber" class="form-control mb-3" type="text"
+                                    placeholder="1234 5678 9876 5432" maxlength="16" style="height: 40px; width: 400px;"
+                                    [class.is-invalid]="paymentForm.get('cardNumber')?.invalid && paymentForm.get('cardNumber')?.touched">
                             </div>
                         </div>
                         <div class="col-2">
                             <div><label>Son Kullanma Tarihi</label>
-                                <div class="last-usage-date">
+                                <div class="last-usage-date d-flex gap-2">
                                     <div class="select-wrapper">
-                                        <select required id="card-date-month">
-                                            <option disabled="disabled" value="" selected="selected">Ay</option>
+                                        <select formControlName="expireMonth" class="form-control"
+                                            [class.is-invalid]="paymentForm.get('expireMonth')?.invalid && paymentForm.get('expireMonth')?.touched">
+                                            <option value="" disabled selected>Ay</option>
                                             <option value="1">01</option>
                                             <option value="2">02</option>
                                             <option value="3">03</option>
@@ -106,44 +47,139 @@
                                             <option value="11">11</option>
                                             <option value="12">12</option>
                                         </select>
-                                        <i class="icon-chevron-down icon"></i>
                                     </div>
                                     <div class="select-wrapper">
-                                        <select required id="card-date-year">
-                                            <option disabled="disabled" value="" selected="selected">Yıl</option>
+                                        <select formControlName="expireYear" class="form-control"
+                                            [class.is-invalid]="paymentForm.get('expireYear')?.invalid && paymentForm.get('expireYear')?.touched">
+                                            <option value="" disabled selected>Yıl</option>
                                             <option value="2025">2025</option>
                                             <option value="2026">2026</option>
                                             <option value="2027">2027</option>
                                             <option value="2028">2028</option>
                                             <option value="2029">2029</option>
                                             <option value="2030">2030</option>
-                                            <option value="2031">2031</option>
-                                            <option value="2032">2032</option>
-                                            <option value="2033">2033</option>
-                                            <option value="2034">2034</option>
-                                            <option value="2035">2035</option>
-                                            <option value="2036">2036</option>
-                                            <option value="2037">2037</option>
-                                            <option value="2038">2038</option>
-                                            <option value="2039">2039</option>
-                                            <option value="2040">2040</option>
                                         </select>
-                                        <i class="icon-chevron-down icon"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="d-flex flex-column">
-                                <p class="text mb-1">CVV/CVC</p>
-                                <input id="cvc" required class="form-control mb-3 pt-2" maxlength="3" type="text" placeholder="***">
+                                <p class="text mb-1 mt-3">CVV/CVC</p>
+                                <input formControlName="cvv" class="form-control mb-3 pt-2" maxlength="3" type="text"
+                                    placeholder="***" style="width: 100px;"
+                                    [class.is-invalid]="paymentForm.get('cvv')?.invalid && paymentForm.get('cvv')?.touched">
                             </div>
                         </div>
-                        <div>
-                            <button type="button" (click)="addCustomerAndRental()" class="btn btn-success btn-xs">
-                                {{ isUserAuthenticated ? 'Kirala' : 'Müşteri Oluştur ve Kirala' }}
+                        <div class="mt-4 mb-4">
+                            <button type="button" (click)="addRentalEntry()" class="btn btn-success btn-lg">
+                                Hemen Kirala
                             </button>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="!isUserAuthenticated" class="p-5 w-100">
+                <h4 class="mb-4">Kiralamayı Tamamlamak İçin Bilgilerinizi Girin</h4>
+
+                <!-- Individual Form -->
+                <form *ngIf="customerType === 0" [formGroup]="guestIndividualForm" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Ad</label>
+                        <input type="text" formControlName="firstName" class="form-control" placeholder="Adınız">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Soyad</label>
+                        <input type="text" formControlName="lastName" class="form-control" placeholder="Soyadınız">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">T.C. Kimlik No</label>
+                        <input type="text" formControlName="identityNumber" class="form-control"
+                            placeholder="11 Haneli TC No" maxlength="11">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">E-Posta</label>
+                        <input type="email" formControlName="email" class="form-control"
+                            placeholder="E-Posta Adresiniz">
+                    </div>
+                </form>
+
+                <!-- Corporate Form -->
+                <form *ngIf="customerType === 1" [formGroup]="guestCorporateForm" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Şirket Adı</label>
+                        <input type="text" formControlName="companyName" class="form-control" placeholder="Şirket Adı">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Vergi Numarası</label>
+                        <input type="text" formControlName="taxNumber" class="form-control" placeholder="Vergi No">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Telefon Numarası</label>
+                        <input type="text" formControlName="phoneNumber" class="form-control"
+                            placeholder="Telefon Seçilmedi (05XX)">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">E-Posta</label>
+                        <input type="email" formControlName="email" class="form-control" placeholder="Kurumsal E-Posta">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Adres</label>
+                        <textarea formControlName="address" class="form-control" placeholder="Kurum Adresi"
+                            rows="2"></textarea>
+                    </div>
+                </form>
+
+                <!-- Payment Information for Guests -->
+                <div class="mt-5" [formGroup]="paymentForm">
+                    <h5 class="mb-3">Ödeme Bilgileri</h5>
+                    <hr>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Kart İsmi</label>
+                            <input type="text" formControlName="cardHolder" class="form-control" placeholder="Ad Soyad"
+                                [class.is-invalid]="paymentForm.get('cardHolder')?.invalid && paymentForm.get('cardHolder')?.touched">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Kart Numarası</label>
+                            <input type="text" formControlName="cardNumber" class="form-control"
+                                placeholder="1234 5678 9876 5432" maxlength="16"
+                                [class.is-invalid]="paymentForm.get('cardNumber')?.invalid && paymentForm.get('cardNumber')?.touched">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Son Kullanma Tarihi</label>
+                            <div class="d-flex gap-2">
+                                <select formControlName="expireMonth" class="form-control"
+                                    [class.is-invalid]="paymentForm.get('expireMonth')?.invalid && paymentForm.get('expireMonth')?.touched">
+                                    <option value="" disabled selected>Ay</option>
+                                    <option *ngFor="let month of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="month">
+                                        {{month | number:'2.0'}}
+                                    </option>
+                                </select>
+                                <select formControlName="expireYear" class="form-control"
+                                    [class.is-invalid]="paymentForm.get('expireYear')?.invalid && paymentForm.get('expireYear')?.touched">
+                                    <option value="" disabled selected>Yıl</option>
+                                    <option *ngFor="let year of [2025,2026,2027,2028,2029,2030]" [value]="year">
+                                        {{year}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">CVV/CVC</label>
+                            <input type="text" formControlName="cvv" class="form-control" maxlength="3"
+                                placeholder="***"
+                                [class.is-invalid]="paymentForm.get('cvv')?.invalid && paymentForm.get('cvv')?.touched">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-4">
+                    <div class="col-12 text-end">
+                        <button type="button" (click)="addRentalEntry()" class="btn btn-success btn-lg">
+                            Ödemeyi Tamamla
+                        </button>
                     </div>
                 </div>
             </div>

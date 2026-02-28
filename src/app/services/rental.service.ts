@@ -6,6 +6,41 @@ import { ListResponseModel } from '../models/listResponseModel';
 import { Rental } from '../models/rental';
 import { RentalDetail } from '../models/rentalDetail';
 
+export interface RentalCreateRequestDto {
+  carId: number;
+  startLocationId: number;
+  endLocationId: number;
+  startDate: string;
+  endDate: string;
+}
+
+export interface GuestRentalCreateRequestDto extends RentalCreateRequestDto {
+  customerType: number;
+  firstName?: string;
+  lastName?: string;
+  identityNumber?: string;
+  email: string;
+  phoneNumber?: string;
+  address?: string;
+  companyName?: string;
+  taxNumber?: string;
+}
+
+export interface RentalResponseDto {
+  rentalId: number;
+  totalPrice: number;
+}
+
+export interface CarAvailabilityFilterDto {
+  startLocationId: number;
+  endLocationId: number;
+  startDate: string;
+  endDate: string;
+  fuelIds?: number[];
+  gearIds?: number[];
+  segmentIds?: number[];
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +60,12 @@ export class RentalService {
   }
 
 
-  add(rental: Rental): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl + "rentals/add", rental)
+  createRental(request: RentalCreateRequestDto): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(this.apiUrl + "rentals/create", request);
+  }
+
+  createGuestRental(request: GuestRentalCreateRequestDto): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(this.apiUrl + "rentals/createguest", request);
   }
 
   getRentalDetailsByUserId(userId: number, customerType: number): Observable<ListResponseModel<RentalDetail>> {

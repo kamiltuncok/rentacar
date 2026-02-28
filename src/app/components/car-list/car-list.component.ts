@@ -14,13 +14,15 @@ import { Component } from '@angular/core';
 import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-    selector: 'app-car-list',
-    templateUrl: './car-list.component.html',
-    styleUrls: ['./car-list.component.css'],
-    imports: [NgIf, NgFor]
+  selector: 'app-car-list',
+  templateUrl: './car-list.component.html',
+  styleUrls: ['./car-list.component.css'],
+  imports: [NgIf, NgFor]
 })
 export class CarListComponent {
   carDetails: CarDetail[] = [];
+  startLocationId: number;
+  endLocationId: number;
   locationName: string;
   locationEndName: string;
   startTime: string = '';
@@ -53,25 +55,29 @@ export class CarListComponent {
   ) { }
 
   ngOnInit(): void {
-  this.activatedRoute.queryParams.subscribe(queryParams => {
-    this.locationName = queryParams["locationName"];
-    this.locationEndName = queryParams["locationEndName"];
-    this.from = queryParams["from"];
-    this.to = queryParams["to"];
-    this.startTime = queryParams["startTime"];
-    this.endTime = queryParams["endTime"];
-    this.customerType = +queryParams["customerType"];
-    
-    // URL'den gelen tarihlere göre gun'ı hesapla
-    this.calculateGunFromDates();
-    this.getFuels();
-    this.getGears();
-    this.getSegments();
-    this.getCarByLocationName(this.locationName);
-  });
-}
+    this.activatedRoute.queryParams.subscribe(queryParams => {
+      this.startLocationId = +queryParams["startLocationId"];
+      this.endLocationId = +queryParams["endLocationId"];
+      this.locationName = queryParams["locationName"];
+      this.locationEndName = queryParams["locationEndName"];
+      this.from = queryParams["from"];
+      this.to = queryParams["to"];
+      this.startTime = queryParams["startTime"];
+      this.endTime = queryParams["endTime"];
+      this.customerType = +queryParams["customerType"];
 
-getFuels() {
+      // URL'den gelen tarihlere göre gun'ı hesapla
+      this.calculateGunFromDates();
+      this.getFuels();
+      this.getGears();
+      this.getSegments();
+
+      // Explicit initial call with basic filters
+      this.applyFilters();
+    });
+  }
+
+  getFuels() {
     this.fuelService.getFuels().subscribe(response => {
       this.fuels = response.data;
     });
@@ -83,34 +89,34 @@ getFuels() {
     });
   }
 
- getSegments() {
-  this.segmentService.getSegments().subscribe(response => {
-    this.segments = response.data;
-    
-    // Segmentleri yükledikten sonra seçili segmenti kontrol et
-    this.applySegmentFilter();
-  });
-}
+  getSegments() {
+    this.segmentService.getSegments().subscribe(response => {
+      this.segments = response.data;
 
-applySegmentFilter() {
-  const storedSegment = sessionStorage.getItem('selectedSegment');
-  if (storedSegment && this.segments.length > 0) {
-    const segment = this.segments.find(s => s.segmentName === storedSegment);
-    if (segment) {
-      // Sadece bu segmenti seç
-      this.selectedSegmentIds = [segment.segmentId];
-      this.isSegmentFilterDisabled = true;
-      
-      // Filtreleme yap
-      this.applyFilters();
-      
-      // Temizle
-      sessionStorage.removeItem('selectedSegment');
+      // Segmentleri yükledikten sonra seçili segmenti kontrol et
+      this.applySegmentFilter();
+    });
+  }
+
+  applySegmentFilter() {
+    const storedSegment = sessionStorage.getItem('selectedSegment');
+    if (storedSegment && this.segments.length > 0) {
+      const segment = this.segments.find(s => s.segmentName === storedSegment);
+      if (segment) {
+        // Sadece bu segmenti seç
+        this.selectedSegmentIds = [segment.segmentId];
+        this.isSegmentFilterDisabled = true;
+
+        // Filtreleme yap
+        this.applyFilters();
+
+        // Temizle
+        sessionStorage.removeItem('selectedSegment');
+      }
     }
   }
-}
 
- isSegmentSelected(segmentId: number): boolean {
+  isSegmentSelected(segmentId: number): boolean {
     return this.selectedSegmentIds.includes(segmentId);
   }
 
@@ -152,78 +158,80 @@ applySegmentFilter() {
   }
 
   applyFilters() {
-    // Segment, fuel veya gear seçiliyse kombine filtreleme
-    if (this.selectedSegmentIds.length > 0 || this.selectedFuelIds.length > 0 || this.selectedGearIds.length > 0) {
-      this.getCarsByFilters(this.selectedFuelIds, this.selectedGearIds,this.selectedSegmentIds, this.locationName);
-    } else {
-      // Hiç filtre seçilmediyse tüm araçları getir
-      this.getCarByLocationName(this.locationName);
-    }
-  }
-
-  getCarsByFilters(segmentIds: number[], fuelIds: number[], gearIds: number[], locationName: string) {
     this.dataLoaded = false;
-    this.carDetailService.getCarsByFilters(segmentIds, fuelIds, gearIds, locationName).subscribe(response => {
+
+    // Use DomainV2 Availability Check DTO
+    let filterDateStart = this.from;
+    let filterDateEnd = this.to;
+
+    // Combine dates with times for strict domain checks
+    if (this.from && this.startTime) {
+      filterDateStart = `${this.from}T${this.startTime}`;
+    }
+    if (this.to && this.endTime) {
+      filterDateEnd = `${this.to}T${this.endTime}`;
+    }
+
+    const filter = {
+      startLocationId: this.startLocationId,
+      endLocationId: this.endLocationId,
+      startDate: filterDateStart,
+      endDate: filterDateEnd,
+      fuelIds: this.selectedFuelIds,
+      gearIds: this.selectedGearIds,
+      segmentIds: this.selectedSegmentIds
+    };
+
+
+    this.carDetailService.getAvailableCars(filter).subscribe(response => {
       this.carDetails = response.data;
       this.dataLoaded = true;
       this.loadCarImages();
     });
   }
 
-calculateGunFromDates() {
-  if (this.from && this.to) {
-    const startDateTime = new Date(this.from + 'T' + this.startTime);
-    const endDateTime = new Date(this.to + 'T' + this.endTime);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+  calculateGunFromDates() {
+    if (this.from && this.to) {
+      const startDateTime = new Date(this.from + 'T' + this.startTime);
+      const endDateTime = new Date(this.to + 'T' + this.endTime);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-    // Geçmiş tarih kontrolü
-    if (startDateTime < today) {
-      this.toastrService.error('Teslim alma tarihi bugünden önce olamaz.', 'Hata');
-      this.router.navigate(['/home']); // Ana sayfaya yönlendir
-      return;
-    }
+      // Geçmiş tarih kontrolü
+      if (startDateTime < today) {
+        this.toastrService.error('Teslim alma tarihi bugünden önce olamaz.', 'Hata');
+        this.router.navigate(['/home']); // Ana sayfaya yönlendir
+        return;
+      }
 
-    // Tarih sıralaması kontrolü
-    if (startDateTime >= endDateTime) {
-      this.toastrService.error('Alış tarihi, iade tarihinden önce olmalıdır.', 'Hata');
-      this.router.navigate(['/home']);
-      return;
-    }
+      // Tarih sıralaması kontrolü
+      if (startDateTime >= endDateTime) {
+        this.toastrService.error('Alış tarihi, iade tarihinden önce olmalıdır.', 'Hata');
+        this.router.navigate(['/home']);
+        return;
+      }
 
-    const dayDifference = Math.ceil((endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60 * 24));
-    this.gun = dayDifference;
-    
-    sessionStorage.setItem('gun', dayDifference.toString());
-  } else {
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras.state) {
-      this.gun = navigation.extras.state['gun'];
+      const dayDifference = Math.ceil((endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60 * 24));
+      this.gun = dayDifference;
+
+      sessionStorage.setItem('gun', dayDifference.toString());
     } else {
-      const storedGun = sessionStorage.getItem('gun');
-      if (storedGun) {
-        this.gun = parseInt(storedGun, 10);
+      const navigation = this.router.getCurrentNavigation();
+      if (navigation?.extras.state) {
+        this.gun = navigation.extras.state['gun'];
+      } else {
+        const storedGun = sessionStorage.getItem('gun');
+        if (storedGun) {
+          this.gun = parseInt(storedGun, 10);
+        }
       }
     }
   }
-}
 
-loadCarImages() {
+  loadCarImages() {
     for (const car of this.carDetails) {
       this.getCarImageByColorAndBrandId(car.brandId, car.colorId, car);
     }
-  }
-
-  getCarByLocationName(locationName: string) {
-    this.carDetailService.getCarsByLocationName(locationName).subscribe(response => {
-      this.carDetails = response.data;
-      this.dataLoaded = true;
-
-      // Iterate through the carDetails to get images for each car
-      for (const car of this.carDetails) {
-        this.getCarImageByColorAndBrandId(car.brandId, car.colorId, car);
-      }
-    });
   }
 
   getCarImageByColorAndBrandId(brandId: number, colorId: number, car: CarDetail) {
@@ -244,23 +252,22 @@ loadCarImages() {
   }
 
   navigateToPayment(carId: number) {
-  const routePath = this.customerType === 0 ? 'payment' : 'paymentcorporate';
-  
-  // Sadece gun state ile, diğerleri query param olarak
-  this.router.navigate([routePath, carId], {
-    relativeTo: this.activatedRoute,
-    queryParams: {
-      locationName: this.locationName,
-      locationEndName: this.locationEndName,
-      from: this.from,
-      to: this.to,
-      startTime: this.startTime,
-      endTime: this.endTime,
-      customerType: this.customerType
-    },
-    state: {
-      gun: this.gun
-    }
-  });
-}
+    // Sadece gun state ile, diğerleri query param olarak
+    this.router.navigate(['/home/carlist/payment', carId], {
+      queryParams: {
+        startLocationId: this.startLocationId,
+        endLocationId: this.endLocationId,
+        locationName: this.locationName,
+        locationEndName: this.locationEndName,
+        from: this.from,
+        to: this.to,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        customerType: this.customerType
+      },
+      state: {
+        gun: this.gun
+      }
+    });
+  }
 }

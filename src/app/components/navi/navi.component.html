@@ -13,7 +13,8 @@
           [routerLinkActiveOptions]="{exact:true}">Anasayfa</a></li>
       <li><a class="g-nav__link" routerLink="/cars" routerLinkActive="g-nav__link--active">Arabalar</a></li>
       <li><a class="g-nav__link" routerLink="/branches" routerLinkActive="g-nav__link--active">Şubeler</a></li>
-      <li><a class="g-nav__link" routerLink="/rentals" routerLinkActive="g-nav__link--active">Kiralamalarım</a></li>
+      <li *ngIf="isAuthenticated()"><a class="g-nav__link" routerLink="/rentals"
+          routerLinkActive="g-nav__link--active">Kiralamalarım</a></li>
       <li *ngIf="showLocationManagerMenu()">
         <a class="g-nav__link" routerLink="/location-rentals" routerLinkActive="g-nav__link--active">Kiralamaları
           Yönet</a>

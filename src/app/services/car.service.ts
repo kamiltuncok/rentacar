@@ -5,6 +5,7 @@ import { CarDetail } from '../models/carDetail';
 import { ListResponseModel } from '../models/listResponseModel';
 import { ResponseModel } from '../models/responseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
+import { CarAvailabilityFilterDto } from './rental.service';
 
 @Injectable({
   providedIn: 'root'
@@ -69,36 +70,14 @@ export class CarService {
     return this.httpClient.post(newPath, {});
   }
 
-getCarsByFilters(fuelIds: number[], gearIds: number[], segmentIds: number[], locationName: string): Observable<ListResponseModel<CarDetail>> {
-  let params = new HttpParams();
-  
-  if (fuelIds && fuelIds.length > 0) {
-    fuelIds.forEach(id => {
-      params = params.append('fuelIds', id.toString());
-    });
+  getAvailableCars(filter: CarAvailabilityFilterDto): Observable<ListResponseModel<CarDetail>> {
+    const newPath = this.apiUrl + "cars/available";
+    return this.httpClient.post<ListResponseModel<CarDetail>>(newPath, filter);
   }
-  
-  if (gearIds && gearIds.length > 0) {
-    gearIds.forEach(id => {
-      params = params.append('gearIds', id.toString());
-    });
-  }
-  
-  if (segmentIds && segmentIds.length > 0) {
-    segmentIds.forEach(id => {
-      params = params.append('segmentIds', id.toString());
-    });
-  }
-  
-  params = params.append('locationName', locationName);
-  
-  const newPath = this.apiUrl + "cars/getcarsbyfilters";
-  return this.httpClient.get<ListResponseModel<CarDetail>>(newPath, { params });
-}
 
-getLowestPriceBySegment(segmentId: number): Observable<SingleResponseModel<number>> {
+  getLowestPriceBySegment(segmentId: number): Observable<SingleResponseModel<number>> {
     const newPath = this.apiUrl + "cars/getlowestpricebysegment?segmentId=" + segmentId;
     return this.httpClient.get<SingleResponseModel<number>>(newPath);
   }
-  
+
 }

@@ -10,14 +10,14 @@ import { CarSearchFormComponent } from '../car-search-form/car-search-form.compo
 import { NgFor, NgIf } from '@angular/common';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css'],
-    imports: [CarSearchFormComponent, NgFor, NgIf]
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css'],
+  imports: [CarSearchFormComponent, NgFor, NgIf]
 })
 export class HomeComponent {
-  alisOfisiOptions: string[] = [];
-  iadeOfisiOptions: string[] = [];
+  alisOfisiOptions: any[] = [];
+  iadeOfisiOptions: any[] = [];
   customerType: string = 'individual';
   showCityPopup: boolean = false;
   showSegmentPopup: boolean = false;
@@ -30,23 +30,23 @@ export class HomeComponent {
   constructor(
     private locationService: LocationService,
     private router: Router,
-    private carService:CarService,
+    private carService: CarService,
     private toastrService: ToastrService,
-    private segmentService:SegmentService
-  ) {}
+    private segmentService: SegmentService
+  ) { }
 
   ngOnInit(): void {
     this.locationService.getLocations().subscribe((response) => {
       if (response.success) {
-        this.alisOfisiOptions = response.data.map((location: Location) => location.locationName);
-        this.iadeOfisiOptions = response.data.map((location: Location) => location.locationName);
+        this.alisOfisiOptions = response.data;
+        this.iadeOfisiOptions = response.data;
       }
     });
 
     this.getSegments();
   }
 
-   getSegments() {
+  getSegments() {
     this.segmentService.getSegments().subscribe((response) => {
       if (response.success) {
         this.segments = response.data;
@@ -76,76 +76,79 @@ export class HomeComponent {
     return 'Yükleniyor...'; // Default değer
   }
 
- navigateToCarList(searchData: any) {
-  const locationName = this.alisOfisiOptions.find((loc) => loc === searchData.selectedStartLocation);
-  const locationEndName = this.iadeOfisiOptions.find((loc) => loc === searchData.selectedEndLocation);
+  navigateToCarList(searchData: any) {
+    const startLocation = this.alisOfisiOptions.find((loc) => loc.locationName === searchData.selectedStartLocation);
+    const endLocation = this.iadeOfisiOptions.find((loc) => loc.locationName === searchData.selectedEndLocation);
 
-  if (locationName && locationEndName) {
-    const startDateTime = new Date(searchData.selectedStartDate + 'T' + searchData.selectedStartTime);
-    const endDateTime = new Date(searchData.selectedEndDate + 'T' + searchData.selectedEndTime);
+    if (startLocation && endLocation) {
+      const startDateTime = new Date(searchData.selectedStartDate + 'T' + searchData.selectedStartTime);
+      const endDateTime = new Date(searchData.selectedEndDate + 'T' + searchData.selectedEndTime);
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-    if (startDateTime < today) {
-      this.toastrService.error('Teslim alma tarihi bugünden önce olamaz. Lütfen tarihi kontrol edin.', "Hata");
-      return;
+      if (startDateTime < today) {
+        this.toastrService.error('Teslim alma tarihi bugünden önce olamaz. Lütfen tarihi kontrol edin.', "Hata");
+        return;
+      }
+
+      if (startDateTime >= endDateTime) {
+        this.toastrService.error('Alış tarihi, iade tarihinden önce olmalıdır. Lütfen tarihi kontrol edin.', "Hata");
+        return;
+      }
+
+      const dayDifference = Math.ceil((endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60 * 24));
+
+      // gun'ı sessionStorage'a kaydet (sayfa yenileme durumu için)
+      sessionStorage.setItem('gun', dayDifference.toString());
+
+      sessionStorage.setItem('selectedSegment', this.selectedSegment);
+
+      const queryParams = {
+        startLocationId: startLocation.id || startLocation.locationId,
+        endLocationId: endLocation.id || endLocation.locationId,
+        locationName: startLocation.locationName,
+        locationEndName: endLocation.locationName,
+        from: searchData.selectedStartDate,
+        to: searchData.selectedEndDate,
+        startTime: searchData.selectedStartTime,
+        endTime: searchData.selectedEndTime,
+        customerType: searchData.customerType === 'individual' ? 0 : 1
+      };
+
+      this.router.navigate(['home/carlist'], {
+        queryParams: queryParams,
+        state: {
+          gun: dayDifference,
+          segment: this.selectedSegment
+        }
+      });
+
+      this.closeSegmentPopup();
     }
-
-    if (startDateTime >= endDateTime) {
-      this.toastrService.error('Alış tarihi, iade tarihinden önce olmalıdır. Lütfen tarihi kontrol edin.',"Hata");
-      return;
+    else {
+      this.toastrService.error('Lütfen teslim alma ve iade ofisini seçin.', 'Hata');
     }
-
-    const dayDifference = Math.ceil((endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60 * 24));
-
-    // gun'ı sessionStorage'a kaydet (sayfa yenileme durumu için)
-    sessionStorage.setItem('gun', dayDifference.toString());
-
-    sessionStorage.setItem('selectedSegment', this.selectedSegment);
-
-    const queryParams = {
-      locationName: locationName,
-      locationEndName: locationEndName,
-      from: searchData.selectedStartDate,
-      to: searchData.selectedEndDate,
-      startTime: searchData.selectedStartTime,
-      endTime: searchData.selectedEndTime,
-      customerType: searchData.customerType === 'individual' ? 0 : 1
-    };
-
-    this.router.navigate(['home/carlist'], { 
-      queryParams: queryParams,
-      state: { gun: dayDifference,
-        segment: this.selectedSegment
-       }
-    });
-
-    this.closeSegmentPopup();
   }
-  else {
-    this.toastrService.error('Lütfen teslim alma ve iade ofisini seçin.', 'Hata');
-  }
-}
 
   openCityPopup(city: string) {
-  this.selectedCity = city;
-  this.showCityPopup = true;
+    this.selectedCity = city;
+    this.showCityPopup = true;
 
-  this.locationService.getLocationsByCity(city).subscribe((response) => {
-    if (response.success && response.data.length > 0) {
-      this.cityLocations = response.data.map((loc: Location) => loc.locationName);
-    } else {
-      this.toastrService.error(`${city} için uygun lokasyon bulunamadı.`, 'Hata');
-      this.cityLocations = []; // Boş array set et
-    }
-  });
-}
+    this.locationService.getLocationsByCity(city).subscribe((response) => {
+      if (response.success && response.data.length > 0) {
+        this.cityLocations = response.data.map((loc: Location) => loc.locationName);
+      } else {
+        this.toastrService.error(`${city} için uygun lokasyon bulunamadı.`, 'Hata');
+        this.cityLocations = []; // Boş array set et
+      }
+    });
+  }
 
-openSegmentPopup(segment: string) {
-  this.selectedSegment = segment;
-  this.showSegmentPopup = true;
-}
+  openSegmentPopup(segment: string) {
+    this.selectedSegment = segment;
+    this.showSegmentPopup = true;
+  }
 
   closeCityPopup() {
     this.showCityPopup = false;
@@ -153,7 +156,7 @@ openSegmentPopup(segment: string) {
   }
 
   closeSegmentPopup() {
-  this.showSegmentPopup = false;
-  this.selectedSegment = '';
-}
+    this.showSegmentPopup = false;
+    this.selectedSegment = '';
+  }
 }

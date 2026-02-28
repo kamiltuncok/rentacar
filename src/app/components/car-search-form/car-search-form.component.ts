@@ -3,17 +3,17 @@ import { NgIf, NgClass, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'app-car-search-form',
-    templateUrl: './car-search-form.component.html',
-    styleUrls: ['./car-search-form.component.css'],
-    imports: [NgIf, NgClass, FormsModule, NgFor]
+  selector: 'app-car-search-form',
+  templateUrl: './car-search-form.component.html',
+  styleUrls: ['./car-search-form.component.css'],
+  imports: [NgIf, NgClass, FormsModule, NgFor]
 })
 export class CarSearchFormComponent {
-  @Input() alisOfisiOptions: string[] = [];
-  @Input() iadeOfisiOptions: string[] = [];
+  @Input() alisOfisiOptions: any[] = [];
+  @Input() iadeOfisiOptions: any[] = [];
   @Input() customerType: string = 'individual';
   @Input() showCloseButton: boolean = false;
-  
+
   @Output() search = new EventEmitter<any>();
   @Output() close = new EventEmitter<void>();
   @Output() customerTypeChange = new EventEmitter<string>();
@@ -31,7 +31,7 @@ export class CarSearchFormComponent {
     const today = new Date();
     const twoDaysLater = new Date();
     twoDaysLater.setDate(today.getDate() + 2);
-  
+
     this.selectedStartDate = today.toISOString().split('T')[0];
     this.selectedEndDate = twoDaysLater.toISOString().split('T')[0];
     this.selectedStartTime = "22:00";
