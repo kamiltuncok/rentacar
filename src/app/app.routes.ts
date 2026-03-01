@@ -129,10 +129,32 @@ export const routes: Routes = [
         loadComponent: () => import('./components/profile/profile.component').then(m => m.ProfileComponent),
         canActivate: [LoginGuard],
     },
+    {
+        path: 'location-manager-profile',
+        loadComponent: () => import('./components/profile/profile.component').then(m => m.ProfileComponent),
+        canActivate: [LoginGuard],
+    },
 
     // ─── Branches (lazy) ───
     {
         path: 'branches',
         loadComponent: () => import('./components/branches/branches.component').then(m => m.BranchesComponent),
+    },
+
+    // ─── Location Managers (lazy) ───
+    {
+        path: 'location-managers',
+        loadComponent: () => import('./components/location-manager-list/location-manager-list.component').then(m => m.LocationManagerListComponent),
+        canActivate: [AdminGuard],
+    },
+    {
+        path: 'location-managers/add',
+        loadComponent: () => import('./components/location-manager-add/location-manager-add.component').then(m => m.LocationManagerAddComponent),
+        canActivate: [AdminGuard],
+    },
+    {
+        path: 'location-managers/update/:id',
+        loadComponent: () => import('./components/location-manager-update/location-manager-update.component').then(m => m.LocationManagerUpdateComponent),
+        canActivate: [AdminGuard],
     },
 ];

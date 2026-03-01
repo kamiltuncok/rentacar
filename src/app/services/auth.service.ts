@@ -1,4 +1,3 @@
-import { CustomerType } from './../models/rental';
 import { RegisterForCorporateModel } from './../models/registerForCorporateModel';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -72,16 +71,10 @@ export class AuthService {
     return userId;
   }
 
-  getCustomerType(): string | null {
-    const decodedToken = this.getDecodedToken;
-    const customerType = decodedToken['customerType'];
-
-    if (!customerType) {
-      console.error('CustomerType bilgisi alınamadı.');
-      return null;
-    }
-
-    return customerType;
+  getCustomerType(): string {
+    const roles = this.getRoles();
+    if (roles.includes('corporate')) return 'Corporate';
+    return 'Individual';
   }
 
   registerAdmin(registerModel: RegisterModel) {

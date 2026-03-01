@@ -14,6 +14,6 @@
         <td>{{customer.id}}</td>
         <td>{{customer.email}}</td>
         <td>{{customer.phoneNumber}}</td>
-        <td>{{customer.customerType === 1 ? 'Bireysel' : 'Kurumsal'}}</td>
+        <td>{{getCustomerType(customer)}}</td>
     </tr>
 </table>

@@ -15,13 +15,11 @@ export interface RentalCreateRequestDto {
 }
 
 export interface GuestRentalCreateRequestDto extends RentalCreateRequestDto {
-  customerType: number;
   firstName?: string;
   lastName?: string;
   identityNumber?: string;
   email: string;
   phoneNumber?: string;
-  address?: string;
   companyName?: string;
   taxNumber?: string;
 }
@@ -68,8 +66,14 @@ export class RentalService {
     return this.httpClient.post<ResponseModel>(this.apiUrl + "rentals/createguest", request);
   }
 
-  getRentalDetailsByUserId(userId: number, customerType: number): Observable<ListResponseModel<RentalDetail>> {
-    let newPath = this.apiUrl + "rentals/getrentalsbyuserid?userId=" + userId + "&customerType=" + customerType;
+  getRentalDetailsByUserId(userId: number): Observable<ListResponseModel<RentalDetail>> {
+    let newPath = this.apiUrl + "rentals/getrentalsbyuserid?userId=" + userId;
+    return this.httpClient
+      .get<ListResponseModel<RentalDetail>>(newPath)
+  }
+
+  getRentalsByManagerLocation(userId: number): Observable<ListResponseModel<RentalDetail>> {
+    let newPath = this.apiUrl + "rentals/getrentalsbymanagerlocation?userId=" + userId;
     return this.httpClient
       .get<ListResponseModel<RentalDetail>>(newPath)
   }

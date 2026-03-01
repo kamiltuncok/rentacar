@@ -1,0 +1,60 @@
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Add New Location Manager</h4>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="addForm" (ngSubmit)="add()">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" id="firstName" class="form-control" formControlName="firstName"
+                                    placeholder="First Name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" id="lastName" class="form-control" formControlName="lastName"
+                                    placeholder="Last Name">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" id="email" class="form-control" formControlName="email"
+                                    placeholder="email@example.com">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="phoneNumber" class="form-label">Phone Number</label>
+                                <input type="text" id="phoneNumber" class="form-control" formControlName="phoneNumber"
+                                    placeholder="555-123-4567">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Temporary Password</label>
+                            <input type="text" id="password" class="form-control" formControlName="password">
+                            <small class="form-text text-muted">A default password is pre-filled.</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="locationId" class="form-label">Assign To Location</label>
+                            <select id="locationId" class="form-select" formControlName="locationId">
+                                <option value="" disabled selected>Select a location branch</option>
+                                <option *ngFor="let loc of locations" [value]="loc.id">{{loc.locationName}}</option>
+                            </select>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-secondary me-2" (click)="cancel()">Cancel</button>
+                            <button type="submit" class="btn btn-success" [disabled]="!addForm.valid">Add
+                                Manager</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

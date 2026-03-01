@@ -4,28 +4,34 @@ import { CustomerService } from 'src/app/services/customer.service';
 import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-    selector: 'app-customer',
-    templateUrl: './customer.component.html',
-    styleUrls: ['./customer.component.css'],
-    imports: [NgIf, NgFor]
+  selector: 'app-customer',
+  templateUrl: './customer.component.html',
+  styleUrls: ['./customer.component.css'],
+  imports: [NgIf, NgFor]
 })
-export class CustomerComponent implements OnInit  {
-  customers:Customer[]= [];
-  dataLoaded=false;
+export class CustomerComponent implements OnInit {
+  customers: Customer[] = [];
+  dataLoaded = false;
 
-   
 
- constructor(private customerService:CustomerService) {}
 
-  ngOnInit():void {
-   this.getCustomers();
+  constructor(private customerService: CustomerService) { }
+
+  ngOnInit(): void {
+    this.getCustomers();
   }
 
   getCustomers() {
-   this.customerService.getCustomers().subscribe(response=>{
-    this.customers=response.data;
-    this.dataLoaded=true;
-   });
-   
+    this.customerService.getCustomers().subscribe(response => {
+      this.customers = response.data;
+      this.dataLoaded = true;
+    });
+  }
+
+  getCustomerType(customer: any): string {
+    if (customer.companyName) {
+      return 'Kurumsal';
+    }
+    return 'Bireysel';
   }
 }

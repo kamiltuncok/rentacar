@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { RentalDetail } from 'src/app/models/rentalDetail';
-import { LocationOperationClaimService } from 'src/app/services/location-operation-claim.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { CustomerType } from 'src/app/models/rental';
 import { UserService } from 'src/app/services/user.service';
 import { CorporateUserService } from 'src/app/services/corporate-user.service';
 import { CustomerService } from 'src/app/services/customer.service';
+import { IndividualCustomerService } from 'src/app/services/individual-customer.service';
 import { CorporateCustomerService } from 'src/app/services/corporate-customer.service';
 import { User } from 'src/app/models/user';
 import { CorporateUser } from 'src/app/models/corporateUser';
@@ -41,12 +40,12 @@ export class LocationManagerRentalsComponent implements OnInit {
   filterName: string = '';
 
   constructor(
-    private locationOperationClaimService: LocationOperationClaimService,
     private authService: AuthService,
     private toastrService: ToastrService,
     private userService: UserService,
     private corporateUserService: CorporateUserService,
     private customerService: CustomerService,
+    private individualCustomerService: IndividualCustomerService,
     private corporateCustomerService: CorporateCustomerService,
     private rentalService: RentalService
   ) { }
@@ -72,7 +71,7 @@ export class LocationManagerRentalsComponent implements OnInit {
       return;
     }
 
-    this.locationOperationClaimService.getRentalsByManagerLocation(this.userId).subscribe(
+    this.rentalService.getRentalsByManagerLocation(this.userId).subscribe(
       (response) => {
         if (response.success) {
           this.rentals = response.data;
@@ -176,19 +175,32 @@ export class LocationManagerRentalsComponent implements OnInit {
 
   loadUserDetails() {
     const promises = this.rentals.map((rental) => {
-      // Senaryo 1: UserId ≠ 0 ve CustomerType = Individual
+      // Unauthenticated Guest Users only have a customerId (userId is 0 or null)
       if (rental.customerId !== 0) {
         const key = `customer_${rental.customerId}`;
         if (!this.userDetails[key]) {
+          // Fallback init
+          this.userDetails[key] = { type: 'Unknown', data: null };
+
           return this.customerService.getCustomerById(rental.customerId).toPromise()
-            .then(result => {
+            .then((result: any) => {
               if (result && result.success) {
-                this.userDetails[key] = {
-                  type: result.data.customerType === 2 ? 'CorporateCustomer' : 'IndividualCustomer',
-                  data: result.data
-                };
+                // If the customer has a company name, it's corporate
+                if (result.data.companyName) {
+                  this.userDetails[key] = {
+                    type: 'CorporateCustomer',
+                    data: result.data
+                  };
+                }
+                // Else it's individual
+                else {
+                  this.userDetails[key] = {
+                    type: 'IndividualCustomer',
+                    data: result.data
+                  };
+                }
               }
-            });
+            }).catch(e => console.error("Customer fetch error:", e));
         }
       }
 
@@ -218,8 +230,7 @@ export class LocationManagerRentalsComponent implements OnInit {
           name: `${individualUser.firstName} ${individualUser.lastName}`,
           email: individualUser.email,
           phone: individualUser.phoneNumber,
-          identityNumber: individualUser.identityNumber,
-          address: individualUser.address
+          identityNumber: individualUser.identityNumber
         };
 
       case 'CorporateUser':
@@ -230,32 +241,29 @@ export class LocationManagerRentalsComponent implements OnInit {
           name: corporateUser.companyName,
           email: corporateUser.email,
           phone: corporateUser.phoneNumber,
-          taxNumber: corporateUser.taxNumber,
-          address: corporateUser.address
+          taxNumber: corporateUser.taxNumber
         };
 
       case 'IndividualCustomer':
-        const individualCustomer = userInfo.data as Customer;
+        const individualCustomer = userInfo.data as any; // Usually IndividualCustomer model
         return {
           type: 'Individual',
           source: 'Customer',
-          name: individualCustomer.email,
+          name: `${individualCustomer.firstName || individualCustomer.email} ${individualCustomer.lastName || ''}`,
           email: individualCustomer.email,
           phone: individualCustomer.phoneNumber,
-          identityNumber: '',
-          address: individualCustomer.address
+          identityNumber: individualCustomer.identityNumber || ''
         };
 
       case 'CorporateCustomer':
-        const corporateCustomer = userInfo.data as CorporateCustomer;
+        const corporateCustomer = userInfo.data as any;
         return {
           type: 'Corporate',
           source: 'Customer',
           name: corporateCustomer.companyName,
           email: corporateCustomer.email,
           phone: corporateCustomer.phoneNumber,
-          taxNumber: corporateCustomer.taxNumber,
-          address: corporateCustomer.address
+          taxNumber: corporateCustomer.taxNumber
         };
 
       default:
@@ -279,13 +287,7 @@ export class LocationManagerRentalsComponent implements OnInit {
     return status === 2 ? 'Teslim Edildi' : 'Aktif Kiralama';
   }
 
-  getCustomerTypeText(customerType: number): string {
-    switch (customerType) {
-      case 1: return 'Bireysel';
-      case 2: return 'Kurumsal';
-      default: return 'Bilinmiyor';
-    }
-  }
+
 
   confirmReturn(rental: RentalDetail) {
     if (rental.status === 2) {

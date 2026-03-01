@@ -99,15 +99,15 @@ export class PaymentComponent implements OnInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       identityNumber: ['', [Validators.required, Validators.minLength(11)]],
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
+      phoneNumber: ['', Validators.required]
     });
 
     this.guestCorporateForm = this.formBuilder.group({
       companyName: ['', Validators.required],
       taxNumber: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', Validators.required],
-      address: ['', Validators.required]
+      phoneNumber: ['', Validators.required]
     });
   }
 
@@ -166,7 +166,6 @@ export class PaymentComponent implements OnInit {
       endLocationId: Number(formValue.endLocationId),
       startDate: formValue.startDate,
       endDate: formValue.endDate,
-      customerType: this.customerType,
       email: ''
     };
 
@@ -176,13 +175,13 @@ export class PaymentComponent implements OnInit {
       requestDto.lastName = indv.lastName;
       requestDto.identityNumber = indv.identityNumber;
       requestDto.email = indv.email;
+      requestDto.phoneNumber = indv.phoneNumber;
     } else {
       const corp = this.guestCorporateForm.value;
       requestDto.companyName = corp.companyName;
       requestDto.taxNumber = corp.taxNumber;
       requestDto.phoneNumber = corp.phoneNumber;
       requestDto.email = corp.email;
-      requestDto.address = corp.address;
     }
 
     this.rentalService.createGuestRental(requestDto).subscribe(

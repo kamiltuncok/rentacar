@@ -26,7 +26,7 @@ export class RegisterforcorporateComponent implements OnInit {
       taxNumber: ["", Validators.required],
       email: ["", [Validators.required, Validators.email]],
       phoneNumber: ["", [Validators.required, Validators.maxLength(11)]],
-      address: ["", Validators.required],
+
       password: ["", [Validators.required, Validators.minLength(6)]]
     });
   }

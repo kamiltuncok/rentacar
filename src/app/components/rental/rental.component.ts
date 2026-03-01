@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { RentalService } from 'src/app/services/rental.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { CustomerType } from 'src/app/models/rental';
+
 import { NgIf, NgFor, CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -17,7 +17,7 @@ export class RentalComponent implements OnInit {
   rentals: RentalDetail[] = [];
   isLoading: boolean = false;
   userId: number;
-  customerType: string;
+
   defaultImageUrl: string = "https://localhost:44306/Uploads/Images/default-car-image.jpg";
 
   constructor(
@@ -34,20 +34,13 @@ export class RentalComponent implements OnInit {
     this.isLoading = true;
 
     this.userId = this.authService.getCurrentUserId;
-    this.customerType = this.authService.getCustomerType();
-
-    console.log('User ID:', this.userId);
-    console.log('Customer Type:', this.customerType);
-
-    if (!this.userId || !this.customerType) {
+    if (!this.userId) {
       this.toastrService.error('Kullanıcı bilgileri alınamadı.', 'Hata');
       this.isLoading = false;
       return;
     }
 
-    const customerTypeNumber = this.customerType === 'Corporate' ? CustomerType.Corporate : CustomerType.Individual;
-
-    this.rentalService.getRentalDetailsByUserId(this.userId, customerTypeNumber).subscribe(
+    this.rentalService.getRentalDetailsByUserId(this.userId).subscribe(
       (response) => {
         if (response.success) {
           this.rentals = response.data;

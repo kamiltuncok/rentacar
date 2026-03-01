@@ -3,7 +3,6 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/models/user';
 import { CorporateUser } from './../../models/corporateUser';
-import { CustomerType } from './../../models/rental';
 import { AuthService } from 'src/app/services/auth.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { UserService } from 'src/app/services/user.service';
