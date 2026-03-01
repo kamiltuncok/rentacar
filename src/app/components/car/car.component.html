@@ -26,9 +26,9 @@
         </div>
         <div class="dropdown-wrap">
           <label class="dropdown-label">Şehir</label>
-          <select class="filter-dropdown" [value]="selectedCity" (change)="onCityChange($event)">
+          <select class="filter-dropdown" [value]="selectedCityName" (change)="onCityChange($event)">
             <option value="">Tüm Şehirler</option>
-            <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+            <option *ngFor="let city of cities" [value]="city.name">{{ city.name }}</option>
           </select>
         </div>
         <button *ngIf="hasActiveFilter" class="btn-clear-filter" (click)="clearFilters()">

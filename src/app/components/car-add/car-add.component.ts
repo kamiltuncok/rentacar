@@ -27,6 +27,7 @@ export class CarAddComponent implements OnInit {
   brands: Brand[] = [];
   colors: Color[] = [];
   locations: Location[] = [];
+  cities: { id: number, name: string }[] = [];
   fuels: Fuel[] = [];
   gears: Gear[] = [];
   segments: Segment[] = [];
@@ -47,6 +48,7 @@ export class CarAddComponent implements OnInit {
     this.createCarAddForm();
     this.getBrands();
     this.getColors();
+    this.getCities();
     this.getLocations();
     this.getFuels();
     this.getGears();
@@ -68,6 +70,19 @@ export class CarAddComponent implements OnInit {
       km: ['', [Validators.required, Validators.min(0)]],
       description: ['', Validators.required]
     });
+  }
+
+  getCities() {
+    this.locationService.getCities().subscribe(response => {
+      if (response.success) {
+        this.cities = response.data;
+      }
+    });
+  }
+
+  getCityName(cityId: number): string {
+    const city = this.cities.find(c => c.id === cityId);
+    return city ? city.name : 'Belirsiz';
   }
 
   getBrands() { this.brandService.getBrands().subscribe(r => this.brands = r.data); }

@@ -10,30 +10,35 @@ import { ResponseModel } from '../models/responseModel';
 })
 export class LocationService {
 
-  apiUrl="https://localhost:44306/api/"
+  apiUrl = "https://localhost:44306/api/"
 
-  constructor(private httpClient:HttpClient) { }
+  constructor(private httpClient: HttpClient) { }
 
-  getLocations():Observable<ListResponseModel<Location>>{
-    let newPath=this.apiUrl+"locations/getall";
-   return this.httpClient
-    .get<ListResponseModel<Location>>(newPath)
-   }
-   add(location:Location):Observable<ResponseModel>{
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"locations/add",location)
+  getLocations(): Observable<ListResponseModel<Location>> {
+    let newPath = this.apiUrl + "locations/getall";
+    return this.httpClient
+      .get<ListResponseModel<Location>>(newPath)
   }
-  getLocationsById(locationId:number) : Observable<ListResponseModel<Location>>{
-    let newPath="https://localhost:44306/api/locations/getbyid?locationid="+locationId
+  add(location: Location): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(this.apiUrl + "locations/add", location)
+  }
+  getLocationsById(locationId: number): Observable<ListResponseModel<Location>> {
+    let newPath = "https://localhost:44306/api/locations/getbyid?locationid=" + locationId
     return this.httpClient.get<ListResponseModel<Location>>(newPath);
   }
 
-  update(location:Location): Observable<ResponseModel>{
+  update(location: Location): Observable<ResponseModel> {
     let newUrl = "https://localhost:44306/api/locations/update"
     return this.httpClient.post<ResponseModel>(newUrl, location)
   }
 
-  getLocationsByCity(locationCity:string) : Observable<ListResponseModel<Location>>{
-    let newPath="https://localhost:44306/api/locations/getbylocationcity?locationCity="+locationCity
+  getLocationsByCity(locationCityId: number): Observable<ListResponseModel<Location>> {
+    let newPath = "https://localhost:44306/api/locations/getbycityid?locationCityId=" + locationCityId
     return this.httpClient.get<ListResponseModel<Location>>(newPath);
+  }
+
+  getCities(): Observable<ListResponseModel<{ id: number, name: string }>> {
+    let newPath = this.apiUrl + "locationcities/getall";
+    return this.httpClient.get<ListResponseModel<{ id: number, name: string }>>(newPath);
   }
 }

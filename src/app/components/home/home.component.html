@@ -1,9 +1,6 @@
 <!-- Araç Bulma Alanı -->
-<app-car-search-form
-  [alisOfisiOptions]="alisOfisiOptions"
-  [iadeOfisiOptions]="iadeOfisiOptions"
-  [customerType]="customerType"
-  (search)="navigateToCarList($event)">
+<app-car-search-form [alisOfisiOptions]="alisOfisiOptions" [iadeOfisiOptions]="iadeOfisiOptions"
+  [customerType]="customerType" (search)="navigateToCarList($event)">
 </app-car-search-form>
 
 <!-- Sık Tercih Edilen Şehirler -->
@@ -11,7 +8,7 @@
   <h2 class="section-title">Sık Tercih Edilen Şehirler</h2>
 
   <div class="city-grid">
-    <div class="city-card" (click)="openCityPopup('Istanbul')">
+    <div class="city-card" (click)="openCityPopup('İstanbul')">
       <img src="assets/images/istanbul.jpg" alt="İstanbul">
       <div class="city-card__overlay">
         <span class="city-card__name">İstanbul</span>
@@ -46,9 +43,9 @@
         <img [src]="'assets/images/lux.jpg'" [alt]="segment.segmentName">
       </div>
       <div class="segment-content">
-       <p class="price-text">
-  <strong>{{ getSegmentPrice(segment.segmentId) }}</strong> 'den başlayan fiyatlarla
-       </p>
+        <p class="price-text">
+          <strong>{{ getSegmentPrice(segment.segmentId) }}</strong> 'den başlayan fiyatlarla
+        </p>
         <button class="segment-button" (click)="openSegmentPopup(segment.segmentName)">
           Hemen Kirala
         </button>
@@ -58,25 +55,17 @@
 </div>
 
 <!-- Segment Popup -->
-<div class="popup-overlay" *ngIf="showSegmentPopup"> 
-  <app-car-search-form
-    [alisOfisiOptions]="alisOfisiOptions"
-    [iadeOfisiOptions]="iadeOfisiOptions"
-    [customerType]="customerType"
-    [showCloseButton]="true"
-    (search)="navigateToCarList($event)"
+<div class="popup-overlay" *ngIf="showSegmentPopup">
+  <app-car-search-form [alisOfisiOptions]="alisOfisiOptions" [iadeOfisiOptions]="iadeOfisiOptions"
+    [customerType]="customerType" [showCloseButton]="true" (search)="navigateToCarList($event)"
     (close)="closeSegmentPopup()">
   </app-car-search-form>
 </div>
 
 <!-- Şehir Popup -->
-<div class="popup-overlay" *ngIf="showCityPopup"> 
-  <app-car-search-form
-    [alisOfisiOptions]="cityLocations"
-    [iadeOfisiOptions]="cityLocations"
-    [customerType]="customerType"
-    [showCloseButton]="true"
-    (search)="navigateToCarList($event)"
+<div class="popup-overlay" *ngIf="showCityPopup">
+  <app-car-search-form [alisOfisiOptions]="cityLocations" [iadeOfisiOptions]="cityLocations"
+    [customerType]="customerType" [showCloseButton]="true" (search)="navigateToCarList($event)"
     (close)="closeCityPopup()">
   </app-car-search-form>
 </div>

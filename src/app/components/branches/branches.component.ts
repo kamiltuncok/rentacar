@@ -6,14 +6,15 @@ import * as L from 'leaflet';
 import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-    selector: 'app-branches',
-    templateUrl: './branches.component.html',
-    styleUrls: ['./branches.component.css'],
-    imports: [NgIf, NgFor]
+  selector: 'app-branches',
+  templateUrl: './branches.component.html',
+  styleUrls: ['./branches.component.css'],
+  imports: [NgIf, NgFor]
 })
 export class BranchesComponent implements OnInit {
   locations: Location[] = [];
-  selectedCity: string = '';
+  cities: { id: number, name: string }[] = [];
+  selectedCityId: number = 0;
   private map: any;
   private markers: L.Marker[] = [];
   highlightedLocation: string = '';
@@ -25,7 +26,7 @@ export class BranchesComponent implements OnInit {
 
   ngOnInit(): void {
     this.initMap();
-    this.getLocations();
+    this.getCities();
 
     // Query params'ı dinle
     this.route.queryParams.subscribe(params => {
@@ -42,6 +43,20 @@ export class BranchesComponent implements OnInit {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: ''
     }).addTo(this.map);
+  }
+
+  getCities(): void {
+    this.locationService.getCities().subscribe(response => {
+      if (response.success) {
+        this.cities = response.data;
+        this.getLocations(); // Şehirler yüklendikten sonra lokasyonları çek
+      }
+    });
+  }
+
+  public getCityName(cityId: number): string {
+    const city = this.cities.find(c => c.id === cityId);
+    return city ? city.name : 'Bilinmeyen Şehir';
   }
 
   private addLocationsToMap(): void {
@@ -68,6 +83,7 @@ export class BranchesComponent implements OnInit {
     // Marker'ları ekle
     this.locations.forEach(location => {
       const isHighlighted = this.highlightedLocation === location.locationName;
+      const cityName = this.getCityName(location.locationCityId);
 
       const marker = L.marker([location.latitude, location.longitude], {
         icon: isHighlighted ? highlightedIcon : customIcon
@@ -76,7 +92,7 @@ export class BranchesComponent implements OnInit {
         .bindPopup(`
           <div style="min-width: 200px;">
             <strong>${location.locationName}</strong><br>
-            <strong>Şehir:</strong> ${location.locationCity}<br>
+            <strong>Şehir:</strong> ${cityName}<br>
             <strong>Adres:</strong> ${location.address}<br>
             <strong>Telefon:</strong> ${location.phoneNumber}<br>
             <strong>Email:</strong> ${location.email}
@@ -112,9 +128,9 @@ export class BranchesComponent implements OnInit {
     });
   }
 
-  getLocationsByCity(city: string): void {
-    if (city) {
-      this.locationService.getLocationsByCity(city).subscribe(response => {
+  getLocationsByCity(cityId: number): void {
+    if (cityId > 0) {
+      this.locationService.getLocationsByCity(cityId).subscribe(response => {
         this.locations = response.data;
         this.addLocationsToMap();
       });
@@ -124,13 +140,13 @@ export class BranchesComponent implements OnInit {
   }
 
   onCityChange(event: any): void {
-    const city = event.target.value;
-    this.selectedCity = city;
-    this.getLocationsByCity(city);
+    const cityId = Number(event.target.value);
+    this.selectedCityId = cityId;
+    this.getLocationsByCity(cityId);
   }
 
-  filterByCity(city: string): void {
-    this.selectedCity = city;
-    this.getLocationsByCity(city);
+  filterByCity(cityId: number): void {
+    this.selectedCityId = cityId;
+    this.getLocationsByCity(cityId);
   }
 }

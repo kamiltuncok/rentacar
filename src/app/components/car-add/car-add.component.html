@@ -26,7 +26,7 @@
         <select id="currentLocationId" formControlName="currentLocationId" class="form-control">
           <option value="">Lokasyon Seçiniz</option>
           <option *ngFor="let location of locations" [value]="location.id">{{ location.locationName }} – {{
-            location.locationCity }}</option>
+            getCityName(location.locationCityId) }}</option>
         </select>
       </div>
 

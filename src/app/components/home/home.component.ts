@@ -23,7 +23,7 @@ export class HomeComponent {
   showSegmentPopup: boolean = false;
   selectedCity: string = '';
   selectedSegment: string = '';
-  cityLocations: string[] = [];
+  cityLocations: Location[] = [];
   segments: Segment[] = [];
   segmentPrices: { [key: number]: string } = {};
 
@@ -131,16 +131,28 @@ export class HomeComponent {
     }
   }
 
-  openCityPopup(city: string) {
-    this.selectedCity = city;
+  // Frontend HTML'den string 'Istanbul' geliyorsa onu ID'ye çevirmek için
+  openCityPopup(cityName: string) {
+    this.selectedCity = cityName;
     this.showCityPopup = true;
 
-    this.locationService.getLocationsByCity(city).subscribe((response) => {
-      if (response.success && response.data.length > 0) {
-        this.cityLocations = response.data.map((loc: Location) => loc.locationName);
-      } else {
-        this.toastrService.error(`${city} için uygun lokasyon bulunamadı.`, 'Hata');
-        this.cityLocations = []; // Boş array set et
+    // Şehir adına göre API'den ID'yi bulmalıyız veya doğrudan tüm şehirleri çekip filtrelemeliyiz.
+    // Şimdilik listeleme işlemi için geçici bir çözüm
+    this.locationService.getCities().subscribe(cityRes => {
+      if (cityRes.success) {
+        const found = cityRes.data.find((c: any) => c.name.toLowerCase() === cityName.toLowerCase());
+        if (found) {
+          this.locationService.getLocationsByCity(found.id).subscribe((response) => {
+            if (response.success && response.data.length > 0) {
+              this.cityLocations = response.data;
+            } else {
+              this.toastrService.error(`${cityName} için uygun lokasyon bulunamadı.`, 'Hata');
+              this.cityLocations = [];
+            }
+          });
+        } else {
+          this.cityLocations = [];
+        }
       }
     });
   }

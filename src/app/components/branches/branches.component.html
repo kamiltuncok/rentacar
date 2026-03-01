@@ -28,14 +28,13 @@
       <div class="branches-filter">
         <span class="branches-filter__label">Şehir Filtrele</span>
         <div class="branches-pill-group">
-          <button class="branches-pill" [class.branches-pill--active]="selectedCity === ''"
-            (click)="filterByCity('')">Tümü</button>
-          <button class="branches-pill" [class.branches-pill--active]="selectedCity === 'Istanbul'"
-            (click)="filterByCity('Istanbul')">İstanbul</button>
-          <button class="branches-pill" [class.branches-pill--active]="selectedCity === 'Ankara'"
-            (click)="filterByCity('Ankara')">Ankara</button>
-          <button class="branches-pill" [class.branches-pill--active]="selectedCity === 'İzmir'"
-            (click)="filterByCity('İzmir')">İzmir</button>
+          <button class="branches-pill" [class.branches-pill--active]="selectedCityId === 0"
+            (click)="filterByCity(0)">Tümü</button>
+
+          <button *ngFor="let city of cities" class="branches-pill"
+            [class.branches-pill--active]="selectedCityId === city.id" (click)="filterByCity(city.id)">
+            {{ city.name }}
+          </button>
         </div>
       </div>
 
@@ -59,7 +58,7 @@
             </div>
             <div>
               <h3 class="location-card__name">{{ location.locationName }}</h3>
-              <span class="location-card__city">{{ location.locationCity }}</span>
+              <span class="location-card__city">{{ getCityName(location.locationCityId) }}</span>
             </div>
           </div>
 

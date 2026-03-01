@@ -5,20 +5,20 @@ import { Location } from 'src/app/models/location';
 import { LocationService } from 'src/app/services/location.service';
 import * as L from 'leaflet';
 import { FormsModule } from '@angular/forms';
-import { NgIf, DecimalPipe } from '@angular/common';
+import { NgIf, NgFor, DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-location-add',
   templateUrl: './location-add.component.html',
   styleUrls: ['./location-add.component.css'],
-  imports: [FormsModule, NgIf, RouterLink, DecimalPipe]
+  imports: [FormsModule, NgIf, NgFor, RouterLink, DecimalPipe]
 })
 export class LocationAddComponent implements OnInit {
 
   location: Location = {
     id: 0,
     locationName: '',
-    locationCity: '',
+    locationCityId: 0,
     address: '',
     email: '',
     phoneNumber: '',
@@ -31,10 +31,11 @@ export class LocationAddComponent implements OnInit {
   private map: any;
   private marker: any;
   selectedLocation: { lat: number, lng: number } | null = null;
+  cities: { id: number, name: string }[] = [];
 
-  // Şehir merkezleri
+  // Şehir merkezleri (bazı tanınmış şehirler için harita kaydırma)
   private cityCenters: { [key: string]: [number, number] } = {
-    'Istanbul': [41.0082, 28.9784],
+    'İstanbul': [41.0082, 28.9784],
     'Ankara': [39.9334, 32.8597],
     'İzmir': [38.4237, 27.1428]
   };
@@ -47,6 +48,15 @@ export class LocationAddComponent implements OnInit {
 
   ngOnInit(): void {
     this.initMap();
+    this.loadCities();
+  }
+
+  loadCities(): void {
+    this.locationService.getCities().subscribe(response => {
+      if (response.success) {
+        this.cities = response.data;
+      }
+    });
   }
 
   private initMap(): void {
@@ -152,9 +162,12 @@ export class LocationAddComponent implements OnInit {
           this.location.address = data.display_name;
         }
 
-        // Şehir bilgisini de otomatik doldur
-        if (!this.location.locationCity && data.address && data.address.city) {
-          this.location.locationCity = data.address.city;
+        // Şehir bilgisini de otomatik doldur - eşleşen bir ID bulmaya çalışırız
+        if (!this.location.locationCityId && data.address && data.address.city) {
+          const matchedCity = this.cities.find(c => c.name.toLowerCase() === data.address.city.toLowerCase());
+          if (matchedCity) {
+            this.location.locationCityId = matchedCity.id;
+          }
         }
       }
     } catch (error) {
@@ -192,8 +205,9 @@ export class LocationAddComponent implements OnInit {
   }
 
   onCityChange(): void {
-    if (this.location.locationCity && this.cityCenters[this.location.locationCity]) {
-      const center = this.cityCenters[this.location.locationCity];
+    const selectedCityObj = this.cities.find(c => c.id == this.location.locationCityId);
+    if (selectedCityObj && this.cityCenters[selectedCityObj.name]) {
+      const center = this.cityCenters[selectedCityObj.name];
       this.map.setView(center, 10);
 
       // Şehir değişince koordinatları sıfırla
@@ -278,7 +292,7 @@ export class LocationAddComponent implements OnInit {
       this.toastrService.warning('Şube adı boş olamaz');
       return false;
     }
-    if (!this.location.locationCity) {
+    if (!this.location.locationCityId || this.location.locationCityId === 0) {
       this.toastrService.warning('Şehir seçmelisiniz');
       return false;
     }

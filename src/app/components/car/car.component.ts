@@ -8,15 +8,16 @@ import { BrandService } from 'src/app/services/brand.service';
 import { CarService } from 'src/app/services/car.service';
 import { CartService } from 'src/app/services/cart.service';
 import { ColorService } from 'src/app/services/color.service';
+import { LocationService } from 'src/app/services/location.service';
 import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf, CurrencyPipe } from '@angular/common';
 import { FilterPipePipe } from '../../pipes/filter-pipe.pipe';
 
 @Component({
-    selector: 'app-car',
-    templateUrl: './car.component.html',
-    styleUrls: ['./car.component.css'],
-    imports: [FormsModule, NgFor, NgIf, RouterLink, CurrencyPipe, FilterPipePipe]
+  selector: 'app-car',
+  templateUrl: './car.component.html',
+  styleUrls: ['./car.component.css'],
+  imports: [FormsModule, NgFor, NgIf, RouterLink, CurrencyPipe, FilterPipePipe]
 })
 export class CarComponent implements OnInit {
   allCars: CarDetail[] = [];
@@ -24,12 +25,12 @@ export class CarComponent implements OnInit {
   pagedCars: CarDetail[] = [];
   brands: Brand[] = [];
   colors: Color[] = [];
-  cities: string[] = [];
+  cities: { id: number, name: string }[] = [];
   dataLoaded = false;
   filterText = "";
   selectedBrandId: number = 0;
   selectedColorId: number = 0;
-  selectedCity: string = "";
+  selectedCityName: string = "";
 
   // Pagination
   currentPage: number = 1;
@@ -40,6 +41,7 @@ export class CarComponent implements OnInit {
     private carService: CarService,
     private brandService: BrandService,
     private colorService: ColorService,
+    private locationService: LocationService,
     private activatedRoute: ActivatedRoute,
     private toastrService: ToastrService,
     private cartService: CartService
@@ -48,6 +50,7 @@ export class CarComponent implements OnInit {
   ngOnInit(): void {
     this.loadBrands();
     this.loadColors();
+    this.loadCities();
     this.getCarDetails();
   }
 
@@ -63,10 +66,15 @@ export class CarComponent implements OnInit {
     });
   }
 
+  loadCities() {
+    this.locationService.getCities().subscribe(response => {
+      this.cities = response.data;
+    });
+  }
+
   getCarDetails() {
     this.carService.getCarDetails().subscribe(response => {
       this.allCars = response.data;
-      this.cities = [...new Set(this.allCars.map(c => c.locationCity).filter(Boolean))].sort();
       this.applyFilters();
       this.dataLoaded = true;
     });
@@ -85,7 +93,7 @@ export class CarComponent implements OnInit {
   }
 
   onCityChange(event: Event) {
-    this.selectedCity = (event.target as HTMLSelectElement).value;
+    this.selectedCityName = (event.target as HTMLSelectElement).value;
     this.currentPage = 1;
     this.applyFilters();
   }
@@ -101,8 +109,8 @@ export class CarComponent implements OnInit {
       filtered = filtered.filter(c => c.colorId === this.selectedColorId);
     }
 
-    if (this.selectedCity) {
-      filtered = filtered.filter(c => c.locationCity === this.selectedCity);
+    if (this.selectedCityName) {
+      filtered = filtered.filter(c => c.locationCity === this.selectedCityName);
     }
 
     this.filteredCars = filtered;
@@ -143,13 +151,13 @@ export class CarComponent implements OnInit {
   clearFilters() {
     this.selectedBrandId = 0;
     this.selectedColorId = 0;
-    this.selectedCity = "";
+    this.selectedCityName = "";
     this.currentPage = 1;
     this.applyFilters();
   }
 
   get hasActiveFilter(): boolean {
-    return this.selectedBrandId > 0 || this.selectedColorId > 0 || this.selectedCity !== '';
+    return this.selectedBrandId > 0 || this.selectedColorId > 0 || this.selectedCityName !== '';
   }
 
   doesntrent(car: CarDetail) {
