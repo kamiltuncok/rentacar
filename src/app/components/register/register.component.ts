@@ -5,45 +5,50 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-    selector: 'app-register',
-    templateUrl: './register.component.html',
-    styleUrls: ['./register.component.css'],
-    imports: [RouterLink, FormsModule, ReactiveFormsModule]
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css'],
+  imports: [RouterLink, FormsModule, ReactiveFormsModule]
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
 
-  constructor(private formBuilder:FormBuilder,private authService:AuthService,
-   private toastrService:ToastrService,private router:Router) {}
- 
+  constructor(private formBuilder: FormBuilder, private authService: AuthService,
+    private toastrService: ToastrService, private router: Router) { }
+
   ngOnInit(): void {
     this.createLoginForm();
   }
-   createLoginForm(){
- this.registerForm=this.formBuilder.group({
-  firstName:["",Validators.required],
-  lastName:["",Validators.required],
-   email:["",Validators.required],
-   identityNumber:["",Validators.required],
-   phoneNumber:["",Validators.required],
+  createLoginForm() {
+    this.registerForm = this.formBuilder.group({
+      firstName: ["", Validators.required],
+      lastName: ["", Validators.required],
+      email: ["", Validators.required],
+      identityNumber: ["", Validators.required],
+      phoneNumber: ["", Validators.required],
 
-   password:["",Validators.required]
- })
-   }
-   register(){
-     if (this.registerForm.valid) {
-       let registerModel=Object.assign({}, this.registerForm.value)
- 
-       this.authService.register(registerModel).subscribe(response => {
-         this.toastrService.info("Kayıt Başarılı")
-         console.log(response)
-       },responseError =>{
-         this.toastrService.error(responseError.error)
-       })
-     }
-   }
+      password: ["", Validators.required]
+    })
+  }
+  register() {
+    if (this.registerForm.valid) {
+      let registerModel = Object.assign({}, this.registerForm.value)
 
-   isActive(path: string): boolean {
+      this.authService.register(registerModel).subscribe(response => {
+        this.toastrService.info("Kayıt Başarılı")
+        console.log(response)
+      }, responseError => {
+        this.toastrService.error(responseError.error)
+      })
+    } else {
+      Object.keys(this.registerForm.controls).forEach(key => {
+        this.registerForm.get(key)?.markAsTouched();
+      });
+      this.toastrService.warning("Lütfen tüm alanları eksiksiz ve kurallara uygun doldurun.");
+    }
+  }
+
+  isActive(path: string): boolean {
     return this.router.url === path;
   }
 }

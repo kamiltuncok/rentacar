@@ -10,7 +10,7 @@ import { NgIf, NgFor } from '@angular/common';
   imports: [NgIf, NgFor]
 })
 export class CustomerComponent implements OnInit {
-  customers: Customer[] = [];
+  customers: any[] = [];
   dataLoaded = false;
 
 

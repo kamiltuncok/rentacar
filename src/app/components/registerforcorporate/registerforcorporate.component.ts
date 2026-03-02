@@ -5,16 +5,16 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-    selector: 'app-registerforcorporate',
-    templateUrl: './registerforcorporate.component.html',
-    styleUrls: ['./registerforcorporate.component.css'],
-    imports: [RouterLink, FormsModule, ReactiveFormsModule]
+  selector: 'app-registerforcorporate',
+  templateUrl: './registerforcorporate.component.html',
+  styleUrls: ['./registerforcorporate.component.css'],
+  imports: [RouterLink, FormsModule, ReactiveFormsModule]
 })
 export class RegisterforcorporateComponent implements OnInit {
   registerCorporateForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private toastrService: ToastrService,
-    private router:Router) { }
+    private router: Router) { }
 
   ngOnInit(): void {
     this.createRegisterForm();
@@ -40,6 +40,11 @@ export class RegisterforcorporateComponent implements OnInit {
       }, responseError => {
         this.toastrService.error(responseError.error);
       });
+    } else {
+      Object.keys(this.registerCorporateForm.controls).forEach(key => {
+        this.registerCorporateForm.get(key)?.markAsTouched();
+      });
+      this.toastrService.warning("Lütfen tüm alanları doğru şekilde doldurunuz.");
     }
   }
 

@@ -20,6 +20,12 @@ export class LocationManagerUpdateComponent implements OnInit {
     userId: number;
     oldLocationId: number;
 
+    // Readonly display fields
+    managerFirstName: string = '';
+    managerLastName: string = '';
+    managerEmail: string = '';
+    managerPhoneNumber: string = '';
+
     constructor(
         private formBuilder: FormBuilder,
         private locationManagerService: LocationManagerService,
@@ -36,8 +42,24 @@ export class LocationManagerUpdateComponent implements OnInit {
         this.activatedRoute.params.subscribe(params => {
             if (params["id"]) {
                 this.userId = parseInt(params["id"]);
-                // Ideally we would load the existing user stats to populate the form.
                 this.updateForm.patchValue({ userId: this.userId });
+                this.loadManagerData();
+            }
+        });
+    }
+
+    loadManagerData() {
+        this.locationManagerService.getLocationManagers().subscribe(response => {
+            const manager = response.data.find(m => m.userId === this.userId);
+            if (manager) {
+                this.managerFirstName = manager.firstName;
+                this.managerLastName = manager.lastName;
+                this.managerEmail = manager.email;
+                this.managerPhoneNumber = manager.phoneNumber;
+                this.updateForm.patchValue({
+                    oldLocationId: manager.locationId,
+                    newLocationId: manager.locationId
+                });
             }
         });
     }
@@ -45,10 +67,6 @@ export class LocationManagerUpdateComponent implements OnInit {
     createUpdateForm() {
         this.updateForm = this.formBuilder.group({
             userId: ["", Validators.required],
-            firstName: ["", Validators.required],
-            lastName: ["", Validators.required],
-            email: ["", [Validators.required, Validators.email]],
-            phoneNumber: ["", Validators.required],
             oldLocationId: ["", Validators.required],
             newLocationId: ["", Validators.required]
         });

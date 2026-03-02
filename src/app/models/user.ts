@@ -1,9 +1,6 @@
 export interface User {
     id: number;
-    firstName: string;
-    lastName: string;
     email: string;
-    identityNumber: string;
-    phoneNumber: string;
+    customerId: number;
     status: boolean;
 }

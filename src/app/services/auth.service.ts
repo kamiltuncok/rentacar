@@ -71,6 +71,13 @@ export class AuthService {
     return userId;
   }
 
+  get getCurrentUserName(): string {
+    let decodedToken = this.getDecodedToken;
+    if (!decodedToken) return '';
+    let nameString = Object.keys(decodedToken).find((t) => t.endsWith('/name'));
+    return nameString ? decodedToken[nameString] : '';
+  }
+
   getCustomerType(): string {
     const roles = this.getRoles();
     if (roles.includes('corporate')) return 'Corporate';

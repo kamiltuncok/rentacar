@@ -111,4 +111,25 @@ export class RentalService {
       {}
     );
   }
+
+  collectDeposit(rentalId: number): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.apiUrl + "rentals/collectdeposit?rentalId=" + rentalId,
+      {}
+    );
+  }
+
+  deliverVehicle(rentalId: number): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.apiUrl + "rentals/delivervehicle?rentalId=" + rentalId,
+      {}
+    );
+  }
+
+  cancelRental(rentalId: number): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.apiUrl + "rentals/cancelrental?rentalId=" + rentalId,
+      {}
+    );
+  }
 }

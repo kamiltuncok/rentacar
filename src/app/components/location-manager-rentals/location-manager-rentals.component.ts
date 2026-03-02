@@ -3,15 +3,14 @@ import { RentalDetail } from 'src/app/models/rentalDetail';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/services/user.service';
-import { CorporateUserService } from 'src/app/services/corporate-user.service';
 import { CustomerService } from 'src/app/services/customer.service';
 import { IndividualCustomerService } from 'src/app/services/individual-customer.service';
 import { CorporateCustomerService } from 'src/app/services/corporate-customer.service';
 import { User } from 'src/app/models/user';
-import { CorporateUser } from 'src/app/models/corporateUser';
 import { Customer } from 'src/app/models/customer';
 import { CorporateCustomer } from 'src/app/models/corporateCustomer';
 import { RentalService } from 'src/app/services/rental.service';
+import { LocationManagerService } from 'src/app/services/location-manager.service';
 import { forkJoin, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
@@ -31,6 +30,7 @@ export class LocationManagerRentalsComponent implements OnInit {
   isLoading: boolean = false;
   isFiltering: boolean = false;
   userId: number;
+  managedLocationNames: string[] = [];
   defaultImageUrl: string = "https://localhost:44306/Uploads/Images/default-car-image.jpg";
 
   filterDate: string = '';
@@ -43,11 +43,11 @@ export class LocationManagerRentalsComponent implements OnInit {
     private authService: AuthService,
     private toastrService: ToastrService,
     private userService: UserService,
-    private corporateUserService: CorporateUserService,
     private customerService: CustomerService,
     private individualCustomerService: IndividualCustomerService,
     private corporateCustomerService: CorporateCustomerService,
-    private rentalService: RentalService
+    private rentalService: RentalService,
+    private locationManagerService: LocationManagerService
   ) { }
 
   ngOnInit(): void {
@@ -71,22 +71,31 @@ export class LocationManagerRentalsComponent implements OnInit {
       return;
     }
 
-    this.rentalService.getRentalsByManagerLocation(this.userId).subscribe(
-      (response) => {
-        if (response.success) {
-          this.rentals = response.data;
-          this.filteredRentals = [...this.rentals];
-          this.loadUserDetails();
-        } else {
-          this.toastrService.error(response.message, 'Hata');
+    // Load user's managed locations first
+    this.locationManagerService.getLocationManagers().subscribe(managerRes => {
+      if (managerRes.success) {
+        this.managedLocationNames = managerRes.data
+          .filter(m => m.userId == this.userId)
+          .map(m => m.locationName);
+      }
+
+      this.rentalService.getRentalsByManagerLocation(this.userId).subscribe(
+        (response) => {
+          if (response.success) {
+            this.rentals = response.data;
+            this.filteredRentals = [...this.rentals];
+            this.loadUserDetails();
+          } else {
+            this.toastrService.error(response.message, 'Hata');
+            this.isLoading = false;
+          }
+        },
+        (error) => {
+          this.toastrService.error('Kiralama bilgileri yüklenirken bir hata oluştu.', 'Hata');
           this.isLoading = false;
         }
-      },
-      (error) => {
-        this.toastrService.error('Kiralama bilgileri yüklenirken bir hata oluştu.', 'Hata');
-        this.isLoading = false;
-      }
-    );
+      );
+    });
   }
 
   applyFilters() {
@@ -222,28 +231,6 @@ export class LocationManagerRentalsComponent implements OnInit {
     if (!userInfo) return null;
 
     switch (userInfo.type) {
-      case 'IndividualUser':
-        const individualUser = userInfo.data as User;
-        return {
-          type: 'Individual',
-          source: 'User',
-          name: `${individualUser.firstName} ${individualUser.lastName}`,
-          email: individualUser.email,
-          phone: individualUser.phoneNumber,
-          identityNumber: individualUser.identityNumber
-        };
-
-      case 'CorporateUser':
-        const corporateUser = userInfo.data as CorporateUser;
-        return {
-          type: 'Corporate',
-          source: 'User',
-          name: corporateUser.companyName,
-          email: corporateUser.email,
-          phone: corporateUser.phoneNumber,
-          taxNumber: corporateUser.taxNumber
-        };
-
       case 'IndividualCustomer':
         const individualCustomer = userInfo.data as any; // Usually IndividualCustomer model
         return {
@@ -280,55 +267,69 @@ export class LocationManagerRentalsComponent implements OnInit {
   }
 
   getStatusClass(status: number): string {
-    return status === 2 ? 'badge-success' : 'badge-warning';
+    return status === 2 ? 'badge-success' : status === 3 ? 'badge-danger' : 'badge-warning';
   }
 
   getStatusText(status: number): string {
-    return status === 2 ? 'Teslim Edildi' : 'Aktif Kiralama';
+    return status === 2 ? 'Teslim Edildi' : status === 3 ? 'İptal Edildi' : 'Aktif Kiralama';
   }
 
+  canCollectDeposit(rental: RentalDetail): boolean {
+    return rental.status === 1 && rental.depositStatus === 1 && this.managedLocationNames.includes(rental.startLocationName);
+  }
 
+  canDeliverVehicle(rental: RentalDetail): boolean {
+    return rental.status === 1 && this.managedLocationNames.includes(rental.endLocationName);
+  }
 
-  confirmReturn(rental: RentalDetail) {
-    if (rental.status === 2) {
-      this.toastrService.info('Bu kiralama zaten teslim edildi.', 'Bilgi');
-      return;
-    }
-    const confirmed = confirm(`#${rental.id} numaralı kiralama teslim alındı olarak işaretlensin mi?\n\nAraç: ${rental.brandName} (${rental.modelYear})`);
-    if (!confirmed) return;
+  canCancelRental(rental: RentalDetail): boolean {
+    return rental.status === 1 && (this.managedLocationNames.includes(rental.startLocationName) || this.managedLocationNames.includes(rental.endLocationName));
+  }
 
-    this.rentalService.markAsReturned(rental.id).subscribe(
-      (res) => {
+  collectDeposit(rental: RentalDetail) {
+    if (!confirm(`#${rental.id} numaralı kiralama için depozitoyu tahsil etmek istiyor musunuz?`)) return;
+    this.rentalService.collectDeposit(rental.id).subscribe(
+      res => {
         if (res.success) {
-          rental.status = 2 as any;
-          this.toastrService.success('Araç teslim alındı olarak işaretlendi.', 'Başarılı');
+          this.toastrService.success(res.message, 'Başarılı');
+          rental.depositStatus = 2; // Charged
         } else {
-          this.toastrService.error(res.message || 'İşlem başarısız.', 'Hata');
+          this.toastrService.error(res.message, 'Hata');
         }
       },
-      (err) => {
-        this.toastrService.error('Sunucu hatası oluştu.', 'Hata');
-      }
+      err => this.toastrService.error('Sunucu hatası.', 'Hata')
     );
   }
 
-  confirmDelete(rental: RentalDetail) {
-    const confirmed = confirm(`#${rental.id} numaralı kiralama silinsin mi?\n\nBu işlem geri alınamaz.\nAraç: ${rental.brandName} (${rental.modelYear})`);
-    if (!confirmed) return;
-
-    this.rentalService.deleteAndFreeCar(rental.id).subscribe(
-      (res) => {
+  deliverVehicle(rental: RentalDetail) {
+    if (!confirm(`#${rental.id} numaralı kiralama için aracı Teslim Edildi olarak işaretlemek istiyor musunuz?`)) return;
+    this.rentalService.deliverVehicle(rental.id).subscribe(
+      res => {
         if (res.success) {
-          this.rentals = this.rentals.filter(r => r.id !== rental.id);
-          this.filteredRentals = this.filteredRentals.filter(r => r.id !== rental.id);
-          this.toastrService.success('Kiralama silindi, araç serbest bırakıldı.', 'Başarılı');
+          this.toastrService.success(res.message, 'Başarılı');
+          rental.status = 2; // Completed
+          rental.depositStatus = 3; // Refunded
         } else {
-          this.toastrService.error(res.message || 'Silme işlemi başarısız.', 'Hata');
+          this.toastrService.error(res.message, 'Hata');
         }
       },
-      (err) => {
-        this.toastrService.error('Sunucu hatası oluştu.', 'Hata');
-      }
+      err => this.toastrService.error('Sunucu hatası.', 'Hata')
+    );
+  }
+
+  cancelRental(rental: RentalDetail) {
+    if (!confirm(`#${rental.id} numaralı kiralamayı iptal etmek istiyor musunuz?`)) return;
+    this.rentalService.cancelRental(rental.id).subscribe(
+      res => {
+        if (res.success) {
+          this.toastrService.success(res.message, 'Başarılı');
+          rental.status = 3; // Cancelled
+          rental.depositStatus = 3; // Refunded
+        } else {
+          this.toastrService.error(res.message, 'Hata');
+        }
+      },
+      err => this.toastrService.error('Sunucu hatası.', 'Hata')
     );
   }
 }

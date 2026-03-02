@@ -1,7 +1,6 @@
 export interface IndividualCustomer {
-    customerId: number;
+    id: number;
     phoneNumber: string;
-    email: string;
     firstName: string;
     lastName: string;
     identityNumber: string;

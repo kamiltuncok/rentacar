@@ -2,11 +2,9 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/models/user';
-import { CorporateUser } from './../../models/corporateUser';
 import { AuthService } from 'src/app/services/auth.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { UserService } from 'src/app/services/user.service';
-import { CorporateUserService } from 'src/app/services/corporate-user.service';
 import { NgIf } from '@angular/common';
 
 @Component({
@@ -18,7 +16,7 @@ import { NgIf } from '@angular/common';
 export class NaviComponent implements OnInit {
 
   user: User | null = null; // Bireysel kullanıcı verisi
-  corporateUser: CorporateUser | null = null; // Kurumsal kullanıcı verisi
+  corporateUser: any | null = null; // Kurumsal kullanıcı verisi
   dataLoaded = false;
   isCorporate = false;
   displayName: string = ''; // Kullanıcı adı veya şirket adı için eklendi
@@ -29,7 +27,6 @@ export class NaviComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private corporateUserService: CorporateUserService,
     private localStorageService: LocalStorageService,
     private toastrService: ToastrService,
     private router: Router
@@ -51,66 +48,23 @@ export class NaviComponent implements OnInit {
       const userId = this.authService.getCurrentUserId;
       const customerType = this.authService.getCustomerType();
 
-      // ✅ Admin kontrolü
-      if (this.authService.isAdmin()) {
+      this.displayName = this.authService.getCurrentUserName;
+
+      this.isAdmin = this.authService.isAdmin();
+      this.isLocationManager = this.authService.isLocationManager();
+      this.isCorporate = customerType === 'Corporate';
+
+      // Still fetch the actual User reference for legacy bindings if needed
+      if (!this.isAdmin && !this.isLocationManager && !this.isCorporate) {
         this.userService.getUserById(userId).subscribe(
-          (response: { data: User }) => {
+          (response) => {
             this.user = response.data;
-            this.displayName = this.user.firstName;
-            this.isAdmin = true;
             this.dataLoaded = true;
           },
-          (error: any) => {
-            console.error('Admin bilgisi alınamadı:', error);
-            this.displayName = "Admin";
-            this.isAdmin = true;
-            this.dataLoaded = true;
-          }
-        );
-      }
-      // ✅ LocationManager kontrolü
-      else if (this.authService.isLocationManager()) {
-        this.userService.getUserById(userId).subscribe(
-          (response: { data: User }) => {
-            this.user = response.data;
-            this.displayName = this.user.firstName;
-            this.isLocationManager = true;
-            this.dataLoaded = true;
-          },
-          (error: any) => {
-            console.error('LocationManager bilgisi alınamadı:', error);
-            this.displayName = "Lokasyon Yöneticisi";
-            this.isLocationManager = true;
-            this.dataLoaded = true;
-          }
-        );
-      }
-      else if (customerType === 'Individual') {
-        this.userService.getUserById(userId).subscribe(
-          (response: { data: User }) => {
-            this.user = response.data;
-            this.displayName = this.user.firstName;
-            this.isCorporate = false;
-            this.dataLoaded = true;
-          },
-          (error: any) => {
-            console.error('Bireysel kullanıcı bilgisi alınamadı:', error);
-          }
-        );
-      } else if (customerType === 'Corporate') {
-        this.corporateUserService.getUserById(userId).subscribe(
-          (response: { data: CorporateUser }) => {
-            this.corporateUser = response.data;
-            this.displayName = this.corporateUser.companyName;
-            this.isCorporate = true;
-            this.dataLoaded = true;
-          },
-          (error: any) => {
-            console.error('Kurumsal kullanıcı bilgisi alınamadı:', error);
-          }
+          (error) => { this.dataLoaded = true; }
         );
       } else {
-        console.error('Geçersiz customerType değeri:', customerType);
+        this.dataLoaded = true;
       }
     }
   }

@@ -152,8 +152,9 @@
           <div class="card-media">
             <img src="assets/images/lux.jpg" alt="{{ rental.brandName }}" (error)="setDefaultImage($event)" />
             <span
-              [class]="rental.status === 2 ? 'card-status card-status--returned' : 'card-status card-status--active'">
-              {{ rental.status === 2 ? '✓ Teslim Edildi' : rental.status === 1 ? '● Aktif' : 'İptal' }}
+              [class]="rental.status === 2 ? 'card-status card-status--returned' : (rental.status === 1 || rental.status === 0) ? 'card-status card-status--active' : 'card-status card-status--cancelled'">
+              {{ rental.status === 2 ? '✓ Teslim Edildi' : rental.status === 1 ? '● Aktif' : rental.status === 0 ? '🕒
+              Bekliyor' : 'İptal' }}
             </span>
           </div>
 
@@ -238,26 +239,32 @@
           <div class="card-footer-strip">
             <span class="card-footer-strip__meta">#{{ rental.id }} · {{ rental.startLocationName }}</span>
             <div class="card-actions">
-              <button class="card-action-btn card-action-btn--return" [disabled]="rental.status === 2"
-                [title]="rental.status === 2 ? 'Zaten teslim edildi' : 'Teslim alındı olarak işaretle'"
-                (click)="confirmReturn(rental)">
+              <button *ngIf="canCollectDeposit(rental)" class="card-action-btn card-action-btn--return"
+                title="Depozitoyu tahsil et" (click)="collectDeposit(rental)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 1v22m-7-11h14M8 7h8a4 4 0 0 1 0 8H8a4 4 0 0 0 0 8h8" />
+                </svg>
+                Depozito Tahsil Edildi
+              </button>
+
+              <button *ngIf="canDeliverVehicle(rental)" class="card-action-btn card-action-btn--return"
+                title="Aracı teslim al" (click)="deliverVehicle(rental)">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                   stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
-                {{ rental.status === 2 ? 'Teslim Edildi' : 'Teslim Alındı' }}
+                Teslim Edildi
               </button>
-              <button class="card-action-btn card-action-btn--delete" title="Kiralamayı sil"
-                (click)="confirmDelete(rental)">
+
+              <button *ngIf="canCancelRental(rental)" class="card-action-btn card-action-btn--delete"
+                title="Kiralamayı iptal et" (click)="cancelRental(rental)">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                   stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="3 6 5 6 21 6" />
-                  <path d="M19 6l-1 14H6L5 6" />
-                  <path d="M10 11v6" />
-                  <path d="M14 11v6" />
-                  <path d="M9 6V4h6v2" />
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
-                Sil
+                İptal Et
               </button>
             </div>
           </div>

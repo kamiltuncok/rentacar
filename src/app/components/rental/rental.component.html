@@ -28,10 +28,12 @@
         <!-- Media -->
         <div class="rental-card__media">
           <img src="assets/images/lux.jpg" [alt]="rental.brandName" (error)="setDefaultImage($event)">
-          <span class="rental-card__status-pill" [class.rental-card__status-pill--active]="rental.status === 1"
+          <span class="rental-card__status-pill"
+            [class.rental-card__status-pill--active]="rental.status === 1 || rental.status === 0"
             [class.rental-card__status-pill--completed]="rental.status === 2"
             [class.rental-card__status-pill--cancelled]="rental.status === 3">
-            {{ rental.status === 1 ? 'Aktif' : rental.status === 2 ? 'Tamamlandı' : 'İptal' }}
+            {{ rental.status === 1 ? 'Aktif' : rental.status === 0 ? 'Bekliyor' : rental.status === 2 ? 'Tamamlandı' :
+            'İptal' }}
           </span>
         </div>
 

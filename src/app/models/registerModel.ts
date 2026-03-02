@@ -1,6 +1,8 @@
 import { LoginModel } from "./loginModel";
 
-export interface RegisterModel extends LoginModel{
-    firstName:string,
-    lastName:string
+export interface RegisterModel extends LoginModel {
+    firstName: string,
+    lastName: string,
+    identityNumber: string,
+    phoneNumber: string
 }

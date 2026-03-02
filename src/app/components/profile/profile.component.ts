@@ -7,23 +7,23 @@ import { UserService } from 'src/app/services/user.service';
 import { NgIf } from '@angular/common';
 
 @Component({
-    selector: 'app-profile',
-    templateUrl: './profile.component.html',
-    styleUrls: ['./profile.component.css'],
-    imports: [NgIf, FormsModule, ReactiveFormsModule]
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.css'],
+  imports: [NgIf, FormsModule, ReactiveFormsModule]
 })
 export class ProfileComponent implements OnInit {
 
-  user:User;
-  profileForm:FormGroup;
-  passwordForm:FormGroup;
+  user: any;
+  profileForm: FormGroup;
+  passwordForm: FormGroup;
   dataLoaded = false;
 
   constructor(
-    private userService:UserService,
-    private authService:AuthService,
-    private formBuilder:FormBuilder,
-    private toastrService:ToastrService
+    private userService: UserService,
+    private authService: AuthService,
+    private formBuilder: FormBuilder,
+    private toastrService: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -32,57 +32,57 @@ export class ProfileComponent implements OnInit {
     this.createPasswordForm();
   }
 
-  createProfileForm(){
+  createProfileForm() {
     this.profileForm = this.formBuilder.group({
-      id:[Number(this.authService.getCurrentUserId)],
-      firstName: ["",Validators.required],
-      lastName:["",Validators.required]
+      id: [Number(this.authService.getCurrentUserId)],
+      firstName: ["", Validators.required],
+      lastName: ["", Validators.required]
     })
   }
 
-  createPasswordForm(){
+  createPasswordForm() {
     this.passwordForm = this.formBuilder.group({
-      userId:[Number(this.authService.getCurrentUserId)],
-      oldPassword: ["",Validators.required],
-      newPassword:["",Validators.required],
-      repeatNewPassword:["",Validators.required]
+      userId: [Number(this.authService.getCurrentUserId)],
+      oldPassword: ["", Validators.required],
+      newPassword: ["", Validators.required],
+      repeatNewPassword: ["", Validators.required]
     })
   }
 
-  getUserById(){
+  getUserById() {
     this.userService.getUserById(this.authService.getCurrentUserId)
-      .subscribe(response=>{
+      .subscribe(response => {
         this.user = response.data
         this.dataLoaded = true
       });
   }
 
-  updateUserNames(){
+  updateUserNames() {
     if (this.profileForm.valid) {
       let userModel = Object.assign({}, this.profileForm.value);
-      this.userService.updateUserNames(userModel).subscribe(response=>{
+      this.userService.updateUserNames(userModel).subscribe(response => {
         this.toastrService.info(response.message, "Bilgiler Güncellendi.");
         setTimeout(() => {
           window.location.reload();
         }, 1000);
-      }, responseError=>{
+      }, responseError => {
         console.log(responseError);
-        
+
         this.toastrService.error(responseError.error, "Hata!");
       });
-      
+
     } else {
       this.toastrService.error("Lütfen tüm alanları doldurunuz.", "Hata!");
     }
   }
 
-  updatePassword(){
+  updatePassword() {
     if (this.passwordForm.valid) {
       let passwordModel = Object.assign({}, this.passwordForm.value);
       console.log(passwordModel);
-      this.authService.updatePassword(passwordModel).subscribe(response=>{
+      this.authService.updatePassword(passwordModel).subscribe(response => {
         this.toastrService.info(response.message, "Şifre Güncellendi");
-      }, responseError=>{
+      }, responseError => {
         this.toastrService.error(responseError.error, "Hata!");
       });
     } else {
