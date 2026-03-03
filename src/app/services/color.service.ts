@@ -10,27 +10,26 @@ import { ResponseModel } from '../models/responseModel';
 })
 export class ColorService {
 
- 
+  apiUrl = "https://localhost:44306/api/"
 
-  apiUrl="https://localhost:44306/api/"
+  constructor(private httpClient: HttpClient) { }
 
-  constructor(private httpClient:HttpClient) { }
-
-  getColors():Observable<ListResponseModel<Color>>{
-    let newPath=this.apiUrl+"colors/getall";
-   return this.httpClient
-    .get<ListResponseModel<Color>>(newPath)
-   }
-   add(color:Color):Observable<ResponseModel>{
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"colors/add",color)
+  getColors(): Observable<ListResponseModel<Color>> {
+    let newPath = this.apiUrl + "colors";
+    return this.httpClient
+      .get<ListResponseModel<Color>>(newPath)
   }
-  getColorsById(colorId:number) : Observable<ListResponseModel<Color>>{
-    let newPath="https://localhost:44306/api/colors/getbyid?colorid="+colorId
+
+  add(color: Color): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(this.apiUrl + "colors", color)
+  }
+
+  getColorsById(colorId: number): Observable<ListResponseModel<Color>> {
+    let newPath = this.apiUrl + "colors/" + colorId;
     return this.httpClient.get<ListResponseModel<Color>>(newPath);
   }
 
-  update(color:Color): Observable<ResponseModel>{
-    let newUrl = "https://localhost:44306/api/colors/update"
-    return this.httpClient.post<ResponseModel>(newUrl, color)
+  update(color: Color): Observable<ResponseModel> {
+    return this.httpClient.put<ResponseModel>(this.apiUrl + "colors/" + color.colorId, color);
   }
 }

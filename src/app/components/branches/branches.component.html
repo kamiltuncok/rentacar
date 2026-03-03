@@ -98,6 +98,21 @@
               <dd>{{ location.phoneNumber }}</dd>
             </div>
           </dl>
+
+          <!-- Google Maps Button -->
+          <div class="location-card__actions"
+            style="margin-top: 1rem; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+            <a [href]="'https://www.google.com/maps/search/?api=1&query=' + (location.locationName + ' ' + location.address + ' ' + getCityName(location.locationCityId))"
+              target="_blank" class="g-btn g-btn--outline"
+              style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              Google Maps'te Göster
+            </a>
+          </div>
         </div>
 
       </div>

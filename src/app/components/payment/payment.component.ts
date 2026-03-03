@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { formatDate, NgIf, NgFor, DecimalPipe } from '@angular/common';
+import { formatDate, NgIf, NgFor, UpperCasePipe, SlicePipe } from '@angular/common';
 
 import { CarDetail } from 'src/app/models/carDetail';
 import { CarService } from 'src/app/services/car.service';
@@ -13,7 +13,7 @@ import { AuthService } from 'src/app/services/auth.service';
   selector: 'app-payment',
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css'],
-  imports: [NgIf, NgFor, FormsModule, ReactiveFormsModule, DecimalPipe]
+  imports: [NgIf, NgFor, FormsModule, ReactiveFormsModule, UpperCasePipe, SlicePipe]
 })
 export class PaymentComponent implements OnInit {
   carDetail: CarDetail;

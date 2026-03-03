@@ -1,30 +1,390 @@
-.last-usage-date {
-    display: flex;
-    justify-content: space-between;
+/* Layout base */
+.pm-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #111827;
+}
+
+/* Header */
+.pm-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.pm-title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.pm-subtitle {
+  font-size: 1rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Page Layout */
+.pm-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media(min-width: 1024px) {
+  .pm-layout {
+    grid-template-columns: 1.5fr 1fr;
+    /* Larger left col, smaller right side summary */
+    gap: 3rem;
   }
- .select-wrapper select {
-    width: 90px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    height: 32px;
-    cursor: pointer;
+}
+
+/* General Layout Utils */
+.pm-mb-4 {
+  margin-bottom: 2rem;
+}
+
+/* Premium Card Style */
+.pm-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  overflow: hidden;
+}
+
+.pm-card-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8fafc;
+}
+
+.pm-card-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pm-icon {
+  color: #3b82f6;
+}
+
+.pm-secure-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #10b981;
+  background-color: #d1fae5;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.pm-card-body {
+  padding: 2rem;
+}
+
+.pm-card-actions {
+  padding: 1.5rem 2rem;
+  background-color: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+}
+
+
+/* Abstract Graphic representation of Credit Card */
+.pm-card-graphic-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.pm-card-graphic {
+  width: 320px;
+  height: 200px;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  padding: 1.5rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.pm-card-graphic::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.pm-card-graphic-chip {
+  width: 44px;
+  height: 32px;
+  background-color: #d4d4d8;
+  border-radius: 6px;
+  opacity: 0.9;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.pm-card-graphic-number {
+  font-family: 'Space Mono', monospace, sans-serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.15em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  margin-top: 1rem;
+}
+
+.pm-card-graphic-footer {
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
+}
+
+.pm-card-graphic-label {
+  font-size: 0.55rem;
+  color: #94a3b8;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.1rem;
+}
+
+.pm-card-graphic-val {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+/* Forms */
+.pm-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media(min-width: 640px) {
+  .pm-form-grid {
+    grid-template-columns: 1fr 1fr;
   }
-#card-date-year{
-margin-right: 50px;
 }
 
-.btn-success {
-  background-color: #28a745; /* Başlangıç rengi (yeşil) */
-  color: white; /* Metin rengi beyaz */
-  border: none; /* Kenarlık yok */
-  padding: 10px 20px; /* İç boşluk */
-  margin-bottom: 5px;
-  border-radius: 5px; /* Köşe yuvarlama */
-  transition: background-color 0.3s ease, transform 0.3s ease; /* Geçiş efekti */
+.pm-col-full {
+  grid-column: 1 / -1;
 }
 
-.btn-success:hover {
-  background-color: #218838; /* Hover için daha koyu yeşil */
-  transform: scale(1.05); /* Hover sırasında butonu büyüt */
+.pm-form-group {
+  display: flex;
+  flex-direction: column;
 }
 
+.pm-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #334155;
+  margin-bottom: 0.5rem;
+}
+
+.pm-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  color: #1e293b;
+  background-color: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.pm-input::placeholder {
+  color: #94a3b8;
+}
+
+.pm-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.pm-input--error {
+  border-color: #ef4444;
+}
+
+.pm-input--error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.pm-input-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pm-select {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+}
+
+/* Buttons */
+.pm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  text-decoration: none;
+}
+
+.pm-btn--block {
+  width: 100%;
+}
+
+.pm-btn--primary {
+  background-color: #0f172a;
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.pm-btn--primary:hover {
+  background-color: #1e293b;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.pm-btn--primary:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+
+/* Sidebar Summary Box */
+.pm-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: sticky;
+  top: 2rem;
+}
+
+.pm-summary-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.pm-summary-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.pm-summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pm-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.pm-summary-label {
+  color: #64748b;
+}
+
+.pm-summary-value {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.pm-summary-divider {
+  height: 1px;
+  background-color: #e2e8f0;
+  margin: 0.5rem 0;
+}
+
+.pm-summary-total {
+  font-size: 1.125rem;
+}
+
+.pm-summary-total .pm-summary-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #10b981;
+}
+
+.pm-summary-note {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* Trust Badges */
+.pm-trust-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pm-trust-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem;
+  background-color: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #f1f5f9;
+}
+
+.pm-trust-icon {
+  font-size: 1.5rem;
+}
+
+.pm-trust-text span {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.15rem;
+}
+
+.pm-trust-text p {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}

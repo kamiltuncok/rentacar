@@ -11,32 +11,31 @@ import { ListResponseModel } from '../models/listResponseModel';
 })
 export class GearService {
 
- 
 
-  apiUrl="https://localhost:44306/api/gears/"
 
-  constructor(private httpClient:HttpClient) { }
+  apiUrl = "https://localhost:44306/api/"
 
-  getGears():Observable<ListResponseModel<Gear>>{
-    let newPath=this.apiUrl+"getall";
-   return this.httpClient
-    .get<ListResponseModel<Gear>>(newPath)
-   }
-   add(gear:Gear):Observable<ResponseModel>{
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"add",gear)
+  constructor(private httpClient: HttpClient) { }
+
+  getGears(): Observable<ListResponseModel<Gear>> {
+    let newPath = this.apiUrl + "gears";
+    return this.httpClient
+      .get<ListResponseModel<Gear>>(newPath)
   }
-  getGearById(gearId:number) : Observable<SingleResponseModel<Gear>>{
-    let newPath=this.apiUrl+"getbyid?gearId="+gearId
+  add(gear: Gear): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(this.apiUrl + "gears", gear)
+  }
+  getGearById(gearId: number): Observable<SingleResponseModel<Gear>> {
+    let newPath = this.apiUrl + "gears/" + gearId;
     return this.httpClient.get<SingleResponseModel<Gear>>(newPath);
   }
 
-  getGearsById(gearId:number) : Observable<ListResponseModel<Gear>>{
-    let newPath=this.apiUrl+"getlistbyid?gearId="+gearId
+  getGearsById(gearId: number): Observable<ListResponseModel<Gear>> {
+    let newPath = this.apiUrl + "getlistbyid?gearId=" + gearId
     return this.httpClient.get<ListResponseModel<Gear>>(newPath);
   }
 
-  update(gear:Gear): Observable<ResponseModel>{
-    let newUrl = this.apiUrl+"update"
-    return this.httpClient.post<ResponseModel>(newUrl, gear)
+  update(gear: Gear): Observable<ResponseModel> {
+    return this.httpClient.put<ResponseModel>(this.apiUrl + "gears/" + gear.gearId, gear);
   }
 }

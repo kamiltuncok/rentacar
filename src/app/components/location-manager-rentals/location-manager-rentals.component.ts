@@ -108,69 +108,46 @@ export class LocationManagerRentalsComponent implements OnInit {
       return;
     }
 
-    // Aralık modunda bitiş tarihi zorunlu
     if (hasDate && this.dateRangeMode && !this.filterDateEnd) {
       this.toastrService.warning('Lütfen bitiş tarihini de giriniz.', 'Uyarı');
       return;
     }
 
-    // Aralık modunda başlangıç > bitiş kontrolü
-    if (hasDate && this.dateRangeMode && this.filterDateEnd && this.filterDate > this.filterDateEnd) {
-      this.toastrService.warning('Başlangıç tarihi bitiş tarihinden büyük olamaz.', 'Uyarı');
-      return;
-    }
-
     this.isFiltering = true;
 
-    // Tarih filtresi: tek tarih veya aralık
-    let dateObs: Observable<Set<number>>;
-    if (!hasDate) {
-      dateObs = of(null);
-    } else if (this.dateRangeMode && this.filterDateEnd) {
-      dateObs = this.rentalService.getRentalsByDateRange(this.filterDate, this.filterDateEnd).pipe(
-        map(r => new Set<number>(r.success ? r.data.map((x: any) => x.rentalId) : []))
-      );
-    } else {
-      // Tek tarih: aynı günü aralık olarak gönder
-      dateObs = this.rentalService.getRentalsByDateRange(this.filterDate, this.filterDate).pipe(
-        map(r => new Set<number>(r.success ? r.data.map((x: any) => x.rentalId) : []))
-      );
-    }
+    this.filteredRentals = this.rentals.filter(r => {
+      // 1. Date Filter
+      if (hasDate) {
+        const d = new Date(r.startDate);
+        const rDate = d.getFullYear() + '-' +
+          String(d.getMonth() + 1).padStart(2, '0') + '-' +
+          String(d.getDate()).padStart(2, '0');
 
-    const emailObs: Observable<Set<number>> = hasEmail
-      ? this.rentalService.getRentalsByEmail(this.filterEmail.trim()).pipe(
-        map(r => new Set<number>(r.success ? r.data.map((x: any) => x.rentalId) : []))
-      )
-      : of(null);
-
-    const nameObs: Observable<Set<number>> = hasName
-      ? this.rentalService.getRentalsByName(this.filterName.trim()).pipe(
-        map(r => new Set<number>(r.success ? r.data.map((x: any) => x.rentalId) : []))
-      )
-      : of(null);
-
-    forkJoin([dateObs, emailObs, nameObs]).subscribe(
-      ([dateIds, emailIds, nameIds]) => {
-        // Sadece aktif filtrelerin sonuçlarını kesişime al
-        this.filteredRentals = this.rentals.filter(r => {
-          if (dateIds !== null && !dateIds.has(r.id)) return false;
-          if (emailIds !== null && !emailIds.has(r.id)) return false;
-          if (nameIds !== null && !nameIds.has(r.id)) return false;
-          return true;
-        });
-
-        if (this.filteredRentals.length === 0) {
-          this.toastrService.info('Filtre kriterlerine uygun kiralama bulunamadı.', 'Bilgi');
+        if (this.dateRangeMode && this.filterDateEnd) {
+          if (rDate < this.filterDate || rDate > this.filterDateEnd) return false;
         } else {
-          this.toastrService.success(`${this.filteredRentals.length} kiralama bulundu.`, 'Başarılı');
+          if (rDate !== this.filterDate) return false;
         }
-        this.isFiltering = false;
-      },
-      (error) => {
-        this.toastrService.error('Filtreleme sırasında bir hata oluştu.', 'Hata');
-        this.isFiltering = false;
       }
-    );
+
+      // 2. Name / Email Filter (Local Search in details)
+      if (hasName || hasEmail) {
+        const info = this.getUserInfo(r);
+        if (!info) return false;
+
+        if (hasName && !info.name?.toLowerCase().includes(this.filterName.toLowerCase())) return false;
+        if (hasEmail && !info.email?.toLowerCase().includes(this.filterEmail.toLowerCase())) return false;
+      }
+
+      return true;
+    });
+
+    if (this.filteredRentals.length === 0) {
+      this.toastrService.info('Filtre kriterlerine uygun kiralama bulunamadı.', 'Bilgi');
+    } else {
+      this.toastrService.success(`${this.filteredRentals.length} kiralama bulundu.`, 'Başarılı');
+    }
+    this.isFiltering = false;
   }
 
   clearFilter() {
@@ -191,7 +168,7 @@ export class LocationManagerRentalsComponent implements OnInit {
           // Fallback init
           this.userDetails[key] = { type: 'Unknown', data: null };
 
-          return this.customerService.getCustomerById(rental.customerId).toPromise()
+          return this.customerService.getCustomerDetailById(rental.customerId).toPromise()
             .then((result: any) => {
               if (result && result.success) {
                 // If the customer has a company name, it's corporate

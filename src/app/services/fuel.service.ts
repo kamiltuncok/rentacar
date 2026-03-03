@@ -11,28 +11,27 @@ import { ListResponseModel } from '../models/listResponseModel';
 })
 export class FuelService {
 
- 
 
-  apiUrl="https://localhost:44306/api/fuels/"
 
-  constructor(private httpClient:HttpClient) { }
+  apiUrl = "https://localhost:44306/api/"
 
-  getFuels():Observable<ListResponseModel<Fuel>>{
-    let newPath=this.apiUrl+"getall";
-   return this.httpClient
-    .get<ListResponseModel<Fuel>>(newPath)
-   }
-   add(fuel:Fuel):Observable<ResponseModel>{
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"add",fuel)
+  constructor(private httpClient: HttpClient) { }
+
+  getFuels(): Observable<ListResponseModel<Fuel>> {
+    let newPath = this.apiUrl + "fuels";
+    return this.httpClient
+      .get<ListResponseModel<Fuel>>(newPath)
   }
-  getFuelById(fuelId:number) : Observable<SingleResponseModel<Fuel>>{
-    let newPath=this.apiUrl+"getbyid?fuelId="+fuelId
+  add(fuel: Fuel): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(this.apiUrl + "fuels", fuel)
+  }
+  getFuelById(fuelId: number): Observable<SingleResponseModel<Fuel>> {
+    let newPath = this.apiUrl + "fuels/" + fuelId;
     return this.httpClient.get<SingleResponseModel<Fuel>>(newPath);
   }
 
 
-  update(fuel:Fuel): Observable<ResponseModel>{
-    let newUrl = this.apiUrl+"update"
-    return this.httpClient.post<ResponseModel>(newUrl, fuel)
+  update(fuel: Fuel): Observable<ResponseModel> {
+    return this.httpClient.put<ResponseModel>(this.apiUrl + "fuels/" + fuel.fuelId, fuel);
   }
 }

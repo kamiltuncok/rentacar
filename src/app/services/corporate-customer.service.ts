@@ -11,32 +11,33 @@ import { ListResponseModel } from '../models/listResponseModel';
 })
 export class CorporateCustomerService {
 
- 
 
-  apiUrl="https://localhost:44306/api/corporatecustomers/"
 
-  constructor(private httpClient:HttpClient) { }
+  apiUrl = "https://localhost:44306/api/corporatecustomers/";
 
-  getCustomers():Observable<ListResponseModel<CorporateCustomer>>{
-    let newPath=this.apiUrl+"getall";
-   return this.httpClient
-    .get<ListResponseModel<CorporateCustomer>>(newPath)
-   }
-   add(corporateCustomer:CorporateCustomer):Observable<ResponseModel>{
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"add",corporateCustomer)
+  constructor(private httpClient: HttpClient) { }
+
+  getCustomers(): Observable<ListResponseModel<CorporateCustomer>> {
+    let newPath = this.apiUrl;
+    return this.httpClient
+      .get<ListResponseModel<CorporateCustomer>>(newPath)
   }
-  getCustomerById(customerId:number) : Observable<SingleResponseModel<CorporateCustomer>>{
-    let newPath=this.apiUrl+"getbyid?customerid="+customerId
+
+  add(corporateCustomer: CorporateCustomer): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(this.apiUrl, corporateCustomer)
+  }
+
+  getCustomerById(customerId: number): Observable<SingleResponseModel<CorporateCustomer>> {
+    let newPath = this.apiUrl + customerId
     return this.httpClient.get<SingleResponseModel<CorporateCustomer>>(newPath);
   }
 
-  getCustomersById(customerId:number) : Observable<ListResponseModel<CorporateCustomer>>{
-    let newPath=this.apiUrl+"getlistbyid?customerid="+customerId
-    return this.httpClient.get<ListResponseModel<CorporateCustomer>>(newPath);
+  update(corporateCustomer: CorporateCustomer): Observable<ResponseModel> {
+    let newUrl = this.apiUrl + corporateCustomer.id
+    return this.httpClient.put<ResponseModel>(newUrl, corporateCustomer)
   }
 
-  update(corporateCustomer:CorporateCustomer): Observable<ResponseModel>{
-    let newUrl = this.apiUrl+"update"
-    return this.httpClient.post<ResponseModel>(newUrl, corporateCustomer)
+  delete(customerId: number): Observable<ResponseModel> {
+    return this.httpClient.delete<ResponseModel>(this.apiUrl + customerId);
   }
 }

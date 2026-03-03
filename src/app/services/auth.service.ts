@@ -42,8 +42,8 @@ export class AuthService {
   }
 
   updatePassword(userPasswordModel: UserPasswordModel) {
-    let newUrl = this.apiUrl + "updatepassword";
-    return this.httpClient.post<ResponseModel>(newUrl, userPasswordModel)
+    let newUrl = this.apiUrl + "password";
+    return this.httpClient.put<ResponseModel>(newUrl, userPasswordModel)
   }
 
   isAuthenticated() {

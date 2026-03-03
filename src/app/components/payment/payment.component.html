@@ -1,164 +1,238 @@
-<div class="container">
-    <div class="row pt-4">
-        <div class="container p-0" style="border: 1px solid black; padding: 0.5px; display: flex;">
-            <!-- Left Side - Payment Information -->
-            <div style="flex: 1;" *ngIf="isUserAuthenticated">
-                <div class="card px-4" style="background-color: #cedce0;">
-                    <h3>Ödeme Bilgileri</h3>
-                    <hr style="border: 0.5px solid black;">
-                    <div style="position: absolute; top: 0; right: 0; margin-top: 65px; margin-right: 10px;">
-                        <img src="https://bertanuzun.com/wp-content/uploads/2020/03/kredi-karti.png" width="400"
-                            height="250" alt="Kredi Kartı">
+<div class="pm-container">
+
+    <!-- Header Section -->
+    <div class="pm-header">
+        <h1 class="pm-title">Ödeme & Onay</h1>
+        <p class="pm-subtitle">Kiralama işlemini tamamlamak için bilgilerinizi güvenle girin.</p>
+    </div>
+
+    <div class="pm-layout">
+
+        <!-- AUTHENTICATED USER VIEW -->
+        <div class="pm-main-column" *ngIf="isUserAuthenticated">
+
+            <div class="pm-card pm-card--payment">
+                <div class="pm-card-header">
+                    <h2 class="pm-card-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pm-icon">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                            <line x1="1" y1="10" x2="23" y2="10"></line>
+                        </svg>
+                        Ödeme Bilgileri
+                    </h2>
+                    <div class="pm-secure-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        256-bit SSL
                     </div>
-                    <div class="row gx-3" [formGroup]="paymentForm">
-                        <div class="col-12">
-                            <div class="d-flex flex-column">
-                                <p class="text mb-1" style="height: 40px;">Kart İsmi</p>
-                                <input formControlName="cardHolder" class="form-control mb-3" type="text"
-                                    placeholder="Ad Soyad" style="height: 40px; width: 400px;"
-                                    [class.is-invalid]="paymentForm.get('cardHolder')?.invalid && paymentForm.get('cardHolder')?.touched">
+                </div>
+
+                <div class="pm-card-body" [formGroup]="paymentForm">
+
+                    <!-- Decorative Card Graphic -->
+                    <div class="pm-card-graphic-wrapper">
+                        <div class="pm-card-graphic">
+                            <div class="pm-card-graphic-chip"></div>
+                            <div class="pm-card-graphic-number">
+                                {{ paymentForm.get('cardNumber')?.value || '•••• •••• •••• ••••' }}
                             </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="d-flex flex-column">
-                                <p class="text mb-1" style="height: 40px;">Kart Numarası</p>
-                                <input formControlName="cardNumber" class="form-control mb-3" type="text"
-                                    placeholder="1234 5678 9876 5432" maxlength="16" style="height: 40px; width: 400px;"
-                                    [class.is-invalid]="paymentForm.get('cardNumber')?.invalid && paymentForm.get('cardNumber')?.touched">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div><label>Son Kullanma Tarihi</label>
-                                <div class="last-usage-date d-flex gap-2">
-                                    <div class="select-wrapper">
-                                        <select formControlName="expireMonth" class="form-control"
-                                            [class.is-invalid]="paymentForm.get('expireMonth')?.invalid && paymentForm.get('expireMonth')?.touched">
-                                            <option value="" disabled selected>Ay</option>
-                                            <option value="1">01</option>
-                                            <option value="2">02</option>
-                                            <option value="3">03</option>
-                                            <option value="4">04</option>
-                                            <option value="5">05</option>
-                                            <option value="6">06</option>
-                                            <option value="7">07</option>
-                                            <option value="8">08</option>
-                                            <option value="9">09</option>
-                                            <option value="10">10</option>
-                                            <option value="11">11</option>
-                                            <option value="12">12</option>
-                                        </select>
-                                    </div>
-                                    <div class="select-wrapper">
-                                        <select formControlName="expireYear" class="form-control"
-                                            [class.is-invalid]="paymentForm.get('expireYear')?.invalid && paymentForm.get('expireYear')?.touched">
-                                            <option value="" disabled selected>Yıl</option>
-                                            <option value="2025">2025</option>
-                                            <option value="2026">2026</option>
-                                            <option value="2027">2027</option>
-                                            <option value="2028">2028</option>
-                                            <option value="2029">2029</option>
-                                            <option value="2030">2030</option>
-                                        </select>
+                            <div class="pm-card-graphic-footer">
+                                <div>
+                                    <div class="pm-card-graphic-label">Kart Sahibi</div>
+                                    <div class="pm-card-graphic-val">{{ (paymentForm.get('cardHolder')?.value |
+                                        uppercase) || 'AD SOYAD' }}</div>
+                                </div>
+                                <div>
+                                    <div class="pm-card-graphic-label">SKT</div>
+                                    <div class="pm-card-graphic-val">
+                                        {{ paymentForm.get('expireMonth')?.value || 'MM' }}/{{
+                                        paymentForm.get('expireYear')?.value ? (paymentForm.get('expireYear')?.value |
+                                        slice:2:4) : 'YY' }}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="d-flex flex-column">
-                                <p class="text mb-1 mt-3">CVV/CVC</p>
-                                <input formControlName="cvv" class="form-control mb-3 pt-2" maxlength="3" type="text"
-                                    placeholder="***" style="width: 100px;"
-                                    [class.is-invalid]="paymentForm.get('cvv')?.invalid && paymentForm.get('cvv')?.touched">
+                    </div>
+
+                    <!-- Form Fields -->
+                    <div class="pm-form-grid">
+                        <div class="pm-form-group pm-col-full">
+                            <label class="pm-label">Kart Üzerindeki İsim</label>
+                            <input formControlName="cardHolder" class="pm-input" type="text" placeholder="Ad Soyad"
+                                [class.pm-input--error]="paymentForm.get('cardHolder')?.invalid && paymentForm.get('cardHolder')?.touched">
+                        </div>
+
+                        <div class="pm-form-group pm-col-full">
+                            <label class="pm-label">Kart Numarası</label>
+                            <input formControlName="cardNumber" class="pm-input" type="text"
+                                placeholder="1234 5678 9876 5432" maxlength="16"
+                                [class.pm-input--error]="paymentForm.get('cardNumber')?.invalid && paymentForm.get('cardNumber')?.touched">
+                        </div>
+
+                        <div class="pm-form-group pm-col-half">
+                            <label class="pm-label">Son Kullanma Tarihi</label>
+                            <div class="pm-input-row">
+                                <select formControlName="expireMonth" class="pm-input pm-select"
+                                    [class.pm-input--error]="paymentForm.get('expireMonth')?.invalid && paymentForm.get('expireMonth')?.touched">
+                                    <option value="" disabled selected>Ay</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                                <select formControlName="expireYear" class="pm-input pm-select"
+                                    [class.pm-input--error]="paymentForm.get('expireYear')?.invalid && paymentForm.get('expireYear')?.touched">
+                                    <option value="" disabled selected>Yıl</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="mt-4 mb-4">
-                            <button type="button" (click)="addRentalEntry()" class="btn btn-success btn-lg">
-                                Hemen Kirala
-                            </button>
+
+                        <div class="pm-form-group pm-col-half">
+                            <label class="pm-label">CVV/CVC</label>
+                            <input formControlName="cvv" class="pm-input" maxlength="3" type="text" placeholder="***"
+                                [class.pm-input--error]="paymentForm.get('cvv')?.invalid && paymentForm.get('cvv')?.touched">
                         </div>
                     </div>
                 </div>
+
+                <div class="pm-card-actions">
+                    <button type="button" (click)="addRentalEntry()" class="pm-btn pm-btn--primary pm-btn--block">
+                        Ödemeyi Tamamla ve Kirala
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- GUEST USER VIEW -->
+        <div class="pm-main-column" *ngIf="!isUserAuthenticated">
+
+            <div class="pm-card pm-mb-4">
+                <div class="pm-card-header">
+                    <h2 class="pm-card-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pm-icon">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        İletişim & Fatura Bilgileri
+                    </h2>
+                </div>
+                <div class="pm-card-body">
+
+                    <!-- Individual Form -->
+                    <form *ngIf="customerType === 0" [formGroup]="guestIndividualForm" class="pm-form-grid">
+                        <div class="pm-form-group pm-col-half">
+                            <label class="pm-label">Ad</label>
+                            <input type="text" formControlName="firstName" class="pm-input" placeholder="Adınız">
+                        </div>
+                        <div class="pm-form-group pm-col-half">
+                            <label class="pm-label">Soyad</label>
+                            <input type="text" formControlName="lastName" class="pm-input" placeholder="Soyadınız">
+                        </div>
+                        <div class="pm-form-group pm-col-half">
+                            <label class="pm-label">T.C. Kimlik No</label>
+                            <input type="text" formControlName="identityNumber" class="pm-input"
+                                placeholder="11 Haneli TC No" maxlength="11">
+                        </div>
+                        <div class="pm-form-group pm-col-half">
+                            <label class="pm-label">E-Posta</label>
+                            <input type="email" formControlName="email" class="pm-input"
+                                placeholder="E-Posta Adresiniz">
+                        </div>
+                        <div class="pm-form-group pm-col-full">
+                            <label class="pm-label">Telefon Numarası</label>
+                            <input type="text" formControlName="phoneNumber" class="pm-input"
+                                placeholder="05XX XXX XX XX">
+                        </div>
+                    </form>
+
+                    <!-- Corporate Form -->
+                    <form *ngIf="customerType === 1" [formGroup]="guestCorporateForm" class="pm-form-grid">
+                        <div class="pm-form-group pm-col-full">
+                            <label class="pm-label">Şirket Adı</label>
+                            <input type="text" formControlName="companyName" class="pm-input"
+                                placeholder="Resmi Şirket Unvanı">
+                        </div>
+                        <div class="pm-form-group pm-col-half">
+                            <label class="pm-label">Vergi Numarası</label>
+                            <input type="text" formControlName="taxNumber" class="pm-input" placeholder="Vergi No">
+                        </div>
+                        <div class="pm-form-group pm-col-half">
+                            <label class="pm-label">Telefon Numarası</label>
+                            <input type="text" formControlName="phoneNumber" class="pm-input"
+                                placeholder="05XX Veya Sabit Hat">
+                        </div>
+                        <div class="pm-form-group pm-col-full">
+                            <label class="pm-label">Kurumsal E-Posta</label>
+                            <input type="email" formControlName="email" class="pm-input" placeholder="ornek@sirket.com">
+                        </div>
+                    </form>
+                </div>
             </div>
 
-            <div *ngIf="!isUserAuthenticated" class="p-5 w-100">
-                <h4 class="mb-4">Kiralamayı Tamamlamak İçin Bilgilerinizi Girin</h4>
-
-                <!-- Individual Form -->
-                <form *ngIf="customerType === 0" [formGroup]="guestIndividualForm" class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Ad</label>
-                        <input type="text" formControlName="firstName" class="form-control" placeholder="Adınız">
+            <!-- Payment Section for Guest -->
+            <div class="pm-card pm-card--payment" [formGroup]="paymentForm">
+                <div class="pm-card-header">
+                    <h2 class="pm-card-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pm-icon">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                            <line x1="1" y1="10" x2="23" y2="10"></line>
+                        </svg>
+                        Ödeme Bilgileri
+                    </h2>
+                    <div class="pm-secure-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        256-bit SSL
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Soyad</label>
-                        <input type="text" formControlName="lastName" class="form-control" placeholder="Soyadınız">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">T.C. Kimlik No</label>
-                        <input type="text" formControlName="identityNumber" class="form-control"
-                            placeholder="11 Haneli TC No" maxlength="11">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">E-Posta</label>
-                        <input type="email" formControlName="email" class="form-control"
-                            placeholder="E-Posta Adresiniz">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Telefon Numarası</label>
-                        <input type="text" formControlName="phoneNumber" class="form-control"
-                            placeholder="Telefon Seçilmedi (05XX)">
-                    </div>
-                </form>
-
-                <!-- Corporate Form -->
-                <form *ngIf="customerType === 1" [formGroup]="guestCorporateForm" class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Şirket Adı</label>
-                        <input type="text" formControlName="companyName" class="form-control" placeholder="Şirket Adı">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Vergi Numarası</label>
-                        <input type="text" formControlName="taxNumber" class="form-control" placeholder="Vergi No">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Telefon Numarası</label>
-                        <input type="text" formControlName="phoneNumber" class="form-control"
-                            placeholder="Telefon Seçilmedi (05XX)">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">E-Posta</label>
-                        <input type="email" formControlName="email" class="form-control" placeholder="Kurumsal E-Posta">
-                    </div>
-                </form>
-
-                <!-- Payment Information for Guests -->
-                <div class="mt-5" [formGroup]="paymentForm">
-                    <h5 class="mb-3">Ödeme Bilgileri</h5>
-                    <hr>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Kart İsmi</label>
-                            <input type="text" formControlName="cardHolder" class="form-control" placeholder="Ad Soyad"
-                                [class.is-invalid]="paymentForm.get('cardHolder')?.invalid && paymentForm.get('cardHolder')?.touched">
+                </div>
+                <div class="pm-card-body">
+                    <div class="pm-form-grid">
+                        <div class="pm-form-group pm-col-full">
+                            <label class="pm-label">Kart Üzerindeki İsim</label>
+                            <input type="text" formControlName="cardHolder" class="pm-input" placeholder="Ad Soyad"
+                                [class.pm-input--error]="paymentForm.get('cardHolder')?.invalid && paymentForm.get('cardHolder')?.touched">
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Kart Numarası</label>
-                            <input type="text" formControlName="cardNumber" class="form-control"
+                        <div class="pm-form-group pm-col-full">
+                            <label class="pm-label">Kart Numarası</label>
+                            <input type="text" formControlName="cardNumber" class="pm-input"
                                 placeholder="1234 5678 9876 5432" maxlength="16"
-                                [class.is-invalid]="paymentForm.get('cardNumber')?.invalid && paymentForm.get('cardNumber')?.touched">
+                                [class.pm-input--error]="paymentForm.get('cardNumber')?.invalid && paymentForm.get('cardNumber')?.touched">
                         </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Son Kullanma Tarihi</label>
-                            <div class="d-flex gap-2">
-                                <select formControlName="expireMonth" class="form-control"
-                                    [class.is-invalid]="paymentForm.get('expireMonth')?.invalid && paymentForm.get('expireMonth')?.touched">
+                        <div class="pm-form-group pm-col-half">
+                            <label class="pm-label">Son Kullanma Tarihi</label>
+                            <div class="pm-input-row">
+                                <select formControlName="expireMonth" class="pm-input pm-select"
+                                    [class.pm-input--error]="paymentForm.get('expireMonth')?.invalid && paymentForm.get('expireMonth')?.touched">
                                     <option value="" disabled selected>Ay</option>
                                     <option *ngFor="let month of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="month">
-                                        {{month | number:'2.0'}}
-                                    </option>
+                                        {{month < 10 ? '0' + month : month}} </option>
                                 </select>
-                                <select formControlName="expireYear" class="form-control"
-                                    [class.is-invalid]="paymentForm.get('expireYear')?.invalid && paymentForm.get('expireYear')?.touched">
+                                <select formControlName="expireYear" class="pm-input pm-select"
+                                    [class.pm-input--error]="paymentForm.get('expireYear')?.invalid && paymentForm.get('expireYear')?.touched">
                                     <option value="" disabled selected>Yıl</option>
                                     <option *ngFor="let year of [2025,2026,2027,2028,2029,2030]" [value]="year">
                                         {{year}}
@@ -166,23 +240,62 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <label class="form-label">CVV/CVC</label>
-                            <input type="text" formControlName="cvv" class="form-control" maxlength="3"
-                                placeholder="***"
-                                [class.is-invalid]="paymentForm.get('cvv')?.invalid && paymentForm.get('cvv')?.touched">
+                        <div class="pm-form-group pm-col-half">
+                            <label class="pm-label">CVV/CVC</label>
+                            <input type="text" formControlName="cvv" class="pm-input" maxlength="3" placeholder="***"
+                                [class.pm-input--error]="paymentForm.get('cvv')?.invalid && paymentForm.get('cvv')?.touched">
                         </div>
                     </div>
                 </div>
+                <div class="pm-card-actions">
+                    <button type="button" (click)="addRentalEntry()" class="pm-btn pm-btn--primary pm-btn--block">
+                        Ödemeyi Tamamla ve Kirala
+                    </button>
+                </div>
+            </div>
 
-                <div class="row g-3 mt-4">
-                    <div class="col-12 text-end">
-                        <button type="button" (click)="addRentalEntry()" class="btn btn-success btn-lg">
-                            Ödemeyi Tamamla
-                        </button>
+        </div>
+
+        <!-- SIDEBAR SUMMARY -->
+        <aside class="pm-sidebar">
+            <div class="pm-summary-card">
+                <h3 class="pm-summary-title">Sipariş Özeti</h3>
+                <div class="pm-summary-content">
+                    <div class="pm-summary-row">
+                        <span class="pm-summary-label">Araç Bedeli (1 Gün)</span>
+                        <span class="pm-summary-value">—</span>
+                    </div>
+                    <div class="pm-summary-row">
+                        <span class="pm-summary-label">Kiralama Süresi</span>
+                        <span class="pm-summary-value">—</span>
+                    </div>
+                    <div class="pm-summary-divider"></div>
+
+                    <div class="pm-summary-row pm-summary-total">
+                        <span class="pm-summary-label">Genel Toplam</span>
+                        <span class="pm-summary-value">Hesaplanıyor...</span>
+                    </div>
+                    <p class="pm-summary-note">Güvence ve ekstralar depozito bedeline dahildir.</p>
+                </div>
+            </div>
+
+            <div class="pm-trust-badges">
+                <div class="pm-trust-item">
+                    <div class="pm-trust-icon">🔒</div>
+                    <div class="pm-trust-text">
+                        <span>Güvenli Ödeme</span>
+                        <p>256-bit şifreleme ile ödemeniz güvende.</p>
+                    </div>
+                </div>
+                <div class="pm-trust-item">
+                    <div class="pm-trust-icon">🛡️</div>
+                    <div class="pm-trust-text">
+                        <span>Anında Onay</span>
+                        <p>Onayınız hemen SMS ile iletilecektir.</p>
                     </div>
                 </div>
             </div>
-        </div>
+        </aside>
+
     </div>
 </div>

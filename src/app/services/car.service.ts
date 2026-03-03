@@ -17,17 +17,17 @@ export class CarService {
   constructor(private httpClient: HttpClient) { }
 
   getCarDetails(): Observable<ListResponseModel<CarDetail>> {
-    const newPath = this.apiUrl + "cars/getcardetails";
+    const newPath = this.apiUrl + "cars/details";
     return this.httpClient.get<ListResponseModel<CarDetail>>(newPath);
   }
 
   getCarsByBrandId(brandId: number): Observable<ListResponseModel<CarDetail>> {
-    const newPath = this.apiUrl + "cars/getbybrands?brandId=" + brandId;
+    const newPath = this.apiUrl + "cars/brand/" + brandId;
     return this.httpClient.get<ListResponseModel<CarDetail>>(newPath);
   }
 
   getCarsByColorId(colorId: number): Observable<ListResponseModel<CarDetail>> {
-    const newPath = this.apiUrl + "cars/getbycolors?colorId=" + colorId;
+    const newPath = this.apiUrl + "cars/color/" + colorId;
     return this.httpClient.get<ListResponseModel<CarDetail>>(newPath);
   }
 
@@ -42,27 +42,27 @@ export class CarService {
   }
 
   getCarsByCarId(carId: number): Observable<ListResponseModel<CarDetail>> {
-    const newPath = this.apiUrl + "cars/getbyid?id=" + carId;
+    const newPath = this.apiUrl + "cars/details/" + carId;
     return this.httpClient.get<ListResponseModel<CarDetail>>(newPath);
   }
 
   getCarDetailById(carId: number): Observable<SingleResponseModel<CarDetail>> {
-    const newPath = this.apiUrl + "cars/getbycarid?carId=" + carId;
+    const newPath = this.apiUrl + "cars/details/" + carId;
     return this.httpClient.get<SingleResponseModel<CarDetail>>(newPath);
   }
 
   add(car: CarDetail): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl + "cars/add", car);
+    return this.httpClient.post<ResponseModel>(this.apiUrl + "cars", car);
   }
 
   getCarsById(id: number): Observable<ListResponseModel<CarDetail>> {
-    const newPath = this.apiUrl + "cars/getbyid?id=" + id;
+    const newPath = this.apiUrl + "cars/" + id;
     return this.httpClient.get<ListResponseModel<CarDetail>>(newPath);
   }
 
   update(car: CarDetail): Observable<ResponseModel> {
-    const newUrl = this.apiUrl + "cars/update";
-    return this.httpClient.post<ResponseModel>(newUrl, car);
+    const newUrl = this.apiUrl + "cars/" + car.id; // Map to PUT /api/cars/{id}
+    return this.httpClient.put<ResponseModel>(newUrl, car);
   }
 
   carisrented(carId: number): Observable<any> {
@@ -76,7 +76,7 @@ export class CarService {
   }
 
   getLowestPriceBySegment(segmentId: number): Observable<SingleResponseModel<number>> {
-    const newPath = this.apiUrl + "cars/getlowestpricebysegment?segmentId=" + segmentId;
+    const newPath = this.apiUrl + `cars/segment/${segmentId}/lowest-price`;
     return this.httpClient.get<SingleResponseModel<number>>(newPath);
   }
 

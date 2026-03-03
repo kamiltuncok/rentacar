@@ -16,26 +16,30 @@ export class CustomerService {
   constructor(private httpClient: HttpClient) { }
 
   getCustomers(): Observable<ListResponseModel<Customer>> {
-    const newPath = this.apiUrl + "customers/getall";
+    const newPath = this.apiUrl + "customers";
     return this.httpClient.get<ListResponseModel<Customer>>(newPath);
   }
 
   add(customer: Customer): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl + "customers/add", customer);
+    return this.httpClient.post<ResponseModel>(this.apiUrl + "customers", customer);
   }
 
   getCustomerById(customerId: number): Observable<SingleResponseModel<Customer>> {
-    const newPath = this.apiUrl + "customers/getbyid?customerid=" + customerId;
+    const newPath = this.apiUrl + "customers/" + customerId;
     return this.httpClient.get<SingleResponseModel<Customer>>(newPath);
   }
 
-  getCustomersById(customerId: number): Observable<ListResponseModel<Customer>> {
-    const newPath = this.apiUrl + "customers/getlistbyid?customerid=" + customerId;
-    return this.httpClient.get<ListResponseModel<Customer>>(newPath);
+  getCustomerDetailById(customerId: number): Observable<SingleResponseModel<any>> {
+    const newPath = this.apiUrl + "customers/detail/" + customerId;
+    return this.httpClient.get<SingleResponseModel<any>>(newPath);
   }
 
   update(customer: Customer): Observable<ResponseModel> {
-    const newUrl = this.apiUrl + "customers/update";
-    return this.httpClient.post<ResponseModel>(newUrl, customer);
+    const newUrl = this.apiUrl + "customers/" + customer.id;
+    return this.httpClient.put<ResponseModel>(newUrl, customer);
+  }
+
+  delete(customerId: number): Observable<ResponseModel> {
+    return this.httpClient.delete<ResponseModel>(this.apiUrl + "customers/" + customerId);
   }
 }

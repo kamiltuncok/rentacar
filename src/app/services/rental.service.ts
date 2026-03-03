@@ -52,7 +52,7 @@ export class RentalService {
   constructor(private httpClient: HttpClient) { }
 
   getRentalDetails(): Observable<ListResponseModel<RentalDetail>> {
-    let newPath = this.apiUrl + "rentals/getall";
+    let newPath = this.apiUrl + "rentals";
     return this.httpClient
       .get<ListResponseModel<RentalDetail>>(newPath)
   }
@@ -67,68 +67,51 @@ export class RentalService {
   }
 
   getRentalDetailsByUserId(userId: number): Observable<ListResponseModel<RentalDetail>> {
-    let newPath = this.apiUrl + "rentals/getrentalsbyuserid?userId=" + userId;
+    let newPath = this.apiUrl + "rentals/user/" + userId;
     return this.httpClient
       .get<ListResponseModel<RentalDetail>>(newPath)
   }
 
   getRentalsByManagerLocation(userId: number): Observable<ListResponseModel<RentalDetail>> {
-    let newPath = this.apiUrl + "rentals/getrentalsbymanagerlocation?userId=" + userId;
+    let newPath = this.apiUrl + "rentals/manager/" + userId;
     return this.httpClient
       .get<ListResponseModel<RentalDetail>>(newPath)
   }
 
   getRentalsByStartDate(startDate: string): Observable<ListResponseModel<Rental>> {
-    let newPath = this.apiUrl + "rentals/getbystartdate?startDate=" + startDate;
+    let newPath = this.apiUrl + "rentals/date-range?startDate=" + startDate + "&endDate=" + startDate; // Simplified
     return this.httpClient.get<ListResponseModel<Rental>>(newPath);
   }
 
-  getRentalsByEmail(email: string): Observable<ListResponseModel<RentalDetail>> {
-    let newPath = this.apiUrl + "rentals/getbyemail?email=" + encodeURIComponent(email);
-    return this.httpClient.get<ListResponseModel<RentalDetail>>(newPath);
-  }
-
-  getRentalsByName(name: string): Observable<ListResponseModel<RentalDetail>> {
-    let newPath = this.apiUrl + "rentals/getbyname?name=" + encodeURIComponent(name);
-    return this.httpClient.get<ListResponseModel<RentalDetail>>(newPath);
-  }
-
   getRentalsByDateRange(startDate: string, endDate: string): Observable<ListResponseModel<RentalDetail>> {
-    let newPath = this.apiUrl + "rentals/getbydaterange?startDate=" + startDate + "&endDate=" + endDate;
+    let newPath = this.apiUrl + "rentals/date-range?startDate=" + startDate + "&endDate=" + endDate;
     return this.httpClient.get<ListResponseModel<RentalDetail>>(newPath);
   }
 
   markAsReturned(rentalId: number): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
-      this.apiUrl + "rentals/markasreturned?rentalId=" + rentalId,
-      {}
-    );
-  }
-
-  deleteAndFreeCar(rentalId: number): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(
-      this.apiUrl + "rentals/deleteandfreecardendpoint?rentalId=" + rentalId,
+      this.apiUrl + "rentals/" + rentalId + "/mark-as-returned",
       {}
     );
   }
 
   collectDeposit(rentalId: number): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
-      this.apiUrl + "rentals/collectdeposit?rentalId=" + rentalId,
+      this.apiUrl + "rentals/" + rentalId + "/collect-deposit",
       {}
     );
   }
 
   deliverVehicle(rentalId: number): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
-      this.apiUrl + "rentals/delivervehicle?rentalId=" + rentalId,
+      this.apiUrl + "rentals/" + rentalId + "/deliver",
       {}
     );
   }
 
   cancelRental(rentalId: number): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
-      this.apiUrl + "rentals/cancelrental?rentalId=" + rentalId,
+      this.apiUrl + "rentals/" + rentalId + "/cancel",
       {}
     );
   }
