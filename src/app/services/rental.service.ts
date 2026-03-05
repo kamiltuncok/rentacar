@@ -5,49 +5,21 @@ import { Observable } from 'rxjs';
 import { ListResponseModel } from '../models/listResponseModel';
 import { Rental } from '../models/rental';
 import { RentalDetail } from '../models/rentalDetail';
+import {
+  RentalCreateRequestDto,
+  GuestRentalCreateRequestDto,
+  CarAvailabilityFilterDto
+} from '../models/rental-dto.model';
 
-export interface RentalCreateRequestDto {
-  carId: number;
-  startLocationId: number;
-  endLocationId: number;
-  startDate: string;
-  endDate: string;
-}
-
-export interface GuestRentalCreateRequestDto extends RentalCreateRequestDto {
-  firstName?: string;
-  lastName?: string;
-  identityNumber?: string;
-  email: string;
-  phoneNumber?: string;
-  companyName?: string;
-  taxNumber?: string;
-}
-
-export interface RentalResponseDto {
-  rentalId: number;
-  totalPrice: number;
-}
-
-export interface CarAvailabilityFilterDto {
-  startLocationId: number;
-  endLocationId: number;
-  startDate: string;
-  endDate: string;
-  fuelIds?: number[];
-  gearIds?: number[];
-  segmentIds?: number[];
-}
-
+export type { RentalCreateRequestDto, GuestRentalCreateRequestDto, CarAvailabilityFilterDto } from '../models/rental-dto.model';
+export type { RentalResponseDto } from '../models/rental-dto.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RentalService {
 
-
-
-  apiUrl = "https://localhost:44306/api/"
+  readonly apiUrl = 'https://localhost:44306/api/';
 
   constructor(private httpClient: HttpClient) { }
 

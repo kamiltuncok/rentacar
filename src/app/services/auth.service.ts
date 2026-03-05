@@ -1,8 +1,9 @@
-import { RegisterForCorporateModel } from './../models/registerForCorporateModel';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
+import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LoginModel } from '../models/loginModel';
+import { RegisterForCorporateModel } from '../models/registerForCorporateModel';
 import { RegisterModel } from '../models/registerModel';
 import { ResponseModel } from '../models/responseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
@@ -10,113 +11,168 @@ import { TokenModel } from '../models/tokenModel';
 import { UserPasswordModel } from '../models/userPasswordModel';
 import { LocalStorageService } from './local-storage.service';
 
+interface DecodedToken {
+  [key: string]: string | string[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private httpClient: HttpClient,
+  readonly apiUrl = 'https://localhost:44306/api/auth/';
+
+  // ─── Auth State as Signals ────────────────────────────────────────────────
+  // Source of truth: the decoded JWT token. Null when logged out.
+  readonly currentUser = signal<DecodedToken | null>(this.tryDecodeToken());
+
+  readonly isAuthenticated = computed(() => this.currentUser() !== null);
+
+  readonly isAdmin = computed(() => this.getRolesFromToken(this.currentUser()).includes('admin'));
+
+  readonly isLocationManager = computed(() =>
+    this.getRolesFromToken(this.currentUser()).some(r =>
+      ['locationmanager', 'location.manager', 'location manager'].includes(r)
+    )
+  );
+
+  readonly customerType = computed<'Corporate' | 'Individual'>(() =>
+    this.getRolesFromToken(this.currentUser()).includes('corporate') ? 'Corporate' : 'Individual'
+  );
+
+  /**
+   * Writable signal for the user's display name.
+   * Initialized from the JWT token when the service starts or the user logs in.
+   * Call updateDisplayName() after a profile name update so the navi
+   * re-renders immediately — without a page reload or new token.
+   */
+  readonly displayName = signal<string>(this.extractNameFromToken(this.tryDecodeToken()));
+
+  constructor(
+    private httpClient: HttpClient,
     private localStorageService: LocalStorageService,
-    private jwtHelperService: JwtHelperService) { }
+    private jwtHelperService: JwtHelperService
+  ) { }
 
-  apiUrl = "https://localhost:44306/api/auth/"
+  // ─── Auth Methods ─────────────────────────────────────────────────────────
 
-  login(loginModel: LoginModel) {
-    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "login", loginModel)
+  login(loginModel: LoginModel): Observable<SingleResponseModel<TokenModel>> {
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + 'login', loginModel);
   }
 
-  loginForCorporate(loginModel: LoginModel) {
-    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "loginforcorporate", loginModel)
+  loginForCorporate(loginModel: LoginModel): Observable<SingleResponseModel<TokenModel>> {
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + 'loginforcorporate', loginModel);
   }
 
-  logOut() {
-    this.localStorageService.remove("token");
+  logOut(): void {
+    this.localStorageService.remove('token');
+    this.currentUser.set(null);
   }
 
-  register(registerModel: RegisterModel) {
-    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "register", registerModel)
+  register(registerModel: RegisterModel): Observable<SingleResponseModel<TokenModel>> {
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + 'register', registerModel);
   }
 
-  registerForCorporate(registerForCorporateModel: RegisterForCorporateModel) {
-    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "registerforcorporate", registerForCorporateModel)
+  registerForCorporate(model: RegisterForCorporateModel): Observable<SingleResponseModel<TokenModel>> {
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + 'registerforcorporate', model);
   }
 
-  updatePassword(userPasswordModel: UserPasswordModel) {
-    let newUrl = this.apiUrl + "password";
-    return this.httpClient.put<ResponseModel>(newUrl, userPasswordModel)
+  registerAdmin(registerModel: RegisterModel): Observable<SingleResponseModel<TokenModel>> {
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + 'registeradmin', registerModel);
   }
 
-  isAuthenticated() {
-    if (localStorage.getItem("token")) {
-      return true;
-    }
-    else {
-      return false;
-    }
+  updatePassword(userPasswordModel: UserPasswordModel): Observable<ResponseModel> {
+    return this.httpClient.put<ResponseModel>(this.apiUrl + 'password', userPasswordModel);
   }
 
-  get getDecodedToken() {
-    let token = this.localStorageService.getItem("token");
-    const decodedToken = this.jwtHelperService.decodeToken(token);
-    return decodedToken;
+  /**
+   * Call after a successful login to store the token and refresh the signal.
+   */
+  applyToken(token: string): void {
+    this.localStorageService.setItem('token', token);
+    const decoded = this.tryDecodeToken();
+    this.currentUser.set(decoded);
+    this.displayName.set(this.extractNameFromToken(decoded));
   }
 
+  /**
+   * Update the display name signal without a new token.
+   * Call this after a successful profile name update.
+   */
+  updateDisplayName(firstName: string, lastName: string): void {
+    this.displayName.set(`${firstName} ${lastName}`.trim());
+  }
 
-  get getCurrentUserId() {
-    let decodedToken = this.getDecodedToken;
-    let userIdString = Object.keys(decodedToken).filter((t) =>
-      t.endsWith('/nameidentifier')
-    )[0];
-    let userId: number = decodedToken[userIdString];
-    return userId;
+  // ─── Keep legacy getters for backward compatibility ───────────────────────
+
+  /** @deprecated Use currentUser signal instead */
+  get getDecodedToken(): DecodedToken | null {
+    return this.currentUser();
+  }
+
+  get getCurrentUserId(): number {
+    const token = this.currentUser();
+    if (!token) return 0;
+    const key = Object.keys(token).find(k => k.endsWith('/nameidentifier'));
+    return key ? Number(token[key]) : 0;
   }
 
   get getCurrentUserName(): string {
-    let decodedToken = this.getDecodedToken;
-    if (!decodedToken) return '';
-    let nameString = Object.keys(decodedToken).find((t) => t.endsWith('/name'));
-    return nameString ? decodedToken[nameString] : '';
+    const token = this.currentUser();
+    if (!token) return '';
+    const key = Object.keys(token).find(k => k.endsWith('/name'));
+    return key ? String(token[key]) : '';
   }
 
-  getCustomerType(): string {
-    const roles = this.getRoles();
-    if (roles.includes('corporate')) return 'Corporate';
-    return 'Individual';
+  /** @deprecated Use isAuthenticated signal instead */
+  isAuthenticatedLegacy(): boolean {
+    return !!this.localStorageService.getItem('token');
   }
 
-  registerAdmin(registerModel: RegisterModel) {
-    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "registeradmin", registerModel);
+  /** @deprecated Use isAdmin signal instead */
+  isAdminLegacy(): boolean {
+    return this.isAdmin();
   }
 
+  /** @deprecated Use isLocationManager signal instead */
+  isLocationManagerLegacy(): boolean {
+    return this.isLocationManager();
+  }
 
   getRoles(): string[] {
-    const decodedToken = this.getDecodedToken;
-    if (!decodedToken) return [];
+    return this.getRolesFromToken(this.currentUser());
+  }
 
-    let roleClaimKey = Object.keys(decodedToken).find((t) =>
-      t.endsWith('/role')
-    );
+  /** @deprecated Use customerType signal instead */
+  getCustomerType(): string {
+    return this.customerType();
+  }
 
-    if (roleClaimKey && decodedToken[roleClaimKey]) {
-      let roles = decodedToken[roleClaimKey];
-      // Eğer tek bir rol varsa string döner, birden fazla rol varsa dizi döner.
-      if (typeof roles === 'string') {
-        return [roles.toLowerCase()];
-      }
-      return roles.map((r: string) => r.toLowerCase());
+  // ─── Private Helpers ──────────────────────────────────────────────────────
+
+  private tryDecodeToken(): DecodedToken | null {
+    try {
+      const token = this.localStorageService.getItem('token');
+      if (!token) return null;
+      const decoded = this.jwtHelperService.decodeToken(token);
+      return decoded ?? null;
+    } catch {
+      return null;
     }
-    return [];
   }
 
-  isAdmin(): boolean {
-    const roles = this.getRoles();
-    return roles.includes('admin');
+  private extractNameFromToken(token: DecodedToken | null): string {
+    if (!token) return '';
+    const key = Object.keys(token).find(k => k.endsWith('/name'));
+    return key ? String(token[key]) : '';
   }
 
-  isLocationManager(): boolean {
-    const roles = this.getRoles();
-    return roles.includes('locationmanager') || roles.includes('location.manager') || roles.includes('location manager');
+  private getRolesFromToken(token: DecodedToken | null): string[] {
+    if (!token) return [];
+    const roleKey = Object.keys(token).find(k => k.endsWith('/role'));
+    if (!roleKey || !token[roleKey]) return [];
+    const roles = token[roleKey];
+    if (typeof roles === 'string') return [roles.toLowerCase()];
+    return (roles as string[]).map(r => r.toLowerCase());
   }
-
-
 }

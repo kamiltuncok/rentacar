@@ -30,10 +30,7 @@ export class GearService {
     return this.httpClient.get<SingleResponseModel<Gear>>(newPath);
   }
 
-  getGearsById(gearId: number): Observable<ListResponseModel<Gear>> {
-    let newPath = this.apiUrl + "getlistbyid?gearId=" + gearId
-    return this.httpClient.get<ListResponseModel<Gear>>(newPath);
-  }
+
 
   update(gear: Gear): Observable<ResponseModel> {
     return this.httpClient.put<ResponseModel>(this.apiUrl + "gears/" + gear.gearId, gear);

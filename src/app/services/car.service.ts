@@ -31,15 +31,7 @@ export class CarService {
     return this.httpClient.get<ListResponseModel<CarDetail>>(newPath);
   }
 
-  getCarsByLocationId(locationId: number): Observable<ListResponseModel<CarDetail>> {
-    const newPath = this.apiUrl + "cars/getbylocations?locationId=" + locationId;
-    return this.httpClient.get<ListResponseModel<CarDetail>>(newPath);
-  }
 
-  getCarsByLocationName(locationName: string): Observable<ListResponseModel<CarDetail>> {
-    const newPath = this.apiUrl + "cars/getcarsnotrentedbylocations?locationName=" + locationName;
-    return this.httpClient.get<ListResponseModel<CarDetail>>(newPath);
-  }
 
   getCarsByCarId(carId: number): Observable<ListResponseModel<CarDetail>> {
     const newPath = this.apiUrl + "cars/details/" + carId;
@@ -65,10 +57,7 @@ export class CarService {
     return this.httpClient.put<ResponseModel>(newUrl, car);
   }
 
-  carisrented(carId: number): Observable<any> {
-    const newPath = `${this.apiUrl}cars/carisrented?carId=${carId}`;
-    return this.httpClient.post(newPath, {});
-  }
+
 
   getAvailableCars(filter: CarAvailabilityFilterDto): Observable<ListResponseModel<CarDetail>> {
     const newPath = this.apiUrl + "cars/available";

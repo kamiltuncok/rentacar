@@ -5,20 +5,20 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'app-loginforcorporate',
-    templateUrl: './loginforcorporate.component.html',
-    styleUrls: ['./loginforcorporate.component.css'],
-    imports: [RouterLink, FormsModule, ReactiveFormsModule]
+  selector: 'app-loginforcorporate',
+  templateUrl: './loginforcorporate.component.html',
+  styleUrls: ['./loginforcorporate.component.css'],
+  imports: [RouterLink, FormsModule, ReactiveFormsModule]
 })
 export class LoginforcorporateComponent implements OnInit {
-  loginForCorporateForm: FormGroup;
+  loginForCorporateForm!: FormGroup;
 
   constructor(
-    private formBuilder: FormBuilder, 
-    private authService: AuthService, 
-    private toastrService: ToastrService, 
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private toastrService: ToastrService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.createLoginForm();
@@ -26,25 +26,27 @@ export class LoginforcorporateComponent implements OnInit {
 
   createLoginForm() {
     this.loginForCorporateForm = this.formBuilder.group({
-      email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required]]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
     });
   }
 
   login() {
     if (this.loginForCorporateForm.valid) {
-      let loginModel = Object.assign({}, this.loginForCorporateForm.value);
+      const loginModel = Object.assign({}, this.loginForCorporateForm.value);
 
-      this.authService.loginForCorporate(loginModel).subscribe(
-        response => {
+      this.authService.loginForCorporate(loginModel).subscribe({
+        next: response => {
           this.toastrService.info(response.message);
-          localStorage.setItem("token", response.data.token);
+          // applyToken stores the token AND updates the currentUser signal,
+          // causing the navi to reactively re-render without a page reload.
+          this.authService.applyToken(response.data.token);
           this.router.navigate(['/cars']);
-        }, 
-        error => {
-          this.toastrService.error(error.error?.message || 'Giriş başarısız');
+        },
+        error: err => {
+          this.toastrService.error(err.error?.message || 'Giriş başarısız');
         }
-      );
+      });
     } else {
       this.markFormGroupTouched();
       this.toastrService.warning('Lütfen tüm alanları doğru şekilde doldurun');

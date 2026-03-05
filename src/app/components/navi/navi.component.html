@@ -13,7 +13,7 @@
           [routerLinkActiveOptions]="{exact:true}">Anasayfa</a></li>
       <li><a class="g-nav__link" routerLink="/cars" routerLinkActive="g-nav__link--active">Arabalar</a></li>
       <li><a class="g-nav__link" routerLink="/branches" routerLinkActive="g-nav__link--active">Şubeler</a></li>
-      <li *ngIf="isAuthenticated()"><a class="g-nav__link" routerLink="/rentals"
+      <li *ngIf="isAuthenticated"><a class="g-nav__link" routerLink="/rentals"
           routerLinkActive="g-nav__link--active">Kiralamalarım</a></li>
       <li *ngIf="showLocationManagerMenu()">
         <a class="g-nav__link" routerLink="/location-rentals" routerLinkActive="g-nav__link--active">Kiralamaları
@@ -45,14 +45,14 @@
       </div>
 
       <!-- Auth — guest -->
-      <ng-container *ngIf="!isAuthenticated()">
+      <ng-container *ngIf="!isAuthenticated">
         <a class="g-nav__auth-link" routerLink="/login">Giriş</a>
         <a class="g-nav__auth-btn" routerLink="/register">Kayıt Ol</a>
       </ng-container>
 
       <!-- Auth — logged in -->
-      <ng-container *ngIf="isAuthenticated()">
-        <a *ngIf="dataLoaded" class="g-nav__user" [routerLink]="getProfileUrl()">
+      <ng-container *ngIf="isAuthenticated">
+        <a class="g-nav__user" [routerLink]="getProfileUrl()">
           <img src="assets/images/user.png" width="26" height="26" alt="profil">
           <span>{{ displayName }}</span>
           <span class="g-nav__role-badge">{{ getUserRoleText() }}</span>

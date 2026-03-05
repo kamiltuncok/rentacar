@@ -16,21 +16,21 @@ export class CarImageService {
   constructor(private httpClient: HttpClient) { }
 
   getCarImages(): Observable<ListResponseModel<CarImage>> {
-    let newPath = this.apiURL + "carimages/getall";
-    return this.httpClient.get<ListResponseModel<CarImage>>(newPath);    
+    let newPath = this.apiURL + "carimages";
+    return this.httpClient.get<ListResponseModel<CarImage>>(newPath);
   }
 
   getCarImagesByCarId(carId: number): Observable<ListResponseModel<CarImage>> {
-    let newPath = this.apiURL + "carimages/getbycarid?carId=" + carId;
-    return this.httpClient.get<ListResponseModel<CarImage>>(newPath);     
+    let newPath = this.apiURL + "carimages/" + carId;
+    return this.httpClient.get<ListResponseModel<CarImage>>(newPath);
   }
 
   add(formData: FormData): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiURL + 'carimages/add', formData);
+    return this.httpClient.post<ResponseModel>(this.apiURL + 'carimages', formData);
   }
 
   getCarImagesColorAndBrandId(brandId: number, colorId: number): Observable<SingleResponseModel<CarImage>> {
-    let newPath = this.apiURL + `carimages/getcarimagebycolorandbrandid?brandId=${brandId}&colorId=${colorId}`;
+    let newPath = this.apiURL + `carimages/brand/${brandId}/color/${colorId}`;
     return this.httpClient.get<SingleResponseModel<CarImage>>(newPath);
   }
 
@@ -38,7 +38,7 @@ export class CarImageService {
     const formData: FormData = new FormData();
     formData.append('file', file);
 
-    const req = new HttpRequest('POST', `${this.apiURL}carimages/add`, formData, {
+    const req = new HttpRequest('POST', `${this.apiURL}carimages`, formData, {
       reportProgress: true,
       responseType: 'json'
     });
@@ -47,6 +47,6 @@ export class CarImageService {
   }
 
   getFiles(): Observable<any> {
-    return this.httpClient.get(`${this.apiURL}carimages/getall`);
+    return this.httpClient.get(`${this.apiURL}carimages`);
   }
 }

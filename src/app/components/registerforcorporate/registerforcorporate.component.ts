@@ -36,7 +36,8 @@ export class RegisterforcorporateComponent implements OnInit {
       let registerModel = Object.assign({}, this.registerCorporateForm.value);
 
       this.authService.registerForCorporate(registerModel).subscribe(response => {
-        this.toastrService.success("Kayıt Başarılı");
+        this.toastrService.success("Kayıt Başarılı. Lütfen giriş yapınız.");
+        this.router.navigate(['/login']);
       }, responseError => {
         this.toastrService.error(responseError.error);
       });

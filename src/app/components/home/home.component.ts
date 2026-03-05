@@ -2,12 +2,23 @@ import { CarService } from 'src/app/services/car.service';
 import { Segment } from './../../models/segment';
 import { SegmentService } from './../../services/segment.service';
 import { ToastrService } from 'ngx-toastr';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Location } from './../../models/location';
+import { Location, LocationCity } from './../../models/location';
 import { LocationService } from './../../services/location.service';
 import { CarSearchFormComponent } from '../car-search-form/car-search-form.component';
 import { NgFor, NgIf } from '@angular/common';
+import { switchMap, EMPTY, catchError } from 'rxjs';
+
+interface CarSearchData {
+  selectedStartLocation: string;
+  selectedEndLocation: string;
+  selectedStartDate: string;
+  selectedEndDate: string;
+  selectedStartTime: string;
+  selectedEndTime: string;
+  customerType: 'individual' | 'corporate';
+}
 
 @Component({
   selector: 'app-home',
@@ -16,8 +27,8 @@ import { NgFor, NgIf } from '@angular/common';
   imports: [CarSearchFormComponent, NgFor, NgIf]
 })
 export class HomeComponent {
-  alisOfisiOptions: any[] = [];
-  iadeOfisiOptions: any[] = [];
+  alisOfisiOptions: Location[] = [];
+  iadeOfisiOptions: Location[] = [];
   customerType: string = 'individual';
   showCityPopup: boolean = false;
   showSegmentPopup: boolean = false;
@@ -76,7 +87,7 @@ export class HomeComponent {
     return 'Yükleniyor...'; // Default değer
   }
 
-  navigateToCarList(searchData: any) {
+  navigateToCarList(searchData: CarSearchData) {
     const startLocation = this.alisOfisiOptions.find((loc) => loc.locationName === searchData.selectedStartLocation);
     const endLocation = this.iadeOfisiOptions.find((loc) => loc.locationName === searchData.selectedEndLocation);
 
@@ -105,8 +116,8 @@ export class HomeComponent {
       sessionStorage.setItem('selectedSegment', this.selectedSegment);
 
       const queryParams = {
-        startLocationId: startLocation.id || startLocation.locationId,
-        endLocationId: endLocation.id || endLocation.locationId,
+        startLocationId: startLocation.id,
+        endLocationId: endLocation.id,
         locationName: startLocation.locationName,
         locationEndName: endLocation.locationName,
         from: searchData.selectedStartDate,
@@ -132,27 +143,28 @@ export class HomeComponent {
   }
 
   // Frontend HTML'den string 'Istanbul' geliyorsa onu ID'ye çevirmek için
-  openCityPopup(cityName: string) {
+  openCityPopup(cityName: string): void {
     this.selectedCity = cityName;
     this.showCityPopup = true;
+    this.cityLocations = [];
 
-    // Şehir adına göre API'den ID'yi bulmalıyız veya doğrudan tüm şehirleri çekip filtrelemeliyiz.
-    // Şimdilik listeleme işlemi için geçici bir çözüm
-    this.locationService.getCities().subscribe(cityRes => {
-      if (cityRes.success) {
-        const found = cityRes.data.find((c: any) => c.name.toLowerCase() === cityName.toLowerCase());
-        if (found) {
-          this.locationService.getLocationsByCity(found.id).subscribe((response) => {
-            if (response.success && response.data.length > 0) {
-              this.cityLocations = response.data;
-            } else {
-              this.toastrService.error(`${cityName} için uygun lokasyon bulunamadı.`, 'Hata');
-              this.cityLocations = [];
-            }
-          });
-        } else {
-          this.cityLocations = [];
-        }
+    this.locationService.getCities().pipe(
+      switchMap(cityRes => {
+        if (!cityRes.success) return EMPTY;
+        const found = cityRes.data.find((c: LocationCity) => c.name.toLowerCase() === cityName.toLowerCase());
+        if (!found) return EMPTY;
+        return this.locationService.getLocationsByCity(found.id);
+      }),
+      catchError(() => {
+        this.toastrService.error(`${cityName} için lokasyon yüklenemedi.`, 'Hata');
+        return EMPTY;
+      })
+    ).subscribe(response => {
+      if (response.success && response.data.length > 0) {
+        this.cityLocations = response.data;
+      } else {
+        this.toastrService.error(`${cityName} için uygun lokasyon bulunamadı.`, 'Hata');
+        this.cityLocations = [];
       }
     });
   }

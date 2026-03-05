@@ -1,4 +1,5 @@
-<div class="profile-page" *ngIf="dataLoaded">
+@if (dataLoaded()) {
+<div class="profile-page">
 
     <!-- Page Header -->
     <div class="profile-header">
@@ -9,16 +10,19 @@
     <div class="profile-layout">
 
         <!-- Sidebar: User Card -->
-        <aside class="profile-sidebar" *ngIf="user">
+        @if (user(); as u) {
+        <aside class="profile-sidebar">
             <div class="user-card">
                 <div class="user-card__avatar">
-                    <span class="user-card__initials">{{ user.firstName?.charAt(0) }}{{ user.lastName?.charAt(0)
-                        }}</span>
+                    <span class="user-card__initials">
+                        {{ u.firstName?.charAt(0) }}{{ u.lastName?.charAt(0) }}
+                    </span>
                 </div>
-                <div class="user-card__name">{{ user.firstName }} {{ user.lastName }}</div>
-                <div class="user-card__email">{{ user.email }}</div>
+                <div class="user-card__name">{{ u.firstName }} {{ u.lastName }}</div>
+                <div class="user-card__email">{{ u.email }}</div>
             </div>
         </aside>
+        }
 
         <!-- Main Content -->
         <main class="profile-main">
@@ -46,7 +50,6 @@
                 </form>
             </section>
 
-            <!-- Divider -->
             <hr class="section-divider">
 
             <!-- Password Section -->
@@ -80,9 +83,10 @@
         </main>
     </div>
 </div>
-
+} @else {
 <!-- Spinner -->
-<div *ngIf="dataLoaded==false" class="g-spinner-wrap">
+<div class="g-spinner-wrap">
     <div class="g-spinner"></div>
     <p class="g-spinner-text">Profil yükleniyor…</p>
 </div>
+}
