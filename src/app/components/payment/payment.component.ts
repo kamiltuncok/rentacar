@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { formatDate, NgIf, NgFor, UpperCasePipe, SlicePipe } from '@angular/common';
+import { formatDate, NgIf, NgFor, UpperCasePipe, SlicePipe, CurrencyPipe } from '@angular/common';
 
 import { CarDetail } from 'src/app/models/carDetail';
 import { CarService } from 'src/app/services/car.service';
@@ -13,7 +13,7 @@ import { AuthService } from 'src/app/services/auth.service';
   selector: 'app-payment',
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css'],
-  imports: [NgIf, NgFor, FormsModule, ReactiveFormsModule, UpperCasePipe, SlicePipe]
+  imports: [NgIf, NgFor, FormsModule, ReactiveFormsModule, UpperCasePipe, SlicePipe, CurrencyPipe]
 })
 export class PaymentComponent implements OnInit {
   carDetail: CarDetail;
@@ -28,6 +28,9 @@ export class PaymentComponent implements OnInit {
   endLocationId: number = 1;
   isUserAuthenticated: boolean = false;
   customerType: number = 0; // 0=Individual, 1=Corporate
+
+  totalDays: number = 0;
+  totalPrice: number = 0;
 
   // Guest Forms
   guestIndividualForm: FormGroup;
@@ -76,8 +79,27 @@ export class PaymentComponent implements OnInit {
         this.carDetail = response.data;
         this.GettingCarId = this.carDetail.id;
         this.createRentalForm();
+        this.calculateTotal();
       }
     });
+  }
+
+  calculateTotal() {
+    if (this.rentdate && this.returndate && this.carDetail) {
+      const start = new Date(this.rentdate);
+      const end = new Date(this.returndate);
+      
+      const diffTime = end.getTime() - start.getTime();
+      let days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (days <= 0) days = 1;
+      
+      this.totalDays = days;
+      this.totalPrice = days * this.carDetail.dailyPrice;
+    } else if (this.carDetail) {
+      this.totalDays = 1;
+      this.totalPrice = this.carDetail.dailyPrice;
+    }
   }
 
   createRentalForm() {

@@ -154,6 +154,12 @@ export class AuthService {
     try {
       const token = this.localStorageService.getItem('token');
       if (!token) return null;
+      
+      if (this.jwtHelperService.isTokenExpired(token)) {
+        this.localStorageService.remove('token');
+        return null;
+      }
+      
       const decoded = this.jwtHelperService.decodeToken(token);
       return decoded ?? null;
     } catch {

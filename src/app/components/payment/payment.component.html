@@ -263,17 +263,17 @@
                 <div class="pm-summary-content">
                     <div class="pm-summary-row">
                         <span class="pm-summary-label">Araç Bedeli (1 Gün)</span>
-                        <span class="pm-summary-value">—</span>
+                        <span class="pm-summary-value">{{ carDetail?.dailyPrice | currency:'TRY':'symbol-narrow':'1.2-2' }}</span>
                     </div>
                     <div class="pm-summary-row">
                         <span class="pm-summary-label">Kiralama Süresi</span>
-                        <span class="pm-summary-value">—</span>
+                        <span class="pm-summary-value">{{ totalDays }} Gün</span>
                     </div>
                     <div class="pm-summary-divider"></div>
 
                     <div class="pm-summary-row pm-summary-total">
                         <span class="pm-summary-label">Genel Toplam</span>
-                        <span class="pm-summary-value">Hesaplanıyor...</span>
+                        <span class="pm-summary-value">{{ totalPrice > 0 ? (totalPrice | currency:'TRY':'symbol-narrow':'1.2-2') : 'Hesaplanıyor...' }}</span>
                     </div>
                     <p class="pm-summary-note">Güvence ve ekstralar depozito bedeline dahildir.</p>
                 </div>
