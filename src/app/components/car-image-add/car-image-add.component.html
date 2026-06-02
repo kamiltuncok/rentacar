@@ -1,25 +1,20 @@
 <form [formGroup]="carImageAddForm" (ngSubmit)="addCarImage()">
-  <div class="form-group">
+  <div class="form-group mb-3">
     <label for="image">Car Image</label>
     <input type="file" id="image" (change)="onChange($event)" class="form-control" accept="image/*">
   </div>
+  
   <div class="mb-3">
-    <label for="brandName">Marka</label>
+    <label for="carId">Araba Seçiniz</label>
     <div class="form-group">
-      <select id="brandName" formControlName="brandName" class="form-control">
-        <option value="">Marka Seçiniz</option>
-        <option *ngFor="let brand of brands" [value]="brand.brandName">{{ brand.brandName }}</option>
+      <select id="carId" formControlName="carId" class="form-control">
+        <option value="">Araba Seçiniz</option>
+        <option *ngFor="let car of cars" [value]="car.id">
+          [Id: {{ car.id }}] {{ car.brandName }} {{ car.colorName }} - {{ car.plateNumber }}
+        </option>
       </select>
     </div>
   </div>
-  <div class="mb-3">
-    <label for="colorName">Renk</label>
-    <div class="form-group">
-      <select id="colorName" formControlName="colorName" class="form-control">
-        <option value="">Renk Seçiniz</option>
-        <option *ngFor="let color of colors" [value]="color.colorName">{{ color.colorName }}</option>
-      </select>
-    </div>
-  </div>
-  <button type="submit" class="btn btn-primary">Add Car Image</button>
+
+  <button type="submit" class="btn btn-primary" [disabled]="!carImageAddForm.valid">Add Car Image</button>
 </form>

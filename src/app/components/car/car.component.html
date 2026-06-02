@@ -1,131 +1,218 @@
-<div class="cars-page">
-
-  <!-- Page Header + Filter Bar -->
-  <div class="cars-header">
-    <div>
-      <span class="g-eyebrow">Araç Kataloğu</span>
-      <h1 class="g-page-title">Arabalar</h1>
+<div class="catalog-container" *ngIf="dataLoaded">
+  <!-- Top Search & Title Summary -->
+  <header class="catalog-header">
+    <div class="catalog-title-wrap">
+      <span class="catalog-eyebrow">PREMIUM ARAÇ DENEYİMİ</span>
+      <h1 class="catalog-title">Lüks ve Konforlu Araç Kataloğu</h1>
+      <p class="catalog-subtitle">İhtiyacınıza en uygun aracı saniyeler içinde bulun, online rezerve edin.</p>
     </div>
 
-    <div class="cars-toolbar">
-      <!-- Dropdowns -->
-      <div class="cars-dropdowns">
-        <div class="dropdown-wrap">
-          <label class="dropdown-label">Marka</label>
-          <select class="filter-dropdown" [value]="selectedBrandId" (change)="onBrandChange($event)">
-            <option [value]="0">Tüm Markalar</option>
-            <option *ngFor="let brand of brands" [value]="brand.brandId">{{ brand.brandName }}</option>
-          </select>
-        </div>
-        <div class="dropdown-wrap">
-          <label class="dropdown-label">Renk</label>
-          <select class="filter-dropdown" [value]="selectedColorId" (change)="onColorChange($event)">
-            <option [value]="0">Tüm Renkler</option>
-            <option *ngFor="let color of colors" [value]="color.colorId">{{ color.colorName }}</option>
-          </select>
-        </div>
-        <div class="dropdown-wrap">
-          <label class="dropdown-label">Şehir</label>
-          <select class="filter-dropdown" [value]="selectedCityName" (change)="onCityChange($event)">
-            <option value="">Tüm Şehirler</option>
-            <option *ngFor="let city of cities" [value]="city.name">{{ city.name }}</option>
-          </select>
-        </div>
-        <button *ngIf="hasActiveFilter" class="btn-clear-filter" (click)="clearFilters()">
-          ✕ Filtreleri Temizle
-        </button>
-      </div>
-
-      <!-- Search -->
-      <div class="cars-search">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8" />
-          <path d="m21 21-4.35-4.35" />
+    <!-- Search bar with dynamic count -->
+    <div class="catalog-search-wrap">
+      <div class="search-input-box">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <input type="text" [(ngModel)]="filterText" class="cars-search__input" placeholder="Marka, açıklama ara…">
+        <input type="text" [(ngModel)]="filterText" placeholder="Açıklama, marka veya model ara..." (input)="applyFilters()">
+      </div>
+      <div class="result-badge">
+        <strong>{{ filteredCars.length }}</strong> araç listeleniyor
       </div>
     </div>
-  </div>
+  </header>
 
-  <!-- Active filter badge -->
-  <div *ngIf="filterText" class="cars-filter-chip">
-    <span>«{{ filterText }}» araması</span>
-    <button (click)="filterText=''">✕</button>
-  </div>
-
-  <!-- Result count -->
-  <div *ngIf="dataLoaded" class="cars-result-count">
-    {{ filteredCars.length }} araç bulundu
-    <span *ngIf="totalPages > 1"> · Sayfa {{ currentPage }}/{{ totalPages }}</span>
-  </div>
-
-  <!-- Spinner -->
-  <div *ngIf="dataLoaded==false" class="g-spinner-wrap">
-    <div class="g-spinner"></div>
-    <p class="g-spinner-text">Araçlar yükleniyor…</p>
-  </div>
-
-  <!-- Car Grid -->
-  <div *ngIf="dataLoaded==true" class="car-grid">
-
-    <!-- Empty state -->
-    <div *ngIf="(pagedCars | filterPipe:filterText).length === 0" class="g-empty-state" style="grid-column:1/-1;">
-      <div class="g-empty-state__icon">🚗</div>
-      <div class="g-empty-state__title">Araç bulunamadı</div>
-      <p class="g-empty-state__text">Farklı bir filtre deneyin.</p>
-    </div>
-
-    <div class="car-card" *ngFor="let car of pagedCars | filterPipe:filterText">
-
-      <!-- Car media -->
-      <div class="car-card__media">
-        <img src="assets/images/lux.jpg" [alt]="car.brandName">
-        <span class="car-card__status-pill" [class.car-card__status-pill--rented]="car.status !== 0">
-          {{ car.status === 0 ? 'Müsait' : car.status === 1 ? 'Kirada' : car.status === 2 ?
-          'Bakımda' : 'Rezerve' }}
-        </span>
+  <div class="catalog-layout">
+    <!-- Left Filter Panel -->
+    <aside class="filter-panel">
+      <div class="filter-panel-header">
+        <h2 class="filter-title">Filtre Seçenekleri</h2>
+        <button *ngIf="hasActiveFilter" class="btn-reset" (click)="clearFilters()">✕ Temizle</button>
       </div>
 
-      <!-- Car Body -->
-      <div class="car-card__body">
-        <div class="car-card__brand">{{ car.brandName }}</div>
-        <div class="car-card__year">{{ car.modelYear }}</div>
-
-        <dl class="car-card__specs">
-          <div class="car-card__spec-row">
-            <dt>Renk</dt>
-            <dd>{{ car.colorName }}</dd>
-          </div>
-          <div class="car-card__spec-row">
-            <dt>Lokasyon</dt>
-            <dd>{{ car.locationName }}</dd>
-          </div>
-          <div class="car-card__spec-row">
-            <dt>Şehir</dt>
-            <dd>{{ car.locationCity }}</dd>
-          </div>
-          <div class="car-card__spec-row">
-            <dt>Günlük</dt>
-            <dd class="car-card__price">{{ car.dailyPrice | currency:'TRY':'symbol':'1.0-0' }}</dd>
-          </div>
-        </dl>
+      <!-- Availability Filter (Button Group Style) -->
+      <div class="filter-group">
+        <label class="filter-label">Müsaitlik Durumu</label>
+        <div class="btn-group-toggle">
+          <button [class.active]="availability === 'all'" (click)="onAvailabilitySelect('all')">Tümü</button>
+          <button [class.active]="availability === 'available'" (click)="onAvailabilitySelect('available')">Sadece Müsaitler</button>
+        </div>
       </div>
 
-      <!-- Car Footer -->
-      <div class="car-card__footer">
-        <a [routerLink]="'carDetail/' + car.id" class="btn-primary-solid">Detay</a>
+      <!-- Brand Filter -->
+      <div class="filter-group">
+        <label class="filter-label">Markalar</label>
+        <div class="filter-list">
+          <button class="filter-option-btn" [class.selected]="selectedBrandId === 0" (click)="onBrandSelect(0)">
+            Tüm Markalar
+          </button>
+          <button *ngFor="let brand of brands" class="filter-option-btn" [class.selected]="selectedBrandId === brand.brandId" (click)="onBrandSelect(brand.brandId)">
+            {{ brand.brandName }}
+          </button>
+        </div>
       </div>
-    </div>
 
+      <!-- Segment Filter -->
+      <div class="filter-group">
+        <label class="filter-label">Araç Sınıfı</label>
+        <div class="filter-list">
+          <button class="filter-option-btn" [class.selected]="selectedSegmentName === ''" (click)="onSegmentSelect('')">
+            Tüm Sınıflar
+          </button>
+          <button *ngFor="let segment of segments" class="filter-option-btn" [class.selected]="selectedSegmentName === segment.segmentName" (click)="onSegmentSelect(segment.segmentName)">
+            {{ segment.segmentName }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Fuel Type Filter -->
+      <div class="filter-group">
+        <label class="filter-label">Yakıt Tipi</label>
+        <div class="filter-list">
+          <button class="filter-option-btn" [class.selected]="selectedFuelName === ''" (click)="onFuelSelect('')">
+            Tüm Yakıtlar
+          </button>
+          <button *ngFor="let fuel of fuels" class="filter-option-btn" [class.selected]="selectedFuelName === fuel.fuelName" (click)="onFuelSelect(fuel.fuelName)">
+            {{ fuel.fuelName }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Gear Type Filter -->
+      <div class="filter-group">
+        <label class="filter-label">Vites Tipi</label>
+        <div class="filter-list">
+          <button class="filter-option-btn" [class.selected]="selectedGearName === ''" (click)="onGearSelect('')">
+            Tüm Vitesler
+          </button>
+          <button *ngFor="let gear of gears" class="filter-option-btn" [class.selected]="selectedGearName === gear.gearName" (click)="onGearSelect(gear.gearName)">
+            {{ gear.gearName }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Price Range Filter -->
+      <div class="filter-group">
+        <div class="filter-label-row">
+          <label class="filter-label">Maksimum Fiyat</label>
+          <span class="price-value">{{ maxPrice | currency:'TRY':'symbol':'1.0-0' }}</span>
+        </div>
+        <input type="range" class="price-slider" [min]="minPrice" [max]="priceLimit" [value]="maxPrice" (input)="onPriceChange($any($event.target).value)">
+        <div class="slider-bounds">
+          <span>Min: {{ minPrice | currency:'TRY':'symbol':'1.0-0' }}</span>
+          <span>Max: {{ priceLimit | currency:'TRY':'symbol':'1.0-0' }}</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right Car Grid Catalog -->
+    <main class="catalog-main">
+      <div class="car-catalog-grid">
+        <!-- Empty State -->
+        <div *ngIf="(pagedCars | filterPipe:filterText).length === 0" class="empty-results">
+          <div class="empty-icon">🚗</div>
+          <h3 class="empty-title">Aradığınız kriterlere uygun araç bulunamadı</h3>
+          <p class="empty-subtitle">Lütfen filtrelerinizi gevşeterek veya arama teriminizi değiştirerek tekrar deneyin.</p>
+          <button class="btn-clear-large" (click)="clearFilters()">Tüm Filtreleri Sıfırla</button>
+        </div>
+
+        <!-- Premium Car Cards -->
+        <article class="premium-car-card" *ngFor="let car of pagedCars | filterPipe:filterText" [class.rented-card]="car.status !== CarStatus.Available">
+          <!-- Card Image & Badge Layer -->
+          <div class="card-media-layer">
+            <img [src]="getImagePath(car)" alt="{{ car.brandName }} {{ car.description }}" loading="lazy" class="car-card-img">
+            
+            <div class="badge-overlay-top">
+              <span class="segment-badge" [class.ekonomik]="car.segmentName === 'Ekonomik'" [class.orta]="car.segmentName === 'Orta'" [class.luks]="car.segmentName === 'Lüks'">
+                {{ car.segmentName || 'Ekonomik' }}
+              </span>
+              <span class="status-badge" [class.available]="car.status === CarStatus.Available" [class.rented]="car.status !== CarStatus.Available">
+                {{ car.status === CarStatus.Available ? 'Müsait' : 'Kirada' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Card Content Body -->
+          <div class="card-details-layer">
+            <div class="card-header-row">
+              <h2 class="car-card-name">{{ car.brandName }}</h2>
+              <span class="car-card-year">{{ car.modelYear }}</span>
+            </div>
+            <p class="car-card-model">{{ car.description }}</p>
+
+            <!-- Subtle spec badges for decision support -->
+            <div class="car-spec-strip">
+              <span class="spec-item-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                {{ car.fuelName }}
+              </span>
+              <span class="spec-item-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="9" y1="3" x2="9" y2="21"></line>
+                </svg>
+                {{ car.gearName }}
+              </span>
+              <span class="spec-item-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                {{ car.locationCity || 'İstanbul' }}
+              </span>
+            </div>
+
+            <!-- Pricing Section (Most Prominent text after image) -->
+            <div class="card-price-layer">
+              <span class="price-caption">Günlük Fiyat</span>
+              <div class="price-amount-box">
+                <span class="price-value">{{ car.dailyPrice | currency:'TRY':'symbol':'1.0-0' }}</span>
+                <span class="price-suffix">/ gün</span>
+              </div>
+            </div>
+
+            <!-- CTA Button Layer -->
+            <div class="card-actions-layer">
+              <!-- Detail button (Secondary) -->
+              <a [routerLink]="'/carDetail/' + car.id" class="btn-action-secondary">
+                Detay
+              </a>
+              <!-- Rent button (Primary CTA) -->
+              <a *ngIf="car.status === CarStatus.Available; else rentedCTA" [routerLink]="'/carDetail/' + car.id + '/payment'" class="btn-action-primary">
+                Kirala
+              </a>
+              <ng-template #rentedCTA>
+                <button (click)="doesntrent(car)" class="btn-action-primary btn-disabled">
+                  Kiralanamaz
+                </button>
+              </ng-template>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Pagination Layer -->
+      <nav *ngIf="dataLoaded && totalPages > 1" class="catalog-pagination">
+        <button class="pag-nav-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+          ‹ Önceki
+        </button>
+        <div class="pag-numbers">
+          <button *ngFor="let p of pageNumbers" class="pag-num-btn" [class.active]="p === currentPage" (click)="goToPage(p)">
+            {{ p }}
+          </button>
+        </div>
+        <button class="pag-nav-btn" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+          Sonraki ›
+        </button>
+      </nav>
+    </main>
   </div>
+</div>
 
-  <!-- Pagination -->
-  <nav *ngIf="dataLoaded && totalPages > 1" class="pagination">
-    <button class="pagination__btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">‹ Önceki</button>
-    <button *ngFor="let p of pageNumbers" class="pagination__num" [class.pagination__num--active]="p === currentPage"
-      (click)="goToPage(p)">{{ p }}</button>
-    <button class="pagination__btn" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">Sonraki
-      ›</button>
-  </nav>
+<!-- Initial Spinner State -->
+<div *ngIf="!dataLoaded" class="spinner-state-wrap">
+  <div class="premium-pulse-spinner"></div>
+  <p class="pulse-text">Seçkin araç filomuz yükleniyor...</p>
 </div>

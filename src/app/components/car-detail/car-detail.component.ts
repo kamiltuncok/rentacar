@@ -37,18 +37,26 @@ export class CarDetailComponent implements OnInit {
     this.carDetailService.getCarDetailById(carId).subscribe(response => {
       this.carDetail = response.data;
       this.dataLoaded = true;
-      this.getCarImageByColorAndBrandId(this.carDetail.brandId, this.carDetail.colorId);
+      this.getCarImagesByCarId(carId);
     });
   }
 
-  getCarImageByColorAndBrandId(brandId: number, colorId: number) {
-    this.carImageService.getCarImagesColorAndBrandId(brandId, colorId).subscribe(response => {
-      this.carImage = response.data;
+  getCarImagesByCarId(carId: number) {
+    this.carImageService.getCarImagesByCarId(carId).subscribe(response => {
+      if (response.data && response.data.length > 0) {
+        this.carImage = response.data[0];
+      }
       this.dataLoaded = true;
     });
   }
 
   getImagePath(carImage: CarImage): string {
-    return this.apiUrl + carImage.imagePath;
+    if (carImage && carImage.imagePath) {
+      if (carImage.imagePath.startsWith('http://') || carImage.imagePath.startsWith('https://')) {
+        return carImage.imagePath;
+      }
+      return this.apiUrl + carImage.imagePath;
+    }
+    return this.defaultImagePath;
   }
 }

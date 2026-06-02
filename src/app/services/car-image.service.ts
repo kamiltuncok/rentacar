@@ -3,7 +3,6 @@ import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CarImage } from '../models/carImage';
 import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from './../models/singleResponseModel';
 import { ResponseModel } from './../models/responseModel';
 
 @Injectable({
@@ -21,17 +20,12 @@ export class CarImageService {
   }
 
   getCarImagesByCarId(carId: number): Observable<ListResponseModel<CarImage>> {
-    let newPath = this.apiURL + "carimages/" + carId;
+    let newPath = this.apiURL + "carimages/car/" + carId;
     return this.httpClient.get<ListResponseModel<CarImage>>(newPath);
   }
 
   add(formData: FormData): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(this.apiURL + 'carimages', formData);
-  }
-
-  getCarImagesColorAndBrandId(brandId: number, colorId: number): Observable<SingleResponseModel<CarImage>> {
-    let newPath = this.apiURL + `carimages/brand/${brandId}/color/${colorId}`;
-    return this.httpClient.get<SingleResponseModel<CarImage>>(newPath);
   }
 
   upload(file: File): Observable<HttpEvent<any>> {

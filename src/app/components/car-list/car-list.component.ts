@@ -230,14 +230,13 @@ export class CarListComponent {
 
   loadCarImages() {
     for (const car of this.carDetails) {
-      this.getCarImageByColorAndBrandId(car.brandId, car.colorId, car);
+      this.getCarImagesByCarId(car.id, car);
     }
   }
 
-  getCarImageByColorAndBrandId(brandId: number, colorId: number, car: CarDetail) {
-    this.carImageService.getCarImagesColorAndBrandId(brandId, colorId).subscribe(response => {
-      const carImage: CarImage = response.data; // Remove the array declaration
-      car.imagePath = [carImage]; // Assign the single image to the car object as an array
+  getCarImagesByCarId(carId: number, car: CarDetail) {
+    this.carImageService.getCarImagesByCarId(carId).subscribe(response => {
+      car.imagePath = response.data;
     });
   }
 
@@ -245,6 +244,9 @@ export class CarListComponent {
     if (car && car.imagePath && car.imagePath.length > 0) {
       const firstImage = car.imagePath[0];
       if (firstImage && firstImage.imagePath) {
+        if (firstImage.imagePath.startsWith('http://') || firstImage.imagePath.startsWith('https://')) {
+          return firstImage.imagePath;
+        }
         return this.apiUrl + firstImage.imagePath;
       }
     }

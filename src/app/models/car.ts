@@ -16,8 +16,8 @@ export interface Car {
 }
 
 export enum CarStatus {
-    Available = 0,
-    Rented = 1,
-    Maintenance = 2,
-    Reserved = 3
+    Available = 1,
+    Rented = 2,
+    Maintenance = 3,
+    Reserved = 4
 }
