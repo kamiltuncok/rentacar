@@ -121,21 +121,23 @@
 
 /* Left Filter Panel */
 .filter-panel {
-  background: white;
-  border-radius: 20px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
-  padding: 1.75rem;
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  border-right: 1px solid #e5e7eb;
+  box-shadow: none;
+  padding: 1.75rem 1.75rem 1.75rem 0;
   display: flex;
   flex-direction: column;
   gap: 1.75rem;
+  color: #0f172a;
 }
 
 .filter-panel-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1.5px solid #f1f5f9;
+  border-bottom: 1.5px solid #e5e7eb;
   padding-bottom: 1rem;
 }
 
@@ -169,88 +171,77 @@
 }
 
 .filter-label {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #475569;
+  letter-spacing: 0.1em;
+  color: #1E3A8A;
 }
 
-/* Button Group style */
-.btn-group-toggle {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  background-color: #f1f5f9;
-  padding: 3px;
-  border-radius: 10px;
-  gap: 2px;
+/* Pill Buttons Layout */
+.filter-pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  max-height: 240px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
 }
 
-.btn-group-toggle button {
-  background: none;
-  border: none;
-  padding: 0.6rem 0.5rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #475569;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.btn-group-toggle button.active {
-  background-color: white;
-  color: #0f172a;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-/* Vertical list of options */
-.filter-list {
+.filter-pill-group-vertical {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.6rem;
   max-height: 240px;
   overflow-y: auto;
   padding-right: 0.25rem;
 }
 
 /* Custom Scrollbar for filter list */
-.filter-list::-webkit-scrollbar {
+.filter-pill-group::-webkit-scrollbar,
+.filter-pill-group-vertical::-webkit-scrollbar {
   width: 4px;
 }
-.filter-list::-webkit-scrollbar-track {
-  background: #f1f5f9;
+.filter-pill-group::-webkit-scrollbar-track,
+.filter-pill-group-vertical::-webkit-scrollbar-track {
+  background: #1e40af;
 }
-.filter-list::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+.filter-pill-group::-webkit-scrollbar-thumb,
+.filter-pill-group-vertical::-webkit-scrollbar-thumb {
+  background: #3b82f6;
   border-radius: 99px;
 }
 
-.filter-option-btn {
-  text-align: left;
-  background: none;
-  border: 1px solid transparent;
-  padding: 0.6rem 0.875rem;
-  font-size: 0.85rem;
+.filter-pill-btn {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
   font-weight: 500;
-  color: #64748b;
-  border-radius: 10px;
+  color: #4b5563;
+  border-radius: 999px;
   cursor: pointer;
-  transition: all 0.15s ease;
-  display: flex;
-  justify-content: space-between;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: inline-flex;
   align-items: center;
 }
 
-.filter-option-btn:hover {
-  background-color: #f8fafc;
-  color: #0f172a;
+.cl-pill-text-icon {
+  gap: 0.5rem;
+  justify-content: flex-start;
 }
 
-.filter-option-btn.selected {
-  background-color: #f1f5f9;
-  color: #0f172a;
+.filter-pill-btn:hover {
+  border-color: #1E3A8A;
+  color: #1E3A8A;
+  background: rgba(30, 58, 138, 0.05);
+}
+
+.filter-pill-btn.selected, .filter-pill-btn.active {
+  background-color: #1E3A8A;
+  border-color: #1E3A8A;
+  color: #ffffff;
   font-weight: 700;
 }
 
@@ -264,7 +255,7 @@
 .price-value {
   font-size: 1.1rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #ffffff;
 }
 
 .price-slider {

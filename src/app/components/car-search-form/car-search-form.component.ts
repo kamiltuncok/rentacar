@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { NgIf, NgClass, NgFor } from '@angular/common';
+import { NgIf, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-car-search-form',
   templateUrl: './car-search-form.component.html',
   styleUrls: ['./car-search-form.component.css'],
-  imports: [NgIf, NgClass, FormsModule, NgFor]
+  imports: [NgIf, FormsModule, NgFor]
 })
 export class CarSearchFormComponent {
   @Input() alisOfisiOptions: any[] = [];

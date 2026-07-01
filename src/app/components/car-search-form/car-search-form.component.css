@@ -1,101 +1,272 @@
-/* Butonlar için genel stil */
-.btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  text-decoration: none;
-  border-radius: 5px;
-  font-size: 16px;
-  display: inline-block;
-  margin-right: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.btn.active {
-  background-color: #0056b3;
-}
-
-.btn.inactive {
-  background-color: #6c757d;
-  color: white;
-}
-
-.button-container {
+/* ═══════════════════════════════════════
+   Hero Section
+   ═══════════════════════════════════════ */
+.hero {
+  background: linear-gradient(135deg, #0a1628 0%, #0d2137 40%, #0a1628 100%);
+  padding: 4rem 2rem 3rem;
   display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.body-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 30px;
-}
-
-.input-container {
-  flex: 1;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.btn-individual {
-  background-color: #4682B4;
-  color: white;
-  border: none;
-  height: 50px;
-  width: 95px;
-  border-radius: 4px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.btn-individual:hover {
-  background-color: #3b70a1;
-  transform: scale(1.05);
-}
-
-.btn-individual.active {
-  background-color: #4682B4;
-}
-
-.btn-individual.inactive {
-  background-color: #6c757d;
-  color: white;
-}
-
-.content-container {
-  background-color: aliceblue;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  padding: 20px;
+  flex-direction: column;
+  align-items: center;
   position: relative;
+  overflow: hidden;
 }
 
-.btn-show-cars {
-  background-color: #4682B4;
-  color: white;
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 114, 255, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 114, 255, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero--popup {
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* Hero Content */
+.hero__content {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero__title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.75rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.hero__title-accent {
+  color: #0072FF;
+}
+
+.hero__subtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Close button */
+.hero__close {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
-  height: 50px;
-  width: 200px;
-  margin-left: 550px;
-  font-size: 18px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 150ms;
+  z-index: 10;
 }
 
-.btn-show-cars:hover {
-  background-color: #3b70a1;
+.hero__close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ═══════════════════════════════════════
+   Search Card
+   ═══════════════════════════════════════ */
+.search-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  width: 100%;
+  max-width: 960px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+/* Tabs */
+.search-tabs {
+  display: flex;
+  gap: 0;
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: 3px;
+  margin-bottom: 1.25rem;
+  width: fit-content;
+}
+
+.search-tab {
+  padding: 0.5rem 1.25rem;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 150ms;
+  font-family: 'Inter', sans-serif;
+}
+
+.search-tab--active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Search Row */
+.search-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.search-field {
+  flex: 1;
+  min-width: 140px;
+}
+
+.search-field--lg {
+  flex: 2;
+  min-width: 200px;
+}
+
+.search-field--sm {
+  flex: 0.6;
+  min-width: 100px;
+}
+
+.search-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.search-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 0.875rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-family: 'Inter', sans-serif;
+  color: #0f172a;
+  background: #f8fafc;
+  outline: none;
+  transition: border-color 150ms, box-shadow 150ms;
+}
+
+.search-input:focus {
+  border-color: #0072FF;
+  box-shadow: 0 0 0 3px rgba(0, 114, 255, 0.1);
+  background: #fff;
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
+/* Search Button */
+.search-btn {
+  flex-shrink: 0;
+  width: 48px;
+  height: 44px;
+  border: none;
+  background: #0072FF;
+  color: white;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 150ms, transform 150ms;
+}
+
+.search-btn:hover {
+  background: #005cd9;
   transform: scale(1.05);
 }
 
-.close-btn {
-  position: absolute;
-  top: 15px;
-  right: 20px;
-  background: none;
-  border: none;
-  font-size: 24px;
+/* Extra Row */
+.search-extra {
+  margin-top: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.search-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: #475569;
   cursor: pointer;
-  color: #333;
-  z-index: 10;
+  user-select: none;
+}
+
+.search-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #0072FF;
+  cursor: pointer;
+}
+
+/* ═══════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════ */
+@media (max-width: 768px) {
+  .hero {
+    padding: 2.5rem 1rem 2rem;
+  }
+
+  .hero__title {
+    font-size: 2rem;
+  }
+
+  .search-card {
+    padding: 1.25rem;
+  }
+
+  .search-row {
+    flex-direction: column;
+  }
+
+  .search-field,
+  .search-field--lg,
+  .search-field--sm {
+    flex: none;
+    width: 100%;
+    min-width: auto;
+  }
+
+  .search-btn {
+    width: 100%;
+    border-radius: 10px;
+  }
 }

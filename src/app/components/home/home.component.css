@@ -1,114 +1,212 @@
-/* Ortak Kart Section Stilleri */
-.card-section {
-  background-color: aliceblue;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  margin-top: 40px;
-  padding: 30px 0;
+/* ═══════════════════════════════════════
+   Zebra Striping Full-Width Wrappers
+   ═══════════════════════════════════════ */
+.zebra-slate {
+  background-color: #f8fafc;
+  width: 100%;
+}
+
+.zebra-white {
+  background-color: #ffffff;
+  width: 100%;
+}
+
+/* ═══════════════════════════════════════
+   3 Easy Steps Section
+   ═══════════════════════════════════════ */
+.steps-section {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem;
   text-align: center;
 }
 
-.section-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 25px;
-  color: #333;
+.steps-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
 }
 
-.card-container {
+.steps-subtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0 0 2.5rem;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.step-card {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.step-card:hover {
+  background: #f8fafc;
+  transform: translateY(-4px);
+}
+
+.step-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: #f1f5f9;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.step-icon--primary {
+  background: #0072FF;
+  color: #ffffff;
+}
+
+.step-card:hover .step-icon {
+  transform: scale(1.1);
+}
+
+.step-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 0.5rem;
+}
+
+.step-desc {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════
+   Shared Section
+   ═══════════════════════════════════════ */
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+}
+
+.section__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  text-align: center;
+  margin: 0 0 2rem;
+  letter-spacing: -0.02em;
+}
+
+/* ═══════════════════════════════════════
+   City Grid
+   ═══════════════════════════════════════ */
+.city-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.city-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 3/2;
+  background: #e2e8f0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.city-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.city-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+}
+
+.city-card:hover img {
+  transform: scale(1.08);
+}
+
+.city-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+      rgba(10, 22, 40, 0.8) 0%,
+      rgba(10, 22, 40, 0) 60%);
+  display: flex;
+  align-items: flex-end;
+  padding: 1.25rem;
+}
+
+.city-card__name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+/* ═══════════════════════════════════════
+   Segment Cards
+   ═══════════════════════════════════════ */
+.segment-grid {
   display: flex;
   justify-content: center;
-  gap: 25px;
+  gap: 1.5rem;
   flex-wrap: wrap;
 }
 
-.custom-card {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 330px;
-  height: 180px;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-}
-
-.custom-card img {
-  width: 100%;
-  height: 130px;
-  object-fit: cover;
-}
-
-.custom-card p {
-  margin: 8px 0;
-  font-size: 18px;
-  font-weight: 500;
-  color: #333;
-}
-
-.custom-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
-
-/* Segment Kartları için Profesyonel Tasarım */
 .segment-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   width: 320px;
-  height: 400px;
-  padding: 0;
   overflow: hidden;
   transition: all 0.3s ease;
-  position: relative;
   display: flex;
   flex-direction: column;
-  border: 1px solid #e5e7eb;
+  border: 1.5px solid #e5e7eb;
 }
 
 .segment-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
-  border-color: #3b82f6;
+  box-shadow: 0 16px 32px rgba(0, 114, 255, 0.1);
+  border-color: #0072FF;
 }
 
 .segment-header {
-  background: #f8fafc;
-  padding: 20px;
+  padding: 1.25rem;
   text-align: center;
-  border-bottom: 2px solid #e5e7eb;
-  flex-shrink: 0;
+  border-bottom: 1.5px solid #f1f5f9;
 }
 
 .segment-name {
   margin: 0;
-  font-size: 22px;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: #1e293b;
-  letter-spacing: -0.5px;
+  color: #0f172a;
 }
 
 .segment-image {
-  flex: 1;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background: #ffffff;
+  padding: 1rem;
   overflow: hidden;
 }
 
@@ -124,128 +222,77 @@
 }
 
 .segment-content {
-  padding: 20px;
+  padding: 1.25rem;
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  flex-shrink: 0;
-  background: #ffffff;
+  gap: 0.875rem;
   border-top: 1px solid #f1f5f9;
 }
 
 .price-text {
   margin: 0;
-  font-size: 16px;
-  font-weight: 400;
+  font-size: 0.95rem;
   color: #475569;
-  line-height: 1.6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-.price-text::before {
-  content: "₺";
-  font-size: 20px;
-  font-weight: 700;
-  color: #3b82f6;
 }
 
 .price-text strong {
   font-weight: 700;
-  color: #1e293b;
-  font-size: 18px;
+  color: #0072FF;
+  font-size: 1.1rem;
 }
 
 .segment-button {
-  background: #3b82f6;
+  background: #0072FF;
   color: white;
   border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 15px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
-  letter-spacing: 0.3px;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
 }
 
 .segment-button:hover {
-  background: #2563eb;
+  background: #005cd9;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 114, 255, 0.3);
 }
 
-.segment-button:active {
-  transform: translateY(0);
+/* ═══════════════════════════════════════
+   Popup
+   ═══════════════════════════════════════ */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
 }
 
-/* Responsive Tasarım */
+/* ═══════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════ */
 @media (max-width: 768px) {
+  .steps-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .city-grid {
+    grid-template-columns: 1fr;
+  }
+
   .segment-card {
     width: 100%;
     max-width: 350px;
-    height: 380px;
   }
-
-  .card-container {
-    padding: 0 15px;
-  }
-}
-
-/* Şehir Grid */
-.city-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
-  justify-content: center;
-  padding: 0 30px;
-}
-
-.city-card {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  aspect-ratio: 3/2;
-  background: #e2e8f0;
-  border: 1px solid #e5e7eb;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.city-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.city-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-}
-
-.city-card:hover img {
-  transform: scale(1.05);
-}
-
-.city-card__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top,
-      rgba(15, 23, 42, 0.75) 0%,
-      rgba(15, 23, 42, 0) 60%);
-  display: flex;
-  align-items: flex-end;
-  padding: 1rem 1.25rem;
-}
-
-.city-card__name {
-  font-size: 1.0625rem;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: -0.01em;
 }

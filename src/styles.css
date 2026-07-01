@@ -5,9 +5,9 @@
 
 :root {
     /* Brand */
-    --color-brand: #1d4ed8;
-    --color-brand-hover: #1e40af;
-    --color-brand-light: #eff6ff;
+    --color-brand: #0072FF;
+    --color-brand-hover: #005cd9;
+    --color-brand-light: #e8f2ff;
 
     /* Ink scale */
     --color-ink-900: #0f172a;
@@ -61,7 +61,7 @@ html {
 body {
     font-family: var(--font-sans);
     color: var(--color-ink-900);
-    background: #eef1f5;
+    background: #eef4fc;
     margin: 0;
     padding: 0;
     line-height: 1.5;

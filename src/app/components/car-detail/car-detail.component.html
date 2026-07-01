@@ -22,12 +22,12 @@
                         <div>
                             <div class="card-header">
                                 <b>{{carDetail.brandName}} {{carDetail.modelYear}}</b>
-                                <span class="badge ms-2" [class.bg-success]="carDetail.status === 0"
-                                    [class.bg-danger]="carDetail.status === 1"
-                                    [class.bg-warning]="carDetail.status === 2"
-                                    [class.bg-info]="carDetail.status === 3">
-                                    {{ carDetail.status === 0 ? 'Müsait' : carDetail.status === 1 ?
-                                    'Kirada' : carDetail.status === 2 ? 'Bakımda' : 'Rezerve' }}
+                                <span class="badge ms-2" [class.bg-success]="carDetail.status === 1"
+                                    [class.bg-danger]="carDetail.status === 2"
+                                    [class.bg-warning]="carDetail.status === 3"
+                                    [class.bg-info]="carDetail.status === 4">
+                                    {{ carDetail.status === 1 ? 'Müsait' : carDetail.status === 2 ?
+                                    'Kirada' : carDetail.status === 3 ? 'Bakımda' : 'Rezerve' }}
                                 </span>
                             </div>
                             <br>
@@ -59,9 +59,9 @@
                                 <p class="card-text"><b>Depozito: </b>{{carDetail.deposit |
                                     currency:'TRY':'symbol':'1.0-0'}}</p>
                                 <hr>
-                                <a routerLink="payment" *ngIf="carDetail.status === 0" type="button"
+                                <a routerLink="payment" *ngIf="carDetail.status === 1" type="button"
                                     class="btn btn-primary">Kirala</a>
-                                <span *ngIf="carDetail.status !== 0" class="text-danger fw-bold">Bu araç şu an
+                                <span *ngIf="carDetail.status !== 1" class="text-danger fw-bold">Bu araç şu an
                                     müsait değil</span>
                             </div>
                         </div>

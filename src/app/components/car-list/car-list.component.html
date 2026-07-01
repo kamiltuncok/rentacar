@@ -47,11 +47,20 @@
       <!-- Fuel Filter -->
       <div class="cl-filter-section">
         <h3 class="cl-filter-heading">Yakıt Tipi</h3>
-        <div class="cl-checkbox-group">
-          <label *ngFor="let fuel of fuels" class="cl-checkbox-label" [for]="'fuel-' + fuel.fuelId">
-            <input class="cl-checkbox-input" type="checkbox" [id]="'fuel-' + fuel.fuelId" [value]="fuel.fuelId"
+        <div class="cl-pill-group-vertical">
+          <label *ngFor="let fuel of fuels" class="cl-pill-label" [for]="'fuel-' + fuel.fuelId">
+            <input class="cl-pill-input" type="checkbox" [id]="'fuel-' + fuel.fuelId" [value]="fuel.fuelId"
               [checked]="isFuelSelected(fuel.fuelId)" (change)="onFuelCheckboxChange($event, fuel.fuelId)">
-            {{ fuel.fuelName }}
+            <span class="cl-pill-text cl-pill-text-icon">
+              <!-- Gas Station SVG -->
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 22V12h18v10"></path>
+                <path d="M3 12V4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8"></path>
+                <path d="M12 2v20"></path>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+              {{ fuel.fuelName }}
+            </span>
           </label>
         </div>
       </div>
@@ -59,11 +68,18 @@
       <!-- Gear Filter -->
       <div class="cl-filter-section">
         <h3 class="cl-filter-heading">Vites Tipi</h3>
-        <div class="cl-checkbox-group">
-          <label *ngFor="let gear of gears" class="cl-checkbox-label" [for]="'gear-' + gear.gearId">
-            <input class="cl-checkbox-input" type="checkbox" [id]="'gear-' + gear.gearId" [value]="gear.gearId"
+        <div class="cl-pill-group-vertical">
+          <label *ngFor="let gear of gears" class="cl-pill-label" [for]="'gear-' + gear.gearId">
+            <input class="cl-pill-input" type="checkbox" [id]="'gear-' + gear.gearId" [value]="gear.gearId"
               [checked]="isGearSelected(gear.gearId)" (change)="onGearCheckboxChange($event, gear.gearId)">
-            {{ gear.gearName }}
+            <span class="cl-pill-text cl-pill-text-icon">
+              <!-- Gear SVG -->
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              {{ gear.gearName }}
+            </span>
           </label>
         </div>
       </div>
@@ -71,12 +87,12 @@
       <!-- Segment Filter -->
       <div class="cl-filter-section">
         <h3 class="cl-filter-heading">Araç Sınıfı</h3>
-        <div class="cl-checkbox-group">
-          <label *ngFor="let segment of segments" class="cl-checkbox-label" [for]="'segment-' + segment.segmentId">
-            <input class="cl-checkbox-input" type="checkbox" [id]="'segment-' + segment.segmentId"
+        <div class="cl-pill-group">
+          <label *ngFor="let segment of segments" class="cl-pill-label" [for]="'segment-' + segment.segmentId">
+            <input class="cl-pill-input" type="checkbox" [id]="'segment-' + segment.segmentId"
               [value]="segment.segmentId" [checked]="isSegmentSelected(segment.segmentId)"
               [disabled]="isSegmentFilterDisabled" (change)="onSegmentCheckboxChange($event, segment.segmentId)">
-            {{ segment.segmentName }}
+            <span class="cl-pill-text">{{ segment.segmentName }}</span>
           </label>
         </div>
       </div>

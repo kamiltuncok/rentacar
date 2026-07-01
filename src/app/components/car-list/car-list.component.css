@@ -15,6 +15,7 @@
   padding: 1.5rem 2rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.025);
   border: 1px solid #f3f4f6;
+  border-top: 3px solid #0072FF;
   margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
@@ -72,18 +73,20 @@
 
 /* Sidebar / Filters */
 .cl-filters {
-  background: white;
-  border-radius: 16px;
-  padding: 1.5rem;
-  border: 1px solid #f3f4f6;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  background: transparent;
+  border-radius: 0;
+  padding: 1.5rem 1.5rem 1.5rem 0;
+  border: none;
+  border-right: 1px solid #e5e7eb;
+  box-shadow: none;
   position: sticky;
   top: 2rem;
+  color: #111827;
 }
 
 .cl-filters-title {
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-block-end: 1.5rem;
   color: #111827;
 }
@@ -91,7 +94,7 @@
 .cl-filter-section {
   margin-bottom: 1.5rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .cl-filter-section:last-child {
@@ -101,12 +104,73 @@
 }
 
 .cl-filter-heading {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #374151;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1E3A8A;
   margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
+/* Pill Buttons */
+.cl-pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.cl-pill-group-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.cl-pill-label {
+  cursor: pointer;
+  user-select: none;
+}
+
+.cl-pill-input {
+  display: none;
+}
+
+.cl-pill-text {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #4b5563;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.cl-pill-text-icon {
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+
+.cl-pill-label:hover .cl-pill-text {
+  border-color: #1E3A8A;
+  color: #1E3A8A;
+  background: rgba(30, 58, 138, 0.05);
+}
+
+.cl-pill-input:checked+.cl-pill-text {
+  background: #1E3A8A;
+  border-color: #1E3A8A;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.cl-pill-input:disabled+.cl-pill-text {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Standard Checkboxes (for Transmission etc) */
 .cl-checkbox-group {
   display: flex;
   flex-direction: column;
@@ -118,23 +182,23 @@
   align-items: center;
   gap: 0.75rem;
   font-size: 0.875rem;
-  color: #4b5563;
+  color: #cbd5e1;
   cursor: pointer;
   transition: color 0.2s;
   user-select: none;
 }
 
 .cl-checkbox-label:hover {
-  color: #111827;
+  color: #ffffff;
 }
 
 .cl-checkbox-input {
   appearance: none;
   width: 1.125rem;
   height: 1.125rem;
-  border: 1.5px solid #d1d5db;
+  border: 1.5px solid #334155;
   border-radius: 4px;
-  background-color: white;
+  background-color: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -144,8 +208,8 @@
 }
 
 .cl-checkbox-input:checked {
-  background-color: #0f172a;
-  border-color: #0f172a;
+  background-color: #0072FF;
+  border-color: #0072FF;
 }
 
 .cl-checkbox-input:checked::after {
@@ -159,7 +223,7 @@
 }
 
 .cl-checkbox-input:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
@@ -321,15 +385,15 @@
 }
 
 .cl-btn-primary {
-  background-color: #0f172a;
+  background-color: #0072FF;
   color: white;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(0, 114, 255, 0.25);
 }
 
 .cl-btn-primary:hover {
-  background-color: #1e293b;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.15), 0 3px 6px -1px rgba(0, 0, 0, 0.1);
+  background-color: #005cd9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 114, 255, 0.3);
   color: white;
 }
 

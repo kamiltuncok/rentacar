@@ -33,20 +33,20 @@
       <!-- Availability Filter (Button Group Style) -->
       <div class="filter-group">
         <label class="filter-label">Müsaitlik Durumu</label>
-        <div class="btn-group-toggle">
-          <button [class.active]="availability === 'all'" (click)="onAvailabilitySelect('all')">Tümü</button>
-          <button [class.active]="availability === 'available'" (click)="onAvailabilitySelect('available')">Sadece Müsaitler</button>
+        <div class="filter-pill-group">
+          <button class="filter-pill-btn" [class.selected]="availability === 'all'" (click)="onAvailabilitySelect('all')">Tümü</button>
+          <button class="filter-pill-btn" [class.selected]="availability === 'available'" (click)="onAvailabilitySelect('available')">Sadece Müsaitler</button>
         </div>
       </div>
 
       <!-- Brand Filter -->
       <div class="filter-group">
         <label class="filter-label">Markalar</label>
-        <div class="filter-list">
-          <button class="filter-option-btn" [class.selected]="selectedBrandId === 0" (click)="onBrandSelect(0)">
+        <div class="filter-pill-group">
+          <button class="filter-pill-btn" [class.selected]="selectedBrandId === 0" (click)="onBrandSelect(0)">
             Tüm Markalar
           </button>
-          <button *ngFor="let brand of brands" class="filter-option-btn" [class.selected]="selectedBrandId === brand.brandId" (click)="onBrandSelect(brand.brandId)">
+          <button *ngFor="let brand of brands" class="filter-pill-btn" [class.selected]="selectedBrandId === brand.brandId" (click)="onBrandSelect(brand.brandId)">
             {{ brand.brandName }}
           </button>
         </div>
@@ -55,11 +55,11 @@
       <!-- Segment Filter -->
       <div class="filter-group">
         <label class="filter-label">Araç Sınıfı</label>
-        <div class="filter-list">
-          <button class="filter-option-btn" [class.selected]="selectedSegmentName === ''" (click)="onSegmentSelect('')">
+        <div class="filter-pill-group">
+          <button class="filter-pill-btn" [class.selected]="selectedSegmentName === ''" (click)="onSegmentSelect('')">
             Tüm Sınıflar
           </button>
-          <button *ngFor="let segment of segments" class="filter-option-btn" [class.selected]="selectedSegmentName === segment.segmentName" (click)="onSegmentSelect(segment.segmentName)">
+          <button *ngFor="let segment of segments" class="filter-pill-btn" [class.selected]="selectedSegmentName === segment.segmentName" (click)="onSegmentSelect(segment.segmentName)">
             {{ segment.segmentName }}
           </button>
         </div>
@@ -68,11 +68,18 @@
       <!-- Fuel Type Filter -->
       <div class="filter-group">
         <label class="filter-label">Yakıt Tipi</label>
-        <div class="filter-list">
-          <button class="filter-option-btn" [class.selected]="selectedFuelName === ''" (click)="onFuelSelect('')">
+        <div class="filter-pill-group-vertical">
+          <button class="filter-pill-btn" [class.selected]="selectedFuelName === ''" (click)="onFuelSelect('')">
             Tüm Yakıtlar
           </button>
-          <button *ngFor="let fuel of fuels" class="filter-option-btn" [class.selected]="selectedFuelName === fuel.fuelName" (click)="onFuelSelect(fuel.fuelName)">
+          <button *ngFor="let fuel of fuels" class="filter-pill-btn cl-pill-text-icon" [class.selected]="selectedFuelName === fuel.fuelName" (click)="onFuelSelect(fuel.fuelName)">
+            <!-- Gas Station SVG -->
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 22V12h18v10"></path>
+              <path d="M3 12V4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8"></path>
+              <path d="M12 2v20"></path>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
             {{ fuel.fuelName }}
           </button>
         </div>
@@ -81,11 +88,16 @@
       <!-- Gear Type Filter -->
       <div class="filter-group">
         <label class="filter-label">Vites Tipi</label>
-        <div class="filter-list">
-          <button class="filter-option-btn" [class.selected]="selectedGearName === ''" (click)="onGearSelect('')">
+        <div class="filter-pill-group-vertical">
+          <button class="filter-pill-btn" [class.selected]="selectedGearName === ''" (click)="onGearSelect('')">
             Tüm Vitesler
           </button>
-          <button *ngFor="let gear of gears" class="filter-option-btn" [class.selected]="selectedGearName === gear.gearName" (click)="onGearSelect(gear.gearName)">
+          <button *ngFor="let gear of gears" class="filter-pill-btn cl-pill-text-icon" [class.selected]="selectedGearName === gear.gearName" (click)="onGearSelect(gear.gearName)">
+            <!-- Gear SVG -->
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
             {{ gear.gearName }}
           </button>
         </div>
