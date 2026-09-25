@@ -1,71 +1,138 @@
 /* ═══════════════════════════════════════
-   Hero Section
+   OtoGez Hero + Search Card
    ═══════════════════════════════════════ */
+:host {
+  /* Aliased to the global dark-surface token so the hero's background is
+     always identical to the navbar's — one color, one source of truth. */
+  --og-navy: var(--color-dark-bg, #0F172A);
+  --og-blue: #2563EB;
+  --og-amber: #F59E0B;
+  --og-amber-hover: #DB9109;
+}
+
 .hero {
-  background: linear-gradient(135deg, #0a1628 0%, #0d2137 40%, #0a1628 100%);
-  padding: 4rem 2rem 3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   position: relative;
+  background: var(--og-navy);
+  padding: 64px 48px 56px;
   overflow: hidden;
 }
 
-.hero::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(0, 114, 255, 0.12) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  bottom: -30%;
-  left: -10%;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(0, 114, 255, 0.08) 0%, transparent 70%);
-  pointer-events: none;
+/* Full-bleed so the split hero (form + car) has room to breathe,
+   even though the page renders inside a narrow bootstrap column. */
+.hero:not(.hero--popup) {
+  width: 100vw;
+  left: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
 }
 
 .hero--popup {
-  padding: 2rem;
+  padding: 40px 32px 32px;
   border-radius: 16px;
-  max-width: 960px;
+  max-width: 720px;
+  width: 100%;
   margin: 0 auto;
 }
 
-/* Hero Content */
-.hero__content {
-  text-align: center;
-  margin-bottom: 2.5rem;
+.hero__inner {
   position: relative;
   z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero__main {
+  position: relative;
+  z-index: 2;
+  max-width: 620px;
+}
+
+.hero--popup .hero__main {
+  max-width: none;
+}
+
+/* Premium sedan / SUV — transparent PNG straight on the navy, no card */
+.hero__art {
+  position: absolute;
+  right: -2%;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 46%;
+  max-height: 380px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero__art img {
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: none;
+}
+
+/* Faint radial depth glow behind the car */
+.hero__art::before {
+  content: "";
+  position: absolute;
+  left: 48%;
+  top: 44%;
+  transform: translate(-50%, -50%);
+  width: 108%;
+  height: 90%;
+  background: radial-gradient(ellipse at center, rgba(64, 104, 168, 0.30) 0%, rgba(15, 23, 42, 0) 70%);
+  z-index: -1;
+}
+
+/* Soft elliptical ground shadow (~80% of the car's base width) */
+.hero__art::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 2%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 22px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(8px);
+  z-index: -1;
+}
+
+/* Hero content */
+.hero__content {
+  margin-bottom: 36px;
 }
 
 .hero__title {
-  font-size: 2.75rem;
+  font-size: 48px;
   font-weight: 800;
-  color: #ffffff;
-  margin: 0 0 0.75rem;
   line-height: 1.15;
-  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  margin: 0 0 14px;
+  letter-spacing: -0.01em;
 }
 
 .hero__title-accent {
-  color: #0072FF;
+  color: var(--og-blue);
 }
 
 .hero__subtitle {
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.6);
-  margin: 0;
-  font-weight: 400;
+  font-size: 17px;
+  color: #94A3B8;
+  margin: 0 0 14px;
+}
+
+.hero__stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 15px;
+  color: #E2E8F0;
+  font-weight: 600;
+}
+
+.hero__dot {
+  color: #475569;
 }
 
 /* Close button */
@@ -96,135 +163,136 @@
    Search Card
    ═══════════════════════════════════════ */
 .search-card {
-  background: #ffffff;
+  background: #FFFFFF;
   border-radius: 16px;
-  padding: 1.5rem 2rem;
-  width: 100%;
-  max-width: 960px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  position: relative;
-  z-index: 1;
+  padding: 24px;
+  max-width: 680px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
 }
 
 /* Tabs */
 .search-tabs {
   display: flex;
-  gap: 0;
-  background: #f1f5f9;
-  border-radius: 8px;
-  padding: 3px;
-  margin-bottom: 1.25rem;
+  gap: 4px;
+  margin-bottom: 20px;
+  background: #F1F5F9;
+  border-radius: 10px;
+  padding: 4px;
   width: fit-content;
 }
 
 .search-tab {
-  padding: 0.5rem 1.25rem;
+  padding: 8px 20px;
   border: none;
   background: transparent;
-  border-radius: 6px;
-  font-size: 0.8125rem;
+  border-radius: 8px;
+  font-size: 14px;
   font-weight: 600;
-  color: #64748b;
+  color: #64748B;
   cursor: pointer;
   transition: all 150ms;
-  font-family: 'Inter', sans-serif;
+  font-family: inherit;
 }
 
 .search-tab--active {
-  background: #ffffff;
-  color: #0f172a;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  background: #FFFFFF;
+  color: var(--og-navy);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Search Row */
-.search-row {
+/* Body */
+.search-body {
   display: flex;
-  gap: 0.75rem;
-  align-items: flex-end;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .search-field {
   flex: 1;
-  min-width: 140px;
-}
-
-.search-field--lg {
-  flex: 2;
-  min-width: 200px;
-}
-
-.search-field--sm {
-  flex: 0.6;
-  min-width: 100px;
 }
 
 .search-label {
   display: block;
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.4rem;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+
+.search-label--accent {
+  color: var(--og-navy);
 }
 
 .search-input {
   width: 100%;
-  height: 44px;
-  padding: 0 0.875rem;
-  border: 1.5px solid #e2e8f0;
+  padding: 14px 16px;
   border-radius: 10px;
-  font-size: 0.875rem;
-  font-family: 'Inter', sans-serif;
-  color: #0f172a;
-  background: #f8fafc;
+  border: 1px solid #CBD5E1;
+  font-size: 14px;
+  color: var(--og-navy);
+  font-family: inherit;
+  background: #FFFFFF;
   outline: none;
   transition: border-color 150ms, box-shadow 150ms;
 }
 
 .search-input:focus {
-  border-color: #0072FF;
-  box-shadow: 0 0 0 3px rgba(0, 114, 255, 0.1);
-  background: #fff;
+  border-color: var(--og-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.search-input--accent {
+  border: 2px solid var(--og-blue);
+  background: #EFF4FE;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .search-input::placeholder {
-  color: #94a3b8;
+  color: #94A3B8;
+  font-weight: 500;
 }
 
-/* Search Button */
-.search-btn {
-  flex-shrink: 0;
-  width: 48px;
-  height: 44px;
-  border: none;
-  background: #0072FF;
-  color: white;
-  border-radius: 12px;
-  cursor: pointer;
+/* Dates row */
+.search-dates {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.search-datetime {
+  display: flex;
+  gap: 6px;
+}
+
+.search-datetime .search-input {
+  flex: 1.3;
+  padding: 11px 10px;
+}
+
+.search-input--time {
+  flex: 1 !important;
+  padding: 11px 8px !important;
+}
+
+.search-daybadge {
+  padding: 8px 12px;
+  border-radius: 20px;
+  background: #FEF3C7;
+  color: #92400E;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  margin-bottom: 11px;
+}
+
+/* Checkbox */
+.search-checkbox {
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: background 150ms, transform 150ms;
-}
-
-.search-btn:hover {
-  background: #005cd9;
-  transform: scale(1.05);
-}
-
-/* Extra Row */
-.search-extra {
-  margin-top: 0.875rem;
-  margin-bottom: 0.5rem;
-}
-
-.search-checkbox {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8125rem;
+  gap: 8px;
+  font-size: 14px;
   color: #475569;
   cursor: pointer;
   user-select: none;
@@ -233,40 +301,77 @@
 .search-checkbox input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: #0072FF;
+  accent-color: var(--og-blue);
   cursor: pointer;
+}
+
+/* Search Button */
+.search-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 10px;
+  background: var(--og-amber);
+  color: #1F2937;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35);
+  transition: background 150ms, transform 150ms;
+}
+
+.search-btn:hover {
+  background: var(--og-amber-hover);
+  transform: translateY(-1px);
 }
 
 /* ═══════════════════════════════════════
    Responsive
    ═══════════════════════════════════════ */
-@media (max-width: 768px) {
-  .hero {
-    padding: 2.5rem 1rem 2rem;
-  }
-
-  .hero__title {
-    font-size: 2rem;
-  }
-
-  .search-card {
-    padding: 1.25rem;
-  }
-
-  .search-row {
+@media (max-width: 900px) {
+  /* Car drops above the form and stacks */
+  .hero__inner {
+    display: flex;
     flex-direction: column;
   }
 
-  .search-field,
-  .search-field--lg,
-  .search-field--sm {
-    flex: none;
-    width: 100%;
-    min-width: auto;
+  .hero__main {
+    max-width: 100%;
   }
 
-  .search-btn {
+  .hero__art {
+    position: static;
+    order: -1;
+    transform: none;
+    height: auto;
+    width: 70%;
+    margin: 0 auto 20px;
+  }
+
+  .hero__art img {
+    height: auto;
     width: 100%;
-    border-radius: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero:not(.hero--popup) {
+    padding: 40px 20px 32px;
+  }
+
+  .hero__title {
+    font-size: 32px;
+  }
+
+  .search-dates {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-daybadge {
+    align-self: center;
+    margin-bottom: 0;
   }
 }

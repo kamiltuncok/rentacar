@@ -1,10 +1,29 @@
+/* ═══════════════════════════════════════
+   Ödeme & Onay (checkout) — design-system aligned
+   ═══════════════════════════════════════ */
+:host {
+  --og-navy: #0F172A;
+  --og-blue: #2563EB;
+  --og-blue-hover: #1D4FD8;
+  --og-amber: #F59E0B;
+  --og-amber-hover: #DB9109;
+  --ink-700: #334155;
+  --ink-500: #64748B;
+  --border: #C9D2DC;
+  --divider: #EEF2F7;
+  --slate-bg: #E8EDF3;
+  --success: #10B981;
+
+  display: block;
+}
+
 /* Layout base */
 .pm-container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 3rem 1.5rem;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: #111827;
+  color: var(--og-navy);
 }
 
 /* Header */
@@ -16,14 +35,14 @@
 .pm-title {
   font-size: 2rem;
   font-weight: 800;
-  letter-spacing: -0.025em;
-  color: #0f172a;
+  letter-spacing: -0.02em;
+  color: var(--og-navy);
   margin-bottom: 0.5rem;
 }
 
 .pm-subtitle {
   font-size: 1rem;
-  color: #64748b;
+  color: var(--ink-500);
   margin: 0;
 }
 
@@ -38,46 +57,43 @@
 @media(min-width: 1024px) {
   .pm-layout {
     grid-template-columns: 1.5fr 1fr;
-    /* Larger left col, smaller right side summary */
     gap: 3rem;
   }
 }
 
-/* General Layout Utils */
 .pm-mb-4 {
   margin-bottom: 2rem;
 }
 
-/* Premium Card Style */
+/* ─── Card ─── */
 .pm-card {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
   overflow: hidden;
 }
 
 .pm-card-header {
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid #f1f5f9;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--divider);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #f8fafc;
+  background-color: #fff;
 }
 
 .pm-card-title {
   margin: 0;
   font-size: 1.125rem;
-  font-weight: 600;
-  color: #0f172a;
+  font-weight: 700;
+  color: var(--og-navy);
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .pm-icon {
-  color: #3b82f6;
+  color: var(--og-blue);
 }
 
 .pm-secure-badge {
@@ -86,24 +102,23 @@
   gap: 0.35rem;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #10b981;
-  background-color: #d1fae5;
+  color: var(--success);
+  background-color: rgba(16, 185, 129, 0.12);
   padding: 0.25rem 0.6rem;
   border-radius: 9999px;
 }
 
 .pm-card-body {
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
 .pm-card-actions {
-  padding: 1.5rem 2rem;
-  background-color: #f8fafc;
-  border-top: 1px solid #f1f5f9;
+  padding: 1.5rem;
+  background-color: #fff;
+  border-top: 1px solid var(--divider);
 }
 
-
-/* Abstract Graphic representation of Credit Card */
+/* Credit card graphic (navy — on palette) */
 .pm-card-graphic-wrapper {
   display: flex;
   justify-content: center;
@@ -113,8 +128,8 @@
 .pm-card-graphic {
   width: 320px;
   height: 200px;
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-  border-radius: 16px;
+  background: linear-gradient(135deg, #1E293B 0%, var(--og-navy) 100%);
+  border-radius: 14px;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   padding: 1.5rem;
   color: white;
@@ -139,7 +154,7 @@
 .pm-card-graphic-chip {
   width: 44px;
   height: 32px;
-  background-color: #d4d4d8;
+  background-color: #D4D4D8;
   border-radius: 6px;
   opacity: 0.9;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
@@ -161,7 +176,7 @@
 
 .pm-card-graphic-label {
   font-size: 0.55rem;
-  color: #94a3b8;
+  color: #94A3B8;
   letter-spacing: 0.1em;
   margin-bottom: 0.1rem;
 }
@@ -172,7 +187,7 @@
   letter-spacing: 0.05em;
 }
 
-/* Forms */
+/* ─── Forms ─── */
 .pm-form-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -196,8 +211,8 @@
 
 .pm-label {
   font-size: 0.875rem;
-  font-weight: 500;
-  color: #334155;
+  font-weight: 600;
+  color: var(--ink-700);
   margin-bottom: 0.5rem;
 }
 
@@ -205,26 +220,25 @@
   width: 100%;
   padding: 0.75rem 1rem;
   font-size: 0.95rem;
-  color: #1e293b;
-  background-color: white;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  color: var(--og-navy);
+  background-color: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .pm-input::placeholder {
-  color: #94a3b8;
+  color: #94A3B8;
 }
 
 .pm-input:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  border-color: var(--og-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 .pm-input--error {
-  border-color: #ef4444;
+  border-color: #EF4444;
 }
 
 .pm-input--error:focus {
@@ -246,17 +260,17 @@
   padding-right: 2.5rem;
 }
 
-/* Buttons */
+/* ─── Primary CTA — amber, dark text (page's single primary action) ─── */
 .pm-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 1rem 1.5rem;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.15s ease;
   border: none;
   text-decoration: none;
 }
@@ -266,24 +280,22 @@
 }
 
 .pm-btn--primary {
-  background-color: #0f172a;
-  color: white;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background-color: var(--og-amber);
+  color: #1F2937;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
 }
 
 .pm-btn--primary:hover {
-  background-color: #1e293b;
+  background-color: var(--og-amber-hover);
   transform: translateY(-1px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 24px rgba(245, 158, 11, 0.38);
 }
 
 .pm-btn--primary:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transform: translateY(0);
 }
 
-
-/* Sidebar Summary Box */
+/* ─── Sidebar Summary ─── */
 .pm-sidebar {
   display: flex;
   flex-direction: column;
@@ -293,17 +305,16 @@
 }
 
 .pm-summary-card {
-  background: white;
-  border-radius: 16px;
-  padding: 1.5rem 2rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e2e8f0;
+  background: #fff;
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
 }
 
 .pm-summary-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--og-navy);
   margin-top: 0;
   margin-bottom: 1.5rem;
 }
@@ -322,17 +333,17 @@
 }
 
 .pm-summary-label {
-  color: #64748b;
+  color: var(--ink-500);
 }
 
 .pm-summary-value {
-  color: #0f172a;
+  color: var(--og-navy);
   font-weight: 600;
 }
 
 .pm-summary-divider {
   height: 1px;
-  background-color: #e2e8f0;
+  background-color: #E2E8F0;
   margin: 0.5rem 0;
 }
 
@@ -343,17 +354,17 @@
 .pm-summary-total .pm-summary-value {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #10b981;
+  color: var(--og-navy);
 }
 
 .pm-summary-note {
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: var(--ink-500);
   margin-top: 1rem;
   text-align: center;
 }
 
-/* Trust Badges */
+/* ─── Trust Badges (green reserved for security/assurance) ─── */
 .pm-trust-badges {
   display: flex;
   flex-direction: column;
@@ -363,28 +374,37 @@
 .pm-trust-item {
   display: flex;
   gap: 1rem;
-  align-items: flex-start;
+  align-items: center;
   padding: 1rem;
-  background-color: #f8fafc;
-  border-radius: 12px;
-  border: 1px solid #f1f5f9;
+  background-color: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
 }
 
+/* Green lives only inside this small circular badge */
 .pm-trust-icon {
-  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--success);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .pm-trust-text span {
   display: block;
   font-size: 0.875rem;
-  font-weight: 700;
-  color: #0f172a;
+  font-weight: 600;
+  color: var(--og-navy);
   margin-bottom: 0.15rem;
 }
 
 .pm-trust-text p {
   font-size: 0.75rem;
-  color: #64748b;
+  color: var(--ink-500);
   margin: 0;
   line-height: 1.4;
 }

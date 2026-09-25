@@ -1,0 +1,33 @@
+.pricing-dashboard .metric-box {
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: .5rem;
+  padding: 1rem;
+  height: 100%;
+}
+
+.pricing-dashboard .metric-label {
+  font-size: .8rem;
+  color: #6c757d;
+  margin-bottom: .25rem;
+}
+
+.pricing-dashboard .metric-value {
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.pricing-dashboard .metric-hint {
+  font-size: .75rem;
+  color: #6c757d;
+  margin-top: .35rem;
+}
+
+.pricing-dashboard .window-input {
+  width: 5rem;
+}
+
+/* Fiyat yonu: yesil = zam, kirmizi = indirim */
+.pricing-dashboard .action-up   { color: #198754; font-weight: 600; }
+.pricing-dashboard .action-down { color: #dc3545; font-weight: 600; }
+.pricing-dashboard .action-flat { color: #6c757d; }

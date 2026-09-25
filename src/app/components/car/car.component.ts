@@ -7,28 +7,24 @@ import { Color } from 'src/app/models/color';
 import { Segment } from 'src/app/models/segment';
 import { Fuel } from 'src/app/models/fuel';
 import { Gear } from 'src/app/models/gear';
-import { CarImage } from 'src/app/models/carImage';
-import { CarStatus } from 'src/app/models/car';
 import { BrandService } from 'src/app/services/brand.service';
 import { CarService } from 'src/app/services/car.service';
 import { ColorService } from 'src/app/services/color.service';
-import { LocationService } from 'src/app/services/location.service';
 import { SegmentService } from 'src/app/services/segment.service';
 import { FuelService } from 'src/app/services/fuel.service';
 import { GearService } from 'src/app/services/gear.service';
 import { CarImageService } from 'src/app/services/car-image.service';
 import { FormsModule } from '@angular/forms';
-import { NgFor, NgIf, CurrencyPipe } from '@angular/common';
+import { NgFor, NgIf, NgClass } from '@angular/common';
 import { FilterPipePipe } from '../../pipes/filter-pipe.pipe';
 
 @Component({
   selector: 'app-car',
   templateUrl: './car.component.html',
   styleUrls: ['./car.component.css'],
-  imports: [FormsModule, NgFor, NgIf, RouterLink, CurrencyPipe, FilterPipePipe]
+  imports: [FormsModule, NgFor, NgIf, NgClass, RouterLink, FilterPipePipe]
 })
 export class CarComponent implements OnInit {
-  CarStatus = CarStatus;
   allCars: CarDetail[] = [];
   filteredCars: CarDetail[] = [];
   pagedCars: CarDetail[] = [];
@@ -48,7 +44,6 @@ export class CarComponent implements OnInit {
   minPrice: number = 0;
   maxPrice: number = 5000;
   priceLimit: number = 5000; // Upper limit of the slider
-  availability: string = 'all'; // 'all' or 'available'
 
   apiUrl = "https://localhost:44306/Uploads/Images/";
   defaultImagePath = 'assets/images/lux.jpg';
@@ -112,7 +107,7 @@ export class CarComponent implements OnInit {
   getCarDetails() {
     this.carService.getCarDetails().subscribe(response => {
       this.allCars = response.data;
-      
+
       // Determine initial price limits dynamically based on catalog values
       if (this.allCars.length > 0) {
         const prices = this.allCars.map(c => c.dailyPrice);
@@ -120,7 +115,7 @@ export class CarComponent implements OnInit {
         this.maxPrice = Math.max(...prices);
         this.priceLimit = this.maxPrice;
       }
-      
+
       this.loadCarImages();
       this.applyFilters();
       this.dataLoaded = true;
@@ -150,6 +145,52 @@ export class CarComponent implements OnInit {
       }
     }
     return this.defaultImagePath;
+  }
+
+  // Fall back to the local placeholder when a remote car image fails to load
+  onImgError(event: Event) {
+    const img = event.target as HTMLImageElement;
+    if (img.src !== this.defaultImagePath) {
+      img.src = this.defaultImagePath;
+    }
+  }
+
+  // ─── Turkish price format: 1341 -> "1.341" ───
+  priceTL(value: number): string {
+    return Math.round(value || 0).toLocaleString('tr-TR');
+  }
+
+  // Fix known data typo (Porche -> Porsche)
+  private fixSpelling(text: string): string {
+    return (text || '').replace(/porche/gi, 'Porsche');
+  }
+
+  // Small grey brand label above the card title
+  brandLabel(car: CarDetail): string {
+    return this.fixSpelling(car.brandName);
+  }
+
+  // Bold card title as "Brand Model" without repeating the brand
+  carTitle(car: CarDetail): string {
+    const brand = this.fixSpelling(car.brandName).trim();
+    const desc = this.fixSpelling(car.description).trim();
+    if (!desc) return brand;
+    if (brand && desc.toLowerCase().startsWith(brand.toLowerCase())) {
+      return desc; // description already contains the brand (e.g. "Porsche 911")
+    }
+    return (brand ? brand + ' ' : '') + desc;
+  }
+
+  // Segmente göre rozet rengi sınıfı (Ekonomik=yeşil, Orta=mavi, Üst/Lüks=altın)
+  segmentClass(segmentName: string): string {
+    const name = (segmentName || 'Ekonomik').toLowerCase();
+    if (name.includes('lüks') || name.includes('luks') || name.includes('lux') || name.includes('üst') || name.includes('ust') || name.includes('premium')) {
+      return 'class-badge--lux';
+    }
+    if (name.includes('orta') || name.includes('middle')) {
+      return 'class-badge--mid';
+    }
+    return 'class-badge--eco';
   }
 
   // Filter change handlers
@@ -183,12 +224,6 @@ export class CarComponent implements OnInit {
     this.applyFilters();
   }
 
-  onAvailabilitySelect(status: string) {
-    this.availability = status;
-    this.currentPage = 1;
-    this.applyFilters();
-  }
-
   applyFilters() {
     let filtered = [...this.allCars];
 
@@ -210,11 +245,6 @@ export class CarComponent implements OnInit {
 
     // Price range
     filtered = filtered.filter(c => c.dailyPrice <= this.maxPrice);
-
-    // Availability
-    if (this.availability === 'available') {
-      filtered = filtered.filter(c => c.status === CarStatus.Available);
-    }
 
     this.filteredCars = filtered;
     this.totalPages = Math.max(1, Math.ceil(this.filteredCars.length / this.pageSize));
@@ -257,7 +287,6 @@ export class CarComponent implements OnInit {
     this.selectedFuelName = "";
     this.selectedGearName = "";
     this.maxPrice = this.priceLimit;
-    this.availability = 'all';
     this.filterText = '';
     this.currentPage = 1;
     this.applyFilters();
@@ -265,16 +294,11 @@ export class CarComponent implements OnInit {
   }
 
   get hasActiveFilter(): boolean {
-    return this.selectedBrandId > 0 || 
-           this.selectedSegmentName !== "" || 
-           this.selectedFuelName !== "" || 
-           this.selectedGearName !== "" || 
-           this.maxPrice < this.priceLimit || 
-           this.availability !== 'all' ||
+    return this.selectedBrandId > 0 ||
+           this.selectedSegmentName !== "" ||
+           this.selectedFuelName !== "" ||
+           this.selectedGearName !== "" ||
+           this.maxPrice < this.priceLimit ||
            this.filterText !== '';
-  }
-
-  doesntrent(car: CarDetail) {
-    this.toastrService.error("Bu araç şu anda başka bir müşterimize kiralıdır.", "Araç Dolu");
   }
 }

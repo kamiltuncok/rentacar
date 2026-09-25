@@ -263,7 +263,7 @@
                 <div class="pm-summary-content">
                     <div class="pm-summary-row">
                         <span class="pm-summary-label">Araç Bedeli (1 Gün)</span>
-                        <span class="pm-summary-value">{{ carDetail?.dailyPrice | currency:'TRY':'symbol-narrow':'1.2-2' }}</span>
+                        <span class="pm-summary-value">{{ formatTL(carDetail?.dailyPrice) }}</span>
                     </div>
                     <div class="pm-summary-row">
                         <span class="pm-summary-label">Kiralama Süresi</span>
@@ -273,7 +273,7 @@
 
                     <div class="pm-summary-row pm-summary-total">
                         <span class="pm-summary-label">Genel Toplam</span>
-                        <span class="pm-summary-value">{{ totalPrice > 0 ? (totalPrice | currency:'TRY':'symbol-narrow':'1.2-2') : 'Hesaplanıyor...' }}</span>
+                        <span class="pm-summary-value">{{ totalPrice > 0 ? formatTL(totalPrice) : 'Hesaplanıyor...' }}</span>
                     </div>
                     <p class="pm-summary-note">Güvence ve ekstralar depozito bedeline dahildir.</p>
                 </div>
@@ -281,14 +281,24 @@
 
             <div class="pm-trust-badges">
                 <div class="pm-trust-item">
-                    <div class="pm-trust-icon">🔒</div>
+                    <div class="pm-trust-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
                     <div class="pm-trust-text">
                         <span>Güvenli Ödeme</span>
                         <p>256-bit şifreleme ile ödemeniz güvende.</p>
                     </div>
                 </div>
                 <div class="pm-trust-item">
-                    <div class="pm-trust-icon">🛡️</div>
+                    <div class="pm-trust-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            <path d="M9 12l2 2 4-4"></path>
+                        </svg>
+                    </div>
                     <div class="pm-trust-text">
                         <span>Anında Onay</span>
                         <p>Onayınız hemen SMS ile iletilecektir.</p>

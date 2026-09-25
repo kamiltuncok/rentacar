@@ -1,24 +1,20 @@
 <div class="catalog-container" *ngIf="dataLoaded">
-  <!-- Top Search & Title Summary -->
+  <!-- Title + result count -->
   <header class="catalog-header">
     <div class="catalog-title-wrap">
-      <span class="catalog-eyebrow">PREMIUM ARAÇ DENEYİMİ</span>
-      <h1 class="catalog-title">Lüks ve Konforlu Araç Kataloğu</h1>
-      <p class="catalog-subtitle">İhtiyacınıza en uygun aracı saniyeler içinde bulun, online rezerve edin.</p>
+      <h1 class="catalog-title">Araç Kataloğu</h1>
+      <p class="catalog-subtitle">Filomuzu inceleyin, size uygun aracı seçin.</p>
     </div>
 
-    <!-- Search bar with dynamic count -->
     <div class="catalog-search-wrap">
       <div class="search-input-box">
         <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <input type="text" [(ngModel)]="filterText" placeholder="Açıklama, marka veya model ara..." (input)="applyFilters()">
+        <input type="text" [(ngModel)]="filterText" placeholder="Marka veya model ara..." (input)="applyFilters()">
       </div>
-      <div class="result-badge">
-        <strong>{{ filteredCars.length }}</strong> araç listeleniyor
-      </div>
+      <span class="result-count">{{ filteredCars.length }} araç listeleniyor</span>
     </div>
   </header>
 
@@ -26,26 +22,15 @@
     <!-- Left Filter Panel -->
     <aside class="filter-panel">
       <div class="filter-panel-header">
-        <h2 class="filter-title">Filtre Seçenekleri</h2>
-        <button *ngIf="hasActiveFilter" class="btn-reset" (click)="clearFilters()">✕ Temizle</button>
-      </div>
-
-      <!-- Availability Filter (Button Group Style) -->
-      <div class="filter-group">
-        <label class="filter-label">Müsaitlik Durumu</label>
-        <div class="filter-pill-group">
-          <button class="filter-pill-btn" [class.selected]="availability === 'all'" (click)="onAvailabilitySelect('all')">Tümü</button>
-          <button class="filter-pill-btn" [class.selected]="availability === 'available'" (click)="onAvailabilitySelect('available')">Sadece Müsaitler</button>
-        </div>
+        <h2 class="filter-title">Filtreler</h2>
+        <button *ngIf="hasActiveFilter" class="filter-clear-link" (click)="clearFilters()">Filtreleri temizle</button>
       </div>
 
       <!-- Brand Filter -->
       <div class="filter-group">
         <label class="filter-label">Markalar</label>
         <div class="filter-pill-group">
-          <button class="filter-pill-btn" [class.selected]="selectedBrandId === 0" (click)="onBrandSelect(0)">
-            Tüm Markalar
-          </button>
+          <button class="filter-pill-btn" (click)="onBrandSelect(0)">Tümü</button>
           <button *ngFor="let brand of brands" class="filter-pill-btn" [class.selected]="selectedBrandId === brand.brandId" (click)="onBrandSelect(brand.brandId)">
             {{ brand.brandName }}
           </button>
@@ -56,9 +41,7 @@
       <div class="filter-group">
         <label class="filter-label">Araç Sınıfı</label>
         <div class="filter-pill-group">
-          <button class="filter-pill-btn" [class.selected]="selectedSegmentName === ''" (click)="onSegmentSelect('')">
-            Tüm Sınıflar
-          </button>
+          <button class="filter-pill-btn" (click)="onSegmentSelect('')">Tümü</button>
           <button *ngFor="let segment of segments" class="filter-pill-btn" [class.selected]="selectedSegmentName === segment.segmentName" (click)="onSegmentSelect(segment.segmentName)">
             {{ segment.segmentName }}
           </button>
@@ -68,12 +51,9 @@
       <!-- Fuel Type Filter -->
       <div class="filter-group">
         <label class="filter-label">Yakıt Tipi</label>
-        <div class="filter-pill-group-vertical">
-          <button class="filter-pill-btn" [class.selected]="selectedFuelName === ''" (click)="onFuelSelect('')">
-            Tüm Yakıtlar
-          </button>
+        <div class="filter-pill-group">
+          <button class="filter-pill-btn" (click)="onFuelSelect('')">Tümü</button>
           <button *ngFor="let fuel of fuels" class="filter-pill-btn cl-pill-text-icon" [class.selected]="selectedFuelName === fuel.fuelName" (click)="onFuelSelect(fuel.fuelName)">
-            <!-- Gas Station SVG -->
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 22V12h18v10"></path>
               <path d="M3 12V4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8"></path>
@@ -88,12 +68,9 @@
       <!-- Gear Type Filter -->
       <div class="filter-group">
         <label class="filter-label">Vites Tipi</label>
-        <div class="filter-pill-group-vertical">
-          <button class="filter-pill-btn" [class.selected]="selectedGearName === ''" (click)="onGearSelect('')">
-            Tüm Vitesler
-          </button>
+        <div class="filter-pill-group">
+          <button class="filter-pill-btn" (click)="onGearSelect('')">Tümü</button>
           <button *ngFor="let gear of gears" class="filter-pill-btn cl-pill-text-icon" [class.selected]="selectedGearName === gear.gearName" (click)="onGearSelect(gear.gearName)">
-            <!-- Gear SVG -->
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="3"></circle>
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
@@ -107,12 +84,12 @@
       <div class="filter-group">
         <div class="filter-label-row">
           <label class="filter-label">Maksimum Fiyat</label>
-          <span class="price-value">{{ maxPrice | currency:'TRY':'symbol':'1.0-0' }}</span>
+          <span class="price-value-label">{{ priceTL(maxPrice) }} TL</span>
         </div>
         <input type="range" class="price-slider" [min]="minPrice" [max]="priceLimit" [value]="maxPrice" (input)="onPriceChange($any($event.target).value)">
         <div class="slider-bounds">
-          <span>Min: {{ minPrice | currency:'TRY':'symbol':'1.0-0' }}</span>
-          <span>Max: {{ priceLimit | currency:'TRY':'symbol':'1.0-0' }}</span>
+          <span>{{ priceTL(minPrice) }} TL</span>
+          <span>{{ priceTL(priceLimit) }} TL</span>
         </div>
       </div>
     </aside>
@@ -122,53 +99,55 @@
       <div class="car-catalog-grid">
         <!-- Empty State -->
         <div *ngIf="(pagedCars | filterPipe:filterText).length === 0" class="empty-results">
-          <div class="empty-icon">🚗</div>
+          <div class="empty-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 17h14M6.5 17l-1.2-5.2A3 3 0 0 1 8.2 8h7.6a3 3 0 0 1 2.9 3.8L17.5 17"></path>
+              <path d="M5 11h14"></path>
+              <circle cx="8" cy="17.5" r="1.5"></circle>
+              <circle cx="16" cy="17.5" r="1.5"></circle>
+            </svg>
+          </div>
           <h3 class="empty-title">Aradığınız kriterlere uygun araç bulunamadı</h3>
           <p class="empty-subtitle">Lütfen filtrelerinizi gevşeterek veya arama teriminizi değiştirerek tekrar deneyin.</p>
           <button class="btn-clear-large" (click)="clearFilters()">Tüm Filtreleri Sıfırla</button>
         </div>
 
-        <!-- Premium Car Cards -->
-        <article class="premium-car-card" *ngFor="let car of pagedCars | filterPipe:filterText" [class.rented-card]="car.status !== CarStatus.Available">
-          <!-- Card Image & Badge Layer -->
+        <!-- Car Cards -->
+        <article class="premium-car-card" *ngFor="let car of pagedCars | filterPipe:filterText">
+          <!-- Card Image + single class badge -->
           <div class="card-media-layer">
-            <img [src]="getImagePath(car)" alt="{{ car.brandName }} {{ car.description }}" loading="lazy" class="car-card-img">
-            
-            <div class="badge-overlay-top">
-              <span class="segment-badge" [class.ekonomik]="car.segmentName === 'Ekonomik'" [class.orta]="car.segmentName === 'Orta'" [class.luks]="car.segmentName === 'Lüks'">
-                {{ car.segmentName || 'Ekonomik' }}
-              </span>
-              <span class="status-badge" [class.available]="car.status === CarStatus.Available" [class.rented]="car.status !== CarStatus.Available">
-                {{ car.status === CarStatus.Available ? 'Müsait' : 'Kirada' }}
-              </span>
-            </div>
+            <img [src]="getImagePath(car)" (error)="onImgError($event)" alt="{{ carTitle(car) }}" loading="lazy" class="car-card-img">
+            <span class="class-badge" [ngClass]="segmentClass(car.segmentName)">{{ car.segmentName || 'Ekonomik' }}</span>
           </div>
 
           <!-- Card Content Body -->
           <div class="card-details-layer">
+            <span class="car-brand-eyebrow">{{ brandLabel(car) }}</span>
             <div class="card-header-row">
-              <h2 class="car-card-name">{{ car.brandName }}</h2>
+              <h2 class="car-card-name">{{ carTitle(car) }}</h2>
               <span class="car-card-year">{{ car.modelYear }}</span>
             </div>
-            <p class="car-card-model">{{ car.description }}</p>
 
-            <!-- Subtle spec badges for decision support -->
+            <!-- Feature chips -->
             <div class="car-spec-strip">
               <span class="spec-item-badge">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 22V12h18v10"></path>
+                  <path d="M3 12V4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8"></path>
+                  <path d="M12 2v20"></path>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                 </svg>
                 {{ car.fuelName }}
               </span>
               <span class="spec-item-badge">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="9" y1="3" x2="9" y2="21"></line>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M12 2v4M12 18v4M2 12h4M18 12h4"></path>
                 </svg>
                 {{ car.gearName }}
               </span>
               <span class="spec-item-badge">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                   <circle cx="12" cy="10" r="3"></circle>
                 </svg>
@@ -176,36 +155,25 @@
               </span>
             </div>
 
-            <!-- Pricing Section (Most Prominent text after image) -->
+            <!-- Pricing -->
             <div class="card-price-layer">
               <span class="price-caption">Günlük Fiyat</span>
               <div class="price-amount-box">
-                <span class="price-value">{{ car.dailyPrice | currency:'TRY':'symbol':'1.0-0' }}</span>
+                <span class="price-value">{{ priceTL(car.dailyPrice) }} TL</span>
                 <span class="price-suffix">/ gün</span>
               </div>
             </div>
 
-            <!-- CTA Button Layer -->
+            <!-- Actions -->
             <div class="card-actions-layer">
-              <!-- Detail button (Secondary) -->
-              <a [routerLink]="'/carDetail/' + car.id" class="btn-action-secondary">
-                Detay
-              </a>
-              <!-- Rent button (Primary CTA) -->
-              <a *ngIf="car.status === CarStatus.Available; else rentedCTA" [routerLink]="'/carDetail/' + car.id + '/payment'" class="btn-action-primary">
-                Kirala
-              </a>
-              <ng-template #rentedCTA>
-                <button (click)="doesntrent(car)" class="btn-action-primary btn-disabled">
-                  Kiralanamaz
-                </button>
-              </ng-template>
+              <a [routerLink]="'/carDetail/' + car.id" class="btn-action-secondary">Detay</a>
+              <a [routerLink]="'/carDetail/' + car.id + '/payment'" class="btn-action-primary">Kirala</a>
             </div>
           </div>
         </article>
       </div>
 
-      <!-- Pagination Layer -->
+      <!-- Pagination -->
       <nav *ngIf="dataLoaded && totalPages > 1" class="catalog-pagination">
         <button class="pag-nav-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
           ‹ Önceki
@@ -226,5 +194,5 @@
 <!-- Initial Spinner State -->
 <div *ngIf="!dataLoaded" class="spinner-state-wrap">
   <div class="premium-pulse-spinner"></div>
-  <p class="pulse-text">Seçkin araç filomuz yükleniyor...</p>
+  <p class="pulse-text">Araç filomuz yükleniyor...</p>
 </div>

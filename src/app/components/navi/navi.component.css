@@ -1,18 +1,25 @@
-/* ─── Navbar Root ─────────────────────────── */
+/* ─── Navbar Root ─────────────────────────────────────────────────────────
+   Outer <header> is a top-level sibling of `.container` in app.component.html
+   (not nested inside it), so `width: 100%` is already the full viewport —
+   no vw-breakout hack needed. Its dark background matches the hero section
+   directly below it on the landing page. The inner <nav> is centered and
+   capped to the hero's own max-width (1200px) so both bars align. ───────── */
 .g-nav {
   position: sticky;
   top: 0;
+  width: 100%;
   z-index: 100;
-  background: #0a1628;
+  background: var(--color-dark-bg, #0F172A);
   height: 64px;
   display: flex;
   align-items: center;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  /* No drop shadow: nav and hero must read as one continuous dark block. */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .g-nav__inner {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
   display: flex;

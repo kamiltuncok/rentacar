@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { formatDate, NgIf, NgFor, UpperCasePipe, SlicePipe, CurrencyPipe } from '@angular/common';
+import { formatDate, NgIf, NgFor, UpperCasePipe, SlicePipe } from '@angular/common';
 
 import { CarDetail } from 'src/app/models/carDetail';
 import { CarService } from 'src/app/services/car.service';
@@ -13,7 +13,7 @@ import { AuthService } from 'src/app/services/auth.service';
   selector: 'app-payment',
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css'],
-  imports: [NgIf, NgFor, FormsModule, ReactiveFormsModule, UpperCasePipe, SlicePipe, CurrencyPipe]
+  imports: [NgIf, NgFor, FormsModule, ReactiveFormsModule, UpperCasePipe, SlicePipe]
 })
 export class PaymentComponent implements OnInit {
   carDetail: CarDetail;
@@ -100,6 +100,12 @@ export class PaymentComponent implements OnInit {
       this.totalDays = 1;
       this.totalPrice = this.carDetail.dailyPrice;
     }
+  }
+
+  // Turkish currency format: 1620 -> "1.620,00 TL"
+  formatTL(value: number | undefined | null): string {
+    const v = value || 0;
+    return v.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TL';
   }
 
   createRentalForm() {

@@ -62,6 +62,16 @@ export class CarSearchFormComponent {
     this.customerTypeChange.emit(type);
   }
 
+  get dayCount(): number {
+    if (!this.selectedStartDate || !this.selectedEndDate) {
+      return 0;
+    }
+    const start = new Date(this.selectedStartDate + 'T' + (this.selectedStartTime || '00:00'));
+    const end = new Date(this.selectedEndDate + 'T' + (this.selectedEndTime || '00:00'));
+    const diff = Math.round((end.getTime() - start.getTime()) / 86400000);
+    return diff > 0 ? diff : 0;
+  }
+
   onSearch() {
     const searchData = {
       selectedStartLocation: this.selectedStartLocation,

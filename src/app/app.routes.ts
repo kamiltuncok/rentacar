@@ -3,6 +3,14 @@ import { LoginGuard } from './guards/login.guard';
 import { AdminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
+    // ─── RL Fiyatlandırma Paneli (admin) ───
+    {
+        path: 'admin/pricing',
+        loadComponent: () => import('./components/pricing-dashboard/pricing-dashboard.component')
+            .then(m => m.PricingDashboardComponent),
+        canActivate: [AdminGuard],
+    },
+
     // ─── Home (eager — landing page) ───
     {
         path: '',

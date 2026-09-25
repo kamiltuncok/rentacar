@@ -1,0 +1,149 @@
+<div class="container-fluid py-4 pricing-dashboard">
+
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+      <h3 class="mb-1">Dinamik Fiyatlandırma (RL)</h3>
+      <p class="text-muted mb-0 small">
+        Q-Learning motorunun kararları ve gerçekleşen sonuçlarla ölçümü
+      </p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary" (click)="runBatch()" [disabled]="runningBatch">
+        {{ runningBatch ? 'Çalışıyor…' : 'Tüm Filoyu Fiyatlandır' }}
+      </button>
+      <button class="btn btn-outline-secondary" (click)="settleRewards()" [disabled]="settling">
+        {{ settling ? 'Kapatılıyor…' : 'Ödülleri Kapat' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- ─── A/B ölçümü ─────────────────────────────────────────── -->
+  <div class="card mb-4">
+    <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <span class="fw-semibold">RL Grubu vs Kontrol Grubu</span>
+      <div class="d-flex align-items-center gap-2">
+        <label class="small text-muted mb-0" for="windowDays">Son</label>
+        <input id="windowDays" type="number" min="1" max="365" class="form-control form-control-sm window-input"
+               [(ngModel)]="windowDays" (change)="loadPerformance()">
+        <span class="small text-muted">gün</span>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div *ngIf="loadingPerformance" class="text-muted">Yükleniyor…</div>
+
+      <div *ngIf="!loadingPerformance && performance">
+        <div class="row g-3">
+          <div class="col-12 col-md-4">
+            <div class="metric-box">
+              <div class="metric-label">Karar başına ciro farkı</div>
+              <div class="metric-value" [ngClass]="upliftClass">{{ upliftLabel }}</div>
+              <div class="metric-hint">RL grubunun kontrol grubuna göre farkı</div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <div class="metric-box">
+              <div class="metric-label">RL grubu</div>
+              <div class="metric-value">{{ performance.rlGroup.revenuePerDecision | number:'1.0-2' }} ₺</div>
+              <div class="metric-hint">
+                {{ performance.rlGroup.decisions }} karar ·
+                {{ performance.rlGroup.realizedRentals }} kiralama ·
+                ort. ödül {{ performance.rlGroup.averageReward | number:'1.0-4' }}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <div class="metric-box">
+              <div class="metric-label">Kontrol grubu (sabit fiyat)</div>
+              <div class="metric-value">{{ performance.controlGroup.revenuePerDecision | number:'1.0-2' }} ₺</div>
+              <div class="metric-hint">
+                {{ performance.controlGroup.decisions }} karar ·
+                {{ performance.controlGroup.realizedRentals }} kiralama
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="performance.notes?.length" class="alert alert-warning mt-3 mb-0 py-2 small">
+          <div *ngFor="let note of performance.notes">{{ note }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Son kararlar ───────────────────────────────────────── -->
+  <div class="card mb-4" *ngIf="decisions.length">
+    <div class="card-header fw-semibold">Son Kararlar ({{ decisions.length }})</div>
+    <div class="table-responsive">
+      <table class="table table-sm table-hover mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Araç</th>
+            <th class="text-end">Eski</th>
+            <th class="text-end">Yeni</th>
+            <th class="text-end">Değişim</th>
+            <th class="text-end">Ödül</th>
+            <th>Karar anındaki durum</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of decisions">
+            <td class="fw-semibold">#{{ d.carId }}</td>
+            <td class="text-end text-muted">{{ d.oldPrice | number:'1.0-0' }} ₺</td>
+            <td class="text-end fw-semibold">{{ d.newPrice | number:'1.0-0' }} ₺</td>
+            <td class="text-end" [ngClass]="actionClass(d.action)">{{ d.priceChange }}</td>
+            <td class="text-end">{{ d.reward | number:'1.0-4' }}</td>
+            <td class="small text-muted">{{ explainState(d.stateKey) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── Filo ───────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header fw-semibold">Filo ({{ cars.length }} araç)</div>
+    <div class="table-responsive">
+      <table class="table table-sm table-hover mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Plaka</th>
+            <th>Segment</th>
+            <th class="text-end">Günlük fiyat</th>
+            <th>Tavsiye</th>
+            <th class="text-end">İşlem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let car of cars">
+            <td>{{ car.id }}</td>
+            <td>{{ car.plateNumber }}</td>
+            <td>{{ car.segmentId }}</td>
+            <td class="text-end fw-semibold">{{ car.dailyPrice | number:'1.0-0' }} ₺</td>
+            <td class="small">
+              <span *ngIf="recommendations[car.id]; else askBtn" class="text-muted">
+                {{ recommendations[car.id] }}
+              </span>
+              <ng-template #askBtn>
+                <button class="btn btn-link btn-sm p-0" (click)="askRecommendation(car.id)">
+                  Tavsiye al
+                </button>
+              </ng-template>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-outline-primary btn-sm"
+                      (click)="updateOne(car.id)"
+                      [disabled]="updatingCarId === car.id">
+                {{ updatingCarId === car.id ? '…' : 'Fiyatla' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

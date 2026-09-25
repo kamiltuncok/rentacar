@@ -11,7 +11,7 @@
 
     <div class="cl-header-group">
       <span class="cl-header-label">Alış Tarihi</span>
-      <span class="cl-header-value">{{ from }} <span style="color:#9ca3af; font-weight:400">{{ startTime
+      <span class="cl-header-value">{{ from }} <span class="cl-header-time">{{ startTime
           }}</span></span>
     </div>
 
@@ -26,14 +26,14 @@
 
     <div class="cl-header-group">
       <span class="cl-header-label">Dönüş Tarihi</span>
-      <span class="cl-header-value">{{ to }} <span style="color:#9ca3af; font-weight:400">{{ endTime }}</span></span>
+      <span class="cl-header-value">{{ to }} <span class="cl-header-time">{{ endTime }}</span></span>
     </div>
 
     <div class="cl-header-divider"></div>
 
     <div class="cl-header-group">
       <span class="cl-header-label">Süre</span>
-      <span class="cl-header-value" style="color: #2563eb; font-weight: 700;">{{ gun }} Gün</span>
+      <span class="cl-header-value cl-header-duration">{{ gun }} Gün</span>
     </div>
   </div>
 
@@ -116,20 +116,31 @@
         <div class="cl-card-content">
           <div>
             <div class="cl-card-header">
-              <h3 class="cl-card-title">{{car.description}}</h3>
+              <h3 class="cl-card-title">{{ carTitle(car) }}</h3>
             </div>
 
             <div class="cl-specs">
               <span class="cl-spec-badge">
-                <img [src]="'assets/images/gas-station.png'" alt="Yakıt">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 22V12h18v10"></path>
+                  <path d="M3 12V4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8"></path>
+                  <path d="M12 2v20"></path>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
                 {{car.fuelName}}
               </span>
               <span class="cl-spec-badge">
-                <img [src]="'assets/images/manual-transmission.png'" alt="Vites">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M12 2v4M12 18v4M2 12h4M18 12h4"></path>
+                </svg>
                 {{car.gearName}}
               </span>
               <span class="cl-spec-badge">
-                <img [src]="'assets/images/deposit.png'" alt="Depozito">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="6" width="20" height="13" rx="2"></rect>
+                  <path d="M2 10h20"></path>
+                </svg>
                 Depozito: {{car.deposit}}₺
               </span>
             </div>
@@ -150,16 +161,14 @@
         </div>
       </article>
 
-      <div *ngIf="carDetails.length === 0"
-        style="text-align:center; padding: 4rem; color: #6b7280; background: white; border-radius: 16px; border: 1px dashed #e5e7eb;">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-          stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem; opacity: 0.5;">
+      <div *ngIf="carDetails.length === 0" class="cl-empty">
+        <svg class="cl-empty__icon" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <p style="font-size: 1.125rem; font-weight: 500; color: #111827; margin-bottom: 0.5rem;">Uygun araç bulunamadı.
-        </p>
-        <p style="font-size: 0.875rem;">Lütfen filtrelerinizi veya tarih aralığınızı değiştirerek tekrar deneyin.</p>
+        <p class="cl-empty__title">Uygun araç bulunamadı.</p>
+        <p class="cl-empty__text">Lütfen filtrelerinizi veya tarih aralığınızı değiştirerek tekrar deneyin.</p>
       </div>
 
     </div>

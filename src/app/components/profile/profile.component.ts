@@ -81,7 +81,16 @@ export class ProfileComponent implements OnInit {
   private loadUserProfile(): void {
     this.userService.getUserById(this.authService.getCurrentUserId).pipe(
       switchMap(userRes => {
-        const userData = userRes.data;
+        // Backend, kullanıcıyı sarmalanmış ({data}) veya düz DTO olarak dönebilir — ikisini de tolere et.
+        const userData: any = (userRes as any)?.data ?? userRes;
+
+        // customerId yoksa müşteri detayını çağırma; elimizdeki veriyle göster.
+        if (!userData || userData.customerId == null) {
+          this.user.set(userData ? { ...userData } as UserProfile : null);
+          this.dataLoaded.set(true);
+          return EMPTY;
+        }
+
         return this.customerService.getCustomerDetailById(userData.customerId).pipe(
           // Build full profile from both responses
           catchError(() => {

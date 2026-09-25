@@ -9,9 +9,9 @@
 
     <div class="profile-layout">
 
-        <!-- Sidebar: User Card -->
-        @if (user(); as u) {
+        <!-- Sidebar: User Card (aside always renders so the grid stays intact) -->
         <aside class="profile-sidebar">
+            @if (user(); as u) {
             <div class="user-card">
                 <div class="user-card__avatar">
                     <span class="user-card__initials">
@@ -21,8 +21,8 @@
                 <div class="user-card__name">{{ u.firstName }} {{ u.lastName }}</div>
                 <div class="user-card__email">{{ u.email }}</div>
             </div>
+            }
         </aside>
-        }
 
         <!-- Main Content -->
         <main class="profile-main">

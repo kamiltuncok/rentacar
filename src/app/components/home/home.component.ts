@@ -38,6 +38,24 @@ export class HomeComponent {
   segments: Segment[] = [];
   segmentPrices: { [key: number]: string } = {};
 
+  // ─── OtoGez landing content ───
+  trustItems: string[] = ['Ücretsiz iptal', 'Gizli ücret yok', '7/24 yol yardımı', 'Anında onay'];
+
+  reviews = [
+    { name: 'Mert Y.', stars: '★★★★★', quote: 'Teslim alma çok hızlıydı, araç tertemizdi. Fiyatlar da gayet makuldü.' },
+    { name: 'Aslı K.', stars: '★★★★★', quote: 'Farklı ofiste teslim seçeneği işimi çok kolaylaştırdı, tekrar tercih edeceğim.' },
+    { name: 'Burak T.', stars: '★★★★☆', quote: 'Rezervasyon süreci sorunsuzdu, müşteri hizmetleri de ilgiliydi.' }
+  ];
+
+  faqs = [
+    { q: 'Araç kiralamak için minimum ehliyet yaşı nedir?', a: 'Araç kiralayabilmek için en az 21 yaşında olmanız ve en az 2 yıllık ehliyete sahip olmanız gerekmektedir. Bazı lüks araç sınıflarında yaş sınırı 25 olabilir.' },
+    { q: 'Depozito ne kadar ve nasıl alınır?', a: 'Depozito, araç sınıfına göre 3.000 TL ile 10.000 TL arasında değişir ve kredi kartından bloke olarak alınır. Aracı hasarsız teslim ettiğinizde blokaj kaldırılır.' },
+    { q: 'Rezervasyonumu ücretsiz iptal edebilir miyim?', a: 'Alış tarihinden 48 saat öncesine kadar yapılan iptallerde herhangi bir ücret alınmaz ve ödemeniz tam olarak iade edilir.' },
+    { q: 'Ek sürücü ekleyebilir miyim?', a: 'Evet, rezervasyon sırasında veya ofiste ek sürücü tanımlayabilirsiniz. Ek sürücünün de ehliyet şartlarını sağlaması gerekir.' },
+    { q: 'Kilometre sınırı var mı?', a: 'Standart kiralamalarda günlük 300 km sınırı uygulanır. Sınırsız kilometre paketini kiralama sırasında ekstra ücretle seçebilirsiniz.' }
+  ];
+  faqOpen: { [key: number]: boolean } = {};
+
   constructor(
     private locationService: LocationService,
     private router: Router,
@@ -182,5 +200,25 @@ export class HomeComponent {
   closeSegmentPopup() {
     this.showSegmentPopup = false;
     this.selectedSegment = '';
+  }
+
+  toggleFaq(index: number) {
+    this.faqOpen[index] = !this.faqOpen[index];
+  }
+
+  // ─── Segment presentation helpers (OtoGez vehicle-class cards) ───
+  getSegmentImage(segmentName: string): string {
+    const name = (segmentName || '').toLowerCase();
+    if (name.includes('ekonom') || name.includes('economy')) return 'assets/images/economy.png';
+    if (name.includes('lüks') || name.includes('luks') || name.includes('lux') || name.includes('premium')) return 'assets/images/lux.jpg';
+    if (name.includes('orta') || name.includes('middle') || name.includes('sedan')) return 'assets/images/middle.png';
+    return 'assets/images/middle.png';
+  }
+
+  getSegmentFeatures(segmentName: string): string[] {
+    const name = (segmentName || '').toLowerCase();
+    if (name.includes('ekonom') || name.includes('economy')) return ['Manuel', '5 Koltuk', 'Klima'];
+    if (name.includes('lüks') || name.includes('luks') || name.includes('lux') || name.includes('premium')) return ['Otomatik', '5 Koltuk', 'Klima + Deri'];
+    return ['Otomatik', '5 Koltuk', 'Klima'];
   }
 }

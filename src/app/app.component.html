@@ -1,14 +1,11 @@
+<!-- Nav and footer are top-level siblings (not nested in `.container`) so their
+     full-bleed dark backgrounds span the true viewport width, not just the
+     Bootstrap container's max-width. Only the routed page content is
+     constrained/centered by `.container`. -->
+<app-navi></app-navi>
+
 <div class="container">
-    <app-navi></app-navi>
-    <div class="row">
-      <div class="col-md-3">
-        <!-- <app-brand></app-brand>
-        <app-color></app-color> -->
-      </div>
-      <div class="col-md-9">
-        <router-outlet></router-outlet>
-      </div>
-    </div>
-        <router-outlet></router-outlet>
-    <app-footer></app-footer>
-  </div>
+  <router-outlet></router-outlet>
+</div>
+
+<app-footer></app-footer>

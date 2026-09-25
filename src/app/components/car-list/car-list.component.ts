@@ -116,6 +116,22 @@ export class CarListComponent {
     }
   }
 
+  // Fix known data typo (Porche -> Porsche)
+  private fixSpelling(text: string): string {
+    return (text || '').replace(/porche/gi, 'Porsche');
+  }
+
+  // Card title as "Brand Model" without repeating the brand
+  carTitle(car: CarDetail): string {
+    const brand = this.fixSpelling(car.brandName).trim();
+    const desc = this.fixSpelling(car.description).trim();
+    if (!desc) return brand;
+    if (brand && desc.toLowerCase().startsWith(brand.toLowerCase())) {
+      return desc;
+    }
+    return (brand ? brand + ' ' : '') + desc;
+  }
+
   isSegmentSelected(segmentId: number): boolean {
     return this.selectedSegmentIds.includes(segmentId);
   }
