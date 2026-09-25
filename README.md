@@ -1,20 +1,52 @@
-# rentacar — Angular Enterprise Car Rental Platform & RL Pricing Dashboard
+# rentacar — Angular 19 Enterprise Car Rental Platform & RL Pricing Dashboard
 
-A modern, standalone-component-driven Single Page Application (SPA) built with **Angular 19** and **TypeScript** for an enterprise vehicle rental platform. It provides role-based portals for individual customers, corporate clients, location managers, and system administrators. The application features multi-criteria fleet filtering, interactive branch mapping with Leaflet, secure JWT authentication flows, mock checkout processing, and a dedicated **Reinforcement Learning Dynamic Pricing Dashboard**.
+<div align="center">
 
-This repository is the **frontend SPA**. The underlying ASP.NET Core backend API is located in [CarProject](https://github.com/kamiltuncok/CarProject).
+![Angular 19](https://img.shields.io/badge/Angular-19.2-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![TypeScript 5.8](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![RxJS](https://img.shields.io/badge/RxJS-7.8-B7178C?style=for-the-badge&logo=reactivex&logoColor=white)
+![Bootstrap 5](https://img.shields.io/badge/Bootstrap-5.2-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+![Leaflet Maps](https://img.shields.io/badge/Leaflet-Geospatial_Maps-199900?style=for-the-badge&logo=leaflet&logoColor=white)
+![Auth0 JWT](https://img.shields.io/badge/Auth0_JWT-Bearer_Auth-EB5424?style=for-the-badge&logo=auth0&logoColor=white)
+
+**A modern, standalone-component-driven Single Page Application (SPA) featuring multi-criteria fleet filtering, interactive Leaflet branch locator, and an algorithmic Reinforcement Learning Dynamic Pricing Dashboard.**
+
+[Live Client (Local)](#getting-started--local-setup) • [Architecture Guide](#system-architecture--system-flow) • [Pricing Dashboard](#4-reinforcement-learning-dynamic-pricing-dashboard) • [Backend API Service](https://github.com/kamiltuncok/CarProject)
+
+</div>
 
 ---
 
-## Recruiter & Engineering Summary
-
-- **Primary Stack**: Angular 19 (Standalone Components), TypeScript 5.8, RxJS 7.8, Bootstrap 5.2, ngx-toastr, Leaflet Maps, `@auth0/angular-jwt`.
-- **Key Engineering Highlights**: Fully modular standalone component architecture with route-level lazy loading (`loadComponent`), functional and class-based route guards (`LoginGuard`, `AdminGuard`), HTTP interceptors for automatic JWT Bearer token attachment, reactive and template-driven forms with custom validation, and interactive geographic office mapping.
-- **Primary Technical Challenge**: Providing a unified administrative dashboard that monitors and triggers algorithmic reinforcement learning price adjustments and settles pricing reward loops across multi-segment vehicle fleets, all routed securely through a .NET backend proxy without exposing internal microservices.
+> ### 📋 GitHub Repository Metadata
+> * **Description:** Modern Angular 19 car rental SPA featuring standalone components, Leaflet branch mapping, JWT guards, and an RL dynamic pricing dashboard.
+> * **Topics:** `angular-19`, `typescript`, `standalone-components`, `leaflet`, `dynamic-pricing`, `reinforcement-learning`, `car-rental`, `bootstrap-5`, `jwt-auth`, `rxjs`
 
 ---
 
-## Architecture & System Flow
+## 📖 Executive Summary & Core Value
+
+`rentacar` is an enterprise vehicle rental frontend client engineered with **Angular 19** standalone components. It provides role-tailored portals for individual customers, corporate organizations, branch managers, and system administrators:
+* **Customer Hub:** Multi-attribute real-time catalog search (by Brand, Color, Segment, Fuel, Transmission, and Branch), split-view vehicle specifications, interactive Leaflet branch office locator, and checkout reservation flow.
+* **Corporate & Administrative Portals:** Separate corporate onboarding, fleet CRUD operations, location manager assignments, and operational permissions.
+* **RL Dynamic Pricing Dashboard:** Administrative monitoring and execution center for an algorithmic Q-learning pricing engine, featuring single-car recommendations, fleet-wide batch repricing, reward loop settlement, and A/B revenue/utilization metrics.
+
+---
+
+## 🎯 Evaluator Guide: Key Architectural Highlights
+
+If you are an evaluator or technical recruiter reviewing code quality, here are the best starting points:
+
+| Evaluated Concept | Key Implementation Files | Key Takeaway |
+|---|---|---|
+| **Standalone Component Architecture** | `src/app/components/` & `app.routes.ts` | Zero `NgModule` boilerplate; lazy-loaded standalone components via `loadComponent` route imports. |
+| **RL Dynamic Pricing Dashboard** | `src/app/components/pricing-dashboard/` | Full-featured administrative control panel monitoring ML price decisions, batch executions, and A/B utilization metrics. |
+| **Geospatial Mapping** | [`branches.component.ts`](file:///c:/Users/MONSTER/OneDrive/Belgeler/GitHub/rentacar/src/app/components/branches/branches.component.ts) | Lightweight, dependency-free interactive branch locator with **Leaflet** maps and custom markers. |
+| **JWT Interception & Claims** | `src/app/interceptors/auth.interceptor.ts` | Transparent `Bearer` token injection and role/claim verification using `@auth0/angular-jwt`. |
+| **Route Protection & Guards** | `src/app/guards/` (`login.guard.ts`, `admin.guard.ts`) | Functional and class-based route guards restricting administrative inventory and pricing views. |
+
+---
+
+## 🏛️ System Architecture & System Flow
 
 ```mermaid
 flowchart TB
@@ -73,148 +105,119 @@ flowchart TB
 
 ---
 
-## Key Features
-
-### 1. Customer Booking & Search Flow
-- **Multi-Attribute Search & Filter**: Real-time filtering by Brand, Color, Fuel Type (Gasoline, Diesel, Hybrid, Electric), Gear Type (Manual, Automatic), Vehicle Segment (Economy, Comfort, Luxury), and Branch Location.
-- **Interactive Branch Locator**: Integrated **Leaflet** map displaying real branch coordinates across cities with interactive popups and office details.
-- **Vehicle Details & Image Carousel**: Image viewer with fallbacks for missing media, technical specifications, daily rate display, and availability verification.
-- **Checkout & Rental Management**: Date-range calculation, client-side credit card validation, and structured rental reservation submission.
-
-### 2. Role-Based Portals & Authentication
-- **Dual Registration & Login**: Separate registration and authentication workflows for Individual and Corporate accounts.
-- **JWT State & Route Protection**: `@auth0/angular-jwt` decoding to extract user identities, claims, and role memberships.
-- **Route Guards**: `LoginGuard` restricts checkout and user profile access; `AdminGuard` protects fleet inventory management and financial pricing views.
-- **Session Persistence**: Token storage abstraction in `LocalStorageService` with automatic header attachment via `AuthInterceptor`.
-
-### 3. Administrative Inventory & Branch Management
-- Comprehensive CRUD interfaces for Cars, Brands, Colors, Car Images, and Physical Locations.
-- Branch Manager assignment and operational role administration (`LocationManagerAddComponent`, `LocationManagerListComponent`).
-
-### 4. Reinforcement Learning Dynamic Pricing Dashboard
-- **Algorithmic Fleet Overview**: Visualizes recommended price adjustments calculated by the backend Q-learning reinforcement learning model.
-- **Batch Execution**: Trigger single-vehicle or full-fleet batch price updates with instant feedback.
-- **Reward Loop Settlement**: Provides administrative controls to settle reward feedback loops against completed rentals once observation windows expire.
-- **A/B Performance Tracking**: Compares pricing metrics (revenue, utilization rate) between RL-optimized vehicles and static baseline control groups over 7, 30, or 90-day intervals.
-
----
-
-## Technology Stack
-
-| Category | Technologies |
-|---|---|
-| **Framework & Core** | Angular 19.2, TypeScript 5.8, RxJS 7.8, Zone.js 0.15 |
-| **UI & Styling** | Bootstrap 5.2, ngx-bootstrap 11, Vanilla CSS Design System |
-| **Mapping & Geospatial** | Leaflet 1.9, `@types/leaflet` |
-| **Auth & Security** | `@auth0/angular-jwt`, Custom HTTP Interceptors, Route Guards |
-| **Notifications & UX** | ngx-toastr 16, Angular Animations |
-| **Build & Tooling** | Angular CLI 19, `@angular-devkit/build-angular` |
-
----
-
-## Project Structure
+## 🗂️ Project Structure & Directory Organization
 
 ```
 rentacar/
 ├── src/
 │   ├── app/
-│   │   ├── components/            # Standalone UI components (32 feature modules)
+│   │   ├── components/            # Standalone UI Feature Modules (30+ components)
 │   │   │   ├── branches/          # Leaflet interactive branch office map
-│   │   │   ├── car/               # Vehicle grid & catalogue
-│   │   │   ├── car-detail/        # Vehicle specification, gallery & booking
+│   │   │   ├── car/               # Vehicle grid, split-layout catalogue & zebra striping
+│   │   │   ├── car-detail/        # Vehicle specs, daily rates, image gallery & booking
 │   │   │   ├── car-search-form/   # Multi-criteria filter search widget
-│   │   │   ├── payment/           # Checkout flow & card validation
-│   │   │   ├── pricing-dashboard/ # RL dynamic pricing admin panel
-│   │   │   ├── profile/           # User account profile management
-│   │   │   ├── login/ & register/ # Individual auth forms
-│   │   │   ├── loginforcorporate/ # Corporate client auth forms
-│   │   │   └── *-add / *-update   # Entity management forms (Brand, Car, Color, Location)
-│   │   ├── guards/                # Route guards (LoginGuard, AdminGuard)
-│   │   ├── interceptors/          # AuthInterceptor (JWT Bearer injection)
-│   │   ├── models/                # Strongly-typed TypeScript interfaces & DTOs
-│   │   │   ├── car.ts, rental.ts  # Domain models
-│   │   │   ├── pricing.ts         # PricingDecision, PricingPerformance interfaces
-│   │   │   └── responseModel.ts   # Generic API response contracts
-│   │   ├── pipes/                 # Custom pipes (FilterPipe, VatPipe)
+│   │   │   ├── payment/           # Checkout reservation flow & client credit card check
+│   │   │   ├── pricing-dashboard/ # RL dynamic pricing administrative control center
+│   │   │   ├── profile/           # User profile & rental history management
+│   │   │   ├── login/ & register/ # Individual client authentication
+│   │   │   ├── loginforcorporate/ # Corporate account authentication
+│   │   │   └── *-add / *-update   # Inventory management forms (Brand, Car, Color, Location)
+│   │   ├── guards/                # Route security guards (LoginGuard, AdminGuard)
+│   │   ├── interceptors/          # AuthInterceptor (JWT Bearer token attachment)
+│   │   ├── models/                # Strongly-typed TypeScript domain models & DTOs
+│   │   │   ├── car.ts, rental.ts  # Vehicle & booking models
+│   │   │   ├── pricing.ts         # PriceDecision, PricingPerformance interfaces
+│   │   │   └── responseModel.ts   # Generic API response envelope contracts
+│   │   ├── pipes/                 # Custom transformation pipes (FilterPipe, VatPipe)
 │   │   ├── services/              # Injectable HTTP services (CarService, PricingService, etc.)
-│   │   ├── app.config.ts          # Application providers, HTTP client & animation setup
-│   │   └── app.routes.ts          # Lazy-loaded route table with guard protections
-│   ├── assets/                    # Static assets, fallback vehicle graphics
-│   ├── styles.css                 # Global design system variables & utility styles
-│   └── main.ts                    # Application bootstrap entry point
-├── angular.json                   # Angular workspace configuration
+│   │   ├── app.config.ts          # Application providers, animations & HTTP interceptors
+│   │   └── app.routes.ts          # Standalone route table with lazy loading
+│   ├── assets/                    # Static images, icons, and hero car artwork
+│   ├── styles.css                 # Global CSS design tokens, zebra striping & variables
+│   └── main.ts                    # Angular bootstrap entry point
+├── angular.json                   # Angular workspace build configuration
 ├── package.json                   # Dependencies and npm scripts
 └── tsconfig.json                  # TypeScript compiler options
 ```
 
 ---
 
-## Key API Integration Points
+## ⚡ Key Features & UI Portals
 
-The frontend communicates with the backend via `https://localhost:44306/api/`:
+### 1. Customer Booking & Fleet Catalog
+* **Multi-Attribute Filter Widget:** Instant filtering across Brands, Colors, Fuel Types (Gasoline, Diesel, Hybrid, Electric), Transmissions (Manual, Automatic), and Rental Branches.
+* **Conversion-Focused Split Layout:** Vehicle catalogue featuring side-by-side specification overview, daily rate badges, and quick reservation triggers.
+* **Interactive Branch Map (Leaflet):** Real geographic branch location map with interactive popups and office operating details.
 
-| Service | Endpoint Path | Purpose |
-|---|---|---|
-| `AuthService` | `/api/auth/login`, `/api/auth/register` | Authentication and JWT issuance |
-| `CarService` | `/api/cars`, `/api/cars/getcardetails` | Fleet catalogue and composite vehicle data |
-| `RentalService` | `/api/rentals/add`, `/api/rentals/checkrules` | Booking validation and rental creation |
-| `LocationService` | `/api/locations/getall`, `/api/locationcities` | Branch coordinates for Leaflet maps |
-| `PricingService` | `/api/cars/{id}/recommended-price` | Single-vehicle pricing recommendations |
-| `PricingService` | `/api/cars/update-prices-batch` | Fleet-wide dynamic batch repricing |
-| `PricingService` | `/api/cars/settle-rewards` | Closes completed rental reward periods |
-| `PricingService` | `/api/cars/pricing/performance` | RL vs control group performance metrics |
+### 2. Role-Based Identity & Security Portals
+* **Discrete Auth Workflows:** Tailored login/registration flows for Individual users and Corporate accounts.
+* **JWT Claim Decoding:** Seamless extraction of user identity and administrative operation claims via `@auth0/angular-jwt`.
+* **Guard Protection:** `AdminGuard` protects inventory management and dynamic pricing screens from unauthorized access.
+
+### 3. Reinforcement Learning Dynamic Pricing Dashboard
+* **Algorithm-Driven Recommendations:** Visualizes suggested daily rates computed by the Q-learning agent.
+* **Fleet Batch Execution:** Execute instant price adjustments across the entire vehicle fleet in a single batch.
+* **Reward Loop Settlement:** Administrative tools to close completed rental observation windows and feed reward metrics back to the RL engine.
+* **A/B Performance Analytics:** Comparative analysis of revenue and fleet utilization between RL-managed cars and static baseline control groups over 7, 30, and 90-day intervals.
 
 ---
 
-## Getting Started
+## 🛠️ Technology Stack
+
+| Domain | Technology |
+|---|---|
+| **Framework & Core** | Angular 19.2, TypeScript 5.8, RxJS 7.8, Zone.js 0.15 |
+| **UI & Layout** | Bootstrap 5.2, ngx-bootstrap 11, Vanilla CSS Design System |
+| **Geospatial & Mapping** | Leaflet 1.9, `@types/leaflet` |
+| **Security & Auth** | `@auth0/angular-jwt`, Custom HTTP Interceptors, Route Guards |
+| **Feedback & UX** | ngx-toastr 16, Angular Animations |
+| **Build & Tooling** | Angular CLI 19, `@angular-devkit/build-angular` |
+
+---
+
+## 🚀 Getting Started & Local Setup
 
 ### Prerequisites
-
-- [Node.js](https://nodejs.org/) (v18.x or v20.x recommended)
-- [Angular CLI](https://angular.io/cli) (`npm install -g @angular/cli`)
-- The [CarProject Backend](https://github.com/kamiltuncok/CarProject) running on `https://localhost:44306`
+* **Node.js:** v18.x or v20.x+
+* **Angular CLI:** Version 19+ (`npm install -g @angular/cli`)
+* **Backend Service:** [CarProject Backend](https://github.com/kamiltuncok/CarProject) running on `https://localhost:44306`
 
 ### 1. Installation
-
 ```bash
+# Clone the repository
+git clone https://github.com/kamiltuncok/rentacar.git
 cd rentacar
+
+# Install dependencies
 npm install
 ```
 
-### 2. Development Server
-
-Run the local development server:
-
+### 2. Start Development Server
 ```bash
 npm start
 # or: ng serve
 ```
-
-Navigate to `http://localhost:4200/` in your browser. The application automatically reloads on source file changes.
+Navigate to **`http://localhost:4200/`** in your browser. The application will automatically reload upon file changes.
 
 ### 3. Production Build
-
 ```bash
 npm run build
 ```
-
-Compiled production artifacts will be generated in the `dist/` directory with bundle optimization and ahead-of-time (AOT) compilation.
-
----
-
-## Engineering Decisions & Trade-offs
-
-1. **Standalone Components over NgModules**:
-   - The application leverages Angular standalone components (`standalone: true`) and `loadComponent` route imports to reduce bundle boilerplate and achieve granular code splitting.
-2. **Backend Proxying of ML Services**:
-   - The frontend never makes direct HTTP calls to the Python RL service (`http://127.0.0.1:8001`). All requests pass through `CarProject`'s `PricingService`. This keeps JWT authorization, CORS enforcement, and validation unified within the backend.
-3. **Leaflet for Branch Visualizations**:
-   - Lightweight, dependency-free mapping with Leaflet was selected over bulky proprietary map SDKs to maintain fast initial page load times while providing customizable map tiles and markers.
+Optimized, AOT-compiled production artifacts will be created in the `dist/` directory.
 
 ---
 
-## Known Limitations & Roadmap
+## 🔗 Key API Integration Endpoints
 
-- **State Management**: Current state is managed via injectable RxJS services and `BehaviorSubject` instances; complex cross-component pricing workflows could benefit from NgRx or Signals state stores.
-- **Automated Testing**: Unit tests for services and components using Jasmine/Karma are partially scaffolded and can be expanded.
-- **Payment Gateway Integration**: Payment processing currently executes a client-side mock verification before recording the rental transaction in the backend.
+The frontend communicates with the backend via `https://localhost:44306/api/`:
+
+| Service | Endpoint Path | Description |
+|---|---|---|
+| `AuthService` | `/api/auth/login`, `/api/auth/register` | Authentication and JWT issuance |
+| `CarService` | `/api/cars/getcardetails` | Fleet catalogue and composite vehicle data |
+| `RentalService` | `/api/rentals/add` | Booking validation and rental creation |
+| `LocationService` | `/api/locations/getall` | Branch coordinates for Leaflet maps |
+| `PricingService` | `/api/cars/{id}/recommended-price` | Single-vehicle pricing recommendations |
+| `PricingService` | `/api/cars/update-prices-batch` | Fleet-wide dynamic batch repricing |
+| `PricingService` | `/api/cars/settle-rewards` | Closes completed rental reward periods |
+| `PricingService` | `/api/cars/pricing/performance` | RL vs control group performance metrics |
