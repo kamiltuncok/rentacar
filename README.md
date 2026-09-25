@@ -17,39 +17,58 @@ This repository is the **frontend SPA**. The underlying ASP.NET Core backend API
 ## Architecture & System Flow
 
 ```mermaid
-flowchart TD
-    subgraph Browser ["Client Browser (Angular 19 SPA)"]
-        Router["Angular Router<br/>(Lazy Loaded Routes)"]
-        Guards["Route Guards<br/>(LoginGuard, AdminGuard)"]
-        
-        subgraph UIComponents ["UI Component Layer"]
-            PublicView["Public / Customer Views<br/>(Home, Car List, Car Detail, Branches Map)"]
-            AuthView["Auth Views<br/>(Individual/Corporate Login & Register)"]
-            AdminView["Admin Management<br/>(Car/Brand/Color CRUD, Location Managers)"]
-            PricingDash["RL Pricing Dashboard<br/>(Fleet Recommendations, Batch Runs, Performance)"]
+flowchart TB
+    %% ================= GLOBAL STYLES =================
+    classDef routerStyle fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc,rx:8,ry:8;
+    classDef publicView fill:#082f49,stroke:#38bdf8,stroke-width:2px,color:#f8fafc,rx:8,ry:8;
+    classDef authView fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#f8fafc,rx:8,ry:8;
+    classDef adminView fill:#14532d,stroke:#4ade80,stroke-width:2px,color:#f8fafc,rx:8,ry:8;
+    classDef pricingView fill:#701a75,stroke:#f472b6,stroke-width:2px,color:#f8fafc,rx:8,ry:8;
+    classDef serviceStyle fill:#1e293b,stroke:#94a3b8,stroke-width:2px,color:#f8fafc,rx:8,ry:8;
+    classDef interceptorStyle fill:#312e81,stroke:#a5b4fc,stroke-width:2px,color:#f8fafc,rx:8,ry:8;
+    classDef backendStyle fill:#022c22,stroke:#2dd4bf,stroke-width:2px,color:#f8fafc,rx:8,ry:8;
+    classDef mlStyle fill:#451a03,stroke:#fbbf24,stroke-width:2px,color:#f8fafc,rx:8,ry:8;
+
+    %% ================= CLIENT RUNTIME =================
+    subgraph ClientBrowser [" 🖥️ CLIENT RUNTIME ENVIRONMENT (Angular 19 SPA :4200) "]
+
+        subgraph NavigationTier [" 🚦 Standalone Routing & Guard Perimeter "]
+            Router["Angular 19 Router<br/><i>(Lazy-Loaded Component Routes)</i>"]:::routerStyle
+            Guards{{"Functional & Class Route Guards<br/><i>(LoginGuard / AdminGuard)</i>"}}:::routerStyle
         end
-        
-        subgraph CoreServices ["Core Services & Interceptors"]
-            AuthService["AuthService (JWT Storage & Claims)"]
-            Interceptor["AuthInterceptor (Bearer Token Injection)"]
-            Services["Domain Services (CarService, RentalService, PricingService, LocationService)"]
+
+        subgraph ComponentLayers [" 🎨 Standalone UI Component Feature Modules "]
+            PublicViews["Customer Booking & Catalog Hub<br/><i>(Car List Split-Layout, Car Detail, Leaflet Map)</i>"]:::publicView
+            AuthViews["Identity & Registration Portal<br/><i>(Individual & Corporate Login/Register)</i>"]:::authView
+            AdminViews["Fleet & Organization Management<br/><i>(Car, Brand, Color CRUD & Location Managers)</i>"]:::adminView
+            PricingViews["RL Dynamic Pricing Dashboard<br/><i>(Recommendations, Batch Updates, Reward Loops)</i>"]:::pricingView
         end
-    end
-    
-    subgraph BackendAPI ["Backend API (CarProject :44306)"]
-        DotNetAPI["ASP.NET Core REST API"]
+
+        subgraph CoreServicesTier [" 🧠 Injectable Services & State Providers "]
+            AuthService["AuthService<br/><i>(@auth0/angular-jwt Token & Claims)</i>"]:::serviceStyle
+            DomainServices["Domain HTTP Services<br/><i>(CarService, RentalService, PricingService, LocationService)</i>"]:::serviceStyle
+            Interceptor[["AuthInterceptor<br/><i>(Bearer Token Injection & Header Normalization)</i>"]]:::interceptorStyle
+        end
     end
 
-    subgraph InternalServices ["Internal Services"]
-        PythonRL["Python FastAPI RL Pricing Engine (:8001)<br/>(Internal Model Inference)"]
+    %% ================= BACKEND & ML APIS =================
+    subgraph BackendAPI [" 🛡️ .NET 7 BACKEND GATEWAY (:44306) "]
+        DotNetAPI[("ASP.NET Core Web API<br/><code>https://localhost:44306/api/*</code><br/><i>(AOP Interceptors, EF Core, SQL Server)</i>")]:::backendStyle
     end
 
-    Router --> Guards
-    Guards --> UIComponents
-    UIComponents --> Services
-    Services --> Interceptor
-    Interceptor -->|HTTPS / JSON + JWT| DotNetAPI
-    DotNetAPI -.->|Internal HTTP Proxy| PythonRL
+    subgraph MLMicroservice [" 🤖 INTERNAL REINFORCEMENT LEARNING ENGINE "]
+        PythonRL["Python FastAPI RL Pricing Service<br/><code>http://127.0.0.1:8001 (Internal Only)</code><br/><i>(Q-Learning Agent & Price Multiplier)</i>"]:::mlStyle
+    end
+
+    %% ================= PIPELINE CONNECTIONS =================
+    Router ==> Guards
+    Guards ==> ComponentLayers
+
+    ComponentLayers -->|"Access Identity & Claims"| AuthService
+    ComponentLayers ==>|"Invoke Data Methods"| DomainServices
+    DomainServices ==> Interceptor
+    Interceptor ==>|"HTTPS / JSON + Bearer Authorization"| DotNetAPI
+    DotNetAPI <-.->|"Secure Reverse Proxy (Batch Payload)"| PythonRL
 ```
 
 ---
