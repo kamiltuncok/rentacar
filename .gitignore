@@ -6,7 +6,7 @@
 /out-tsc
 /bazel-out
 
-# Node
+# Node & Logs
 /node_modules
 *.log
 logs/
@@ -15,6 +15,12 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+*_error.txt
+*_err.txt
+*_err_utf8.txt
+angular_error.txt
+build_error.txt
+ng_build_err*.txt
 
 # Environment
 .env
