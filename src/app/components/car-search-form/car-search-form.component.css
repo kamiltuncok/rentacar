@@ -1,377 +1,297 @@
-/* ═══════════════════════════════════════
-   OtoGez Hero + Search Card
-   ═══════════════════════════════════════ */
-:host {
-  /* Aliased to the global dark-surface token so the hero's background is
-     always identical to the navbar's — one color, one source of truth. */
-  --og-navy: var(--color-dark-bg, #0F172A);
-  --og-blue: #2563EB;
-  --og-amber: #F59E0B;
-  --og-amber-hover: #DB9109;
-}
-
-.hero {
+/* ═══════════════════════════════════════════════════════════════════
+   OtoGez Hero & Glassmorphic Search Card (Palette 2)
+   ═══════════════════════════════════════════════════════════════════ */
+.og-hero {
   position: relative;
-  background: var(--og-navy);
-  padding: 64px 48px 56px;
+  min-height: 580px;
+  background: linear-gradient(180deg, #FDBA74 0%, #FB923C 25%, #7C4A3A 55%, #1F2937 80%, #111827 100%);
   overflow: hidden;
-}
-
-/* Full-bleed so the split hero (form + car) has room to breathe,
-   even though the page renders inside a narrow bootstrap column. */
-.hero:not(.hero--popup) {
-  width: 100vw;
-  left: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-}
-
-.hero--popup {
-  padding: 40px 32px 32px;
-  border-radius: 16px;
-  max-width: 720px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-.hero__inner {
-  position: relative;
-  z-index: 1;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.hero__main {
-  position: relative;
-  z-index: 2;
-  max-width: 620px;
-}
-
-.hero--popup .hero__main {
-  max-width: none;
-}
-
-/* Premium sedan / SUV — transparent PNG straight on the navy, no card */
-.hero__art {
-  position: absolute;
-  right: -2%;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 46%;
-  max-height: 380px;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.hero__art img {
-  display: block;
-  height: 100%;
-  width: auto;
-  max-width: none;
-}
-
-/* Faint radial depth glow behind the car */
-.hero__art::before {
-  content: "";
-  position: absolute;
-  left: 48%;
-  top: 44%;
-  transform: translate(-50%, -50%);
-  width: 108%;
-  height: 90%;
-  background: radial-gradient(ellipse at center, rgba(64, 104, 168, 0.30) 0%, rgba(15, 23, 42, 0) 70%);
-  z-index: -1;
-}
-
-/* Soft elliptical ground shadow (~80% of the car's base width) */
-.hero__art::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 2%;
-  transform: translateX(-50%);
-  width: 80%;
-  height: 22px;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 70%);
-  filter: blur(8px);
-  z-index: -1;
-}
-
-/* Hero content */
-.hero__content {
-  margin-bottom: 36px;
-}
-
-.hero__title {
-  font-size: 48px;
-  font-weight: 800;
-  line-height: 1.15;
-  color: #FFFFFF;
-  margin: 0 0 14px;
-  letter-spacing: -0.01em;
-}
-
-.hero__title-accent {
-  color: var(--og-blue);
-}
-
-.hero__subtitle {
-  font-size: 17px;
-  color: #94A3B8;
-  margin: 0 0 14px;
-}
-
-.hero__stats {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  font-size: 15px;
-  color: #E2E8F0;
-  font-weight: 600;
+  padding: 48px 24px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-.hero__dot {
-  color: #475569;
-}
-
-/* Close button */
-.hero__close {
+.og-hero::before {
+  content: "";
   position: absolute;
-  top: 1rem;
-  right: 1.25rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: #fff;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(8, 12, 24, 0.75) 0%, rgba(8, 12, 24, 0.25) 55%, rgba(8, 12, 24, 0.05) 100%);
+  z-index: 1;
+}
+
+.og-hero--popup {
+  min-height: auto;
+  background: #111827;
+  padding: 36px 24px;
+  border-radius: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.og-hero--popup::before {
+  display: none;
+}
+
+.og-hero__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  font-size: 16px;
-  cursor: pointer;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 150ms;
-  z-index: 10;
-}
-
-.hero__close:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* ═══════════════════════════════════════
-   Search Card
-   ═══════════════════════════════════════ */
-.search-card {
-  background: #FFFFFF;
-  border-radius: 16px;
-  padding: 24px;
-  max-width: 680px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-}
-
-/* Tabs */
-.search-tabs {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 20px;
-  background: #F1F5F9;
-  border-radius: 10px;
-  padding: 4px;
-  width: fit-content;
-}
-
-.search-tab {
-  padding: 8px 20px;
-  border: none;
-  background: transparent;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #64748B;
+  font-size: 16px;
   cursor: pointer;
-  transition: all 150ms;
-  font-family: inherit;
+  z-index: 20;
+  transition: all 0.2s ease;
 }
 
-.search-tab--active {
-  background: #FFFFFF;
-  color: var(--og-navy);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+.og-hero__close:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
-/* Body */
-.search-body {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.search-field {
-  flex: 1;
-}
-
-.search-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 700;
-  color: #475569;
-  letter-spacing: 0.02em;
-  margin-bottom: 8px;
-}
-
-.search-label--accent {
-  color: var(--og-navy);
-}
-
-.search-input {
+.og-hero__inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
   width: 100%;
-  padding: 14px 16px;
-  border-radius: 10px;
-  border: 1px solid #CBD5E1;
-  font-size: 14px;
-  color: var(--og-navy);
-  font-family: inherit;
-  background: #FFFFFF;
-  outline: none;
-  transition: border-color 150ms, box-shadow 150ms;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
 }
 
-.search-input:focus {
-  border-color: var(--og-blue);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+/* Glassmorphic Search Card */
+.og-search-card {
+  width: 440px;
+  max-width: 100%;
+  background: rgba(12, 18, 34, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 22px;
+  padding: 28px 24px;
+  color: #FFFFFF;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
 }
 
-.search-input--accent {
-  border: 2px solid var(--og-blue);
-  background: #EFF4FE;
-  font-size: 15px;
-  font-weight: 600;
+.og-search-card__header {
+  margin-bottom: 18px;
 }
 
-.search-input::placeholder {
-  color: #94A3B8;
+.og-search-card__title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  margin: 0 0 6px;
+  color: #FFFFFF;
+}
+
+.og-search-card__title-accent {
+  color: #FDBA74;
+}
+
+.og-search-card__subtitle {
+  font-size: 13.5px;
+  color: #E5E7EB;
+  margin: 0;
   font-weight: 500;
 }
 
-/* Dates row */
-.search-dates {
+/* Tabs: Individual vs Corporate */
+.og-search-tabs {
   display: flex;
-  align-items: flex-end;
-  gap: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 18px;
 }
 
-.search-datetime {
+.og-search-tab {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 9px;
+  border: none;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #111827;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.og-search-tab--active {
+  background: #F97316;
+  color: #111827;
+  box-shadow: 0 2px 6px rgba(249, 115, 22, 0.3);
+}
+
+/* Form Fields */
+.og-search-body {
   display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.og-search-field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.og-search-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  margin-bottom: 6px;
+  color: #E5E7EB;
+}
+
+.og-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  outline: 0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font: 600 13.5px 'Plus Jakarta Sans', sans-serif;
+  background: #FFFFFF;
+  color: #111827;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.og-search-input:focus {
+  border-color: #F97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.25);
+}
+
+.og-search-dates-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.og-search-datetime-group {
+  display: flex;
+  flex-direction: column;
   gap: 6px;
 }
 
-.search-datetime .search-input {
-  flex: 1.3;
-  padding: 11px 10px;
-}
-
-.search-input--time {
-  flex: 1 !important;
-  padding: 11px 8px !important;
-}
-
-.search-daybadge {
-  padding: 8px 12px;
-  border-radius: 20px;
-  background: #FEF3C7;
-  color: #92400E;
+.og-search-input--date {
+  padding: 10px 10px;
   font-size: 13px;
-  font-weight: 700;
-  white-space: nowrap;
-  margin-bottom: 11px;
 }
 
-/* Checkbox */
-.search-checkbox {
+.og-search-input--time {
+  padding: 8px 10px;
+  font-size: 12.5px;
+}
+
+.og-search-duration-badge {
+  background: rgba(255, 237, 213, 0.2);
+  border: 1px solid rgba(253, 186, 116, 0.35);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #FDBA74;
+  text-align: center;
+}
+
+.og-search-duration-badge strong {
+  color: #FFFFFF;
+}
+
+.og-search-checkbox {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
-  color: #475569;
+  font-size: 12.5px;
+  color: #E5E7EB;
   cursor: pointer;
   user-select: none;
 }
 
-.search-checkbox input[type="checkbox"] {
+.og-search-checkbox input[type="checkbox"] {
+  accent-color: #F97316;
   width: 16px;
   height: 16px;
-  accent-color: var(--og-blue);
   cursor: pointer;
 }
 
-/* Search Button */
-.search-btn {
+/* Submit Button */
+.og-search-btn {
+  border: 0;
+  cursor: pointer;
+  background: #F97316;
+  color: #111827;
+  font: 800 15px 'Plus Jakarta Sans', sans-serif;
+  border-radius: 12px;
+  padding: 15px;
+  letter-spacing: 0.06em;
+  transition: all 0.2s ease;
+  box-shadow: 0 12px 26px -8px rgba(15, 23, 42, 0.5);
+  margin-top: 4px;
+}
+
+.og-search-btn:hover {
+  background: #EA580C;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -6px rgba(234, 88, 12, 0.5);
+}
+
+.og-search-btn:active {
+  transform: translateY(0);
+}
+
+/* Hero Art Vehicle */
+.og-hero__art {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  max-width: 600px;
+}
+
+.og-hero__art-img {
   width: 100%;
-  padding: 16px;
-  border: none;
-  border-radius: 10px;
-  background: var(--og-amber);
-  color: #1F2937;
-  font-size: 16px;
-  font-weight: 700;
-  font-family: inherit;
-  text-align: center;
-  cursor: pointer;
-  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35);
-  transition: background 150ms, transform 150ms;
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.45));
 }
 
-.search-btn:hover {
-  background: var(--og-amber-hover);
-  transform: translateY(-1px);
-}
-
-/* ═══════════════════════════════════════
-   Responsive
-   ═══════════════════════════════════════ */
-@media (max-width: 900px) {
-  /* Car drops above the form and stacks */
-  .hero__inner {
-    display: flex;
-    flex-direction: column;
+@media (max-width: 960px) {
+  .og-hero {
+    min-height: auto;
+    padding: 36px 16px;
   }
 
-  .hero__main {
-    max-width: 100%;
-  }
-
-  .hero__art {
-    position: static;
-    order: -1;
-    transform: none;
-    height: auto;
-    width: 70%;
-    margin: 0 auto 20px;
-  }
-
-  .hero__art img {
-    height: auto;
-    width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero:not(.hero--popup) {
-    padding: 40px 20px 32px;
-  }
-
-  .hero__title {
-    font-size: 32px;
-  }
-
-  .search-dates {
+  .og-hero__inner {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .search-daybadge {
-    align-self: center;
-    margin-bottom: 0;
+  .og-search-card {
+    width: 100%;
+  }
+
+  .og-hero__art {
+    order: -1;
+    max-width: 380px;
+    margin: 0 auto 16px;
   }
 }

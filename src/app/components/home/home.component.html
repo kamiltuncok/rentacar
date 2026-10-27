@@ -4,139 +4,194 @@
 </app-car-search-form>
 
 <!-- ═══════ TRUST BAR ═══════ -->
-<div class="trust-bar">
-  <div class="trust-item" *ngFor="let item of trustItems">
-    <span class="trust-check">✓</span>
-    {{ item }}
+<section class="og-trust-bar">
+  <div class="og-trust-bar__inner">
+    <span class="og-trust-bar__item"><b class="og-trust-bar__check">✓</b> Ücretsiz iptal</span>
+    <span class="og-trust-bar__item"><b class="og-trust-bar__check">✓</b> Gizli ücret yok</span>
+    <span class="og-trust-bar__item"><b class="og-trust-bar__check">✓</b> 7/24 yol yardımı</span>
+    <span class="og-trust-bar__item"><b class="og-trust-bar__check">✓</b> Anında onay</span>
   </div>
-</div>
-
-<!-- ═══════ 3 KOLAY ADIM ═══════ -->
-<div class="og-band og-band--slate">
-  <div class="og-wrap og-wrap--center">
-    <h2 class="og-title">3 Kolay Adımda Araç Kirala</h2>
-    <p class="og-subtitle">Hızlı, güvenilir ve kolay kiralama deneyimi</p>
-
-    <div class="steps-grid">
-      <div class="step-card">
-        <div class="step-icon-wrap">
-          <div class="step-icon">📍</div>
-          <div class="step-num">1</div>
-        </div>
-        <h3 class="step-name">Konum Seçin</h3>
-        <p class="step-desc">Teslim alma ve iade noktasını belirleyin</p>
-      </div>
-      <div class="step-card">
-        <div class="step-icon-wrap">
-          <div class="step-icon">📅</div>
-          <div class="step-num">2</div>
-        </div>
-        <h3 class="step-name">Tarih Belirleyin</h3>
-        <p class="step-desc">Alış ve iade tarihlerinizi seçin</p>
-      </div>
-      <div class="step-card">
-        <div class="step-icon-wrap">
-          <div class="step-icon">🚗</div>
-          <div class="step-num">3</div>
-        </div>
-        <h3 class="step-name">Aracınızı Seçin</h3>
-        <p class="step-desc">Size uygun aracı seçip hemen kiralayın</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ SIK TERCİH EDİLEN ŞEHİRLER ═══════ -->
-<div class="og-band og-band--white">
-  <div class="og-wrap">
-    <h2 class="og-title">Sık Tercih Edilen Şehirler</h2>
-    <div class="city-grid">
-      <div class="city-card" (click)="openCityPopup('Istanbul')">
-        <img src="assets/images/istanbul.jpg" alt="İstanbul">
-        <div class="city-card__overlay"></div>
-        <span class="city-card__name">İstanbul</span>
-      </div>
-      <div class="city-card" (click)="openCityPopup('Ankara')">
-        <img src="assets/images/ankara.jpg" alt="Ankara">
-        <div class="city-card__overlay"></div>
-        <span class="city-card__name">Ankara</span>
-      </div>
-      <div class="city-card" (click)="openCityPopup('İzmir')">
-        <img src="assets/images/izmir.jpg" alt="İzmir">
-        <div class="city-card__overlay"></div>
-        <span class="city-card__name">İzmir</span>
-      </div>
-    </div>
-  </div>
-</div>
+</section>
 
 <!-- ═══════ ARAÇ SINIFLARI ═══════ -->
-<div class="og-band og-band--slate">
-  <div class="og-wrap">
-    <h2 class="og-title">Araç Sınıfları</h2>
-    <div class="veh-grid">
-      <div class="veh-card" *ngFor="let segment of segments">
-        <div class="veh-name">{{ segment.segmentName }}</div>
-        <div class="veh-image">
-          <img [src]="getSegmentImage(segment.segmentName)" [alt]="segment.segmentName">
+<section class="og-section og-section--slate" id="hizmetler">
+  <div class="og-container">
+    <div class="og-section-title">ARAÇ SINIFLARI</div>
+    <div class="og-classes-grid">
+      <div class="og-class-card" *ngFor="let segment of segments" (click)="openSegmentPopup(segment.segmentName)">
+        <div class="og-class-card__title">{{ segment.segmentName }}</div>
+        <div class="og-class-card__image-wrap">
+          <img [src]="getSegmentImage(segment.segmentName)" [alt]="segment.segmentName" class="og-class-card__img">
         </div>
-        <div class="veh-features">
-          <div class="veh-feature" *ngFor="let f of getSegmentFeatures(segment.segmentName)">
-            <span class="veh-dot"></span>{{ f }}
+        <div class="og-class-card__features">
+          <span class="og-class-card__feat" *ngFor="let f of getSegmentFeatures(segment.segmentName)">{{ f }}</span>
+        </div>
+        <div class="og-class-card__footer">
+          <span class="og-class-card__from">başlayan </span>
+          <span class="og-class-card__price">₺{{ getSegmentPrice(segment.segmentId) }}</span>
+          <span class="og-class-card__unit">/gün</span>
+        </div>
+        <button type="button" class="og-class-card__btn">Hemen Kirala</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SIK TERCİH EDİLEN ŞEHİRLER ═══════ -->
+<section class="og-section og-section--white">
+  <div class="og-container">
+    <div class="og-section-title">SIK TERCİH EDİLEN ŞEHİRLER</div>
+    <div class="og-cities-grid">
+      <div class="og-city-card" (click)="openCityPopup('Istanbul')">
+        <div class="og-city-card__media">
+          <img src="assets/images/istanbul.jpg" alt="İstanbul">
+        </div>
+        <div class="og-city-card__overlay"></div>
+        <div class="og-city-card__content">
+          <div class="og-city-card__name">İstanbul</div>
+          <div class="og-city-card__count">120+ araç</div>
+        </div>
+      </div>
+
+      <div class="og-city-card" (click)="openCityPopup('Ankara')">
+        <div class="og-city-card__media">
+          <img src="assets/images/ankara.jpg" alt="Ankara">
+        </div>
+        <div class="og-city-card__overlay"></div>
+        <div class="og-city-card__content">
+          <div class="og-city-card__name">Ankara</div>
+          <div class="og-city-card__count">80+ araç</div>
+        </div>
+      </div>
+
+      <div class="og-city-card" (click)="openCityPopup('İzmir')">
+        <div class="og-city-card__media">
+          <img src="assets/images/izmir.jpg" alt="İzmir">
+        </div>
+        <div class="og-city-card__overlay"></div>
+        <div class="og-city-card__content">
+          <div class="og-city-card__name">İzmir</div>
+          <div class="og-city-card__count">70+ araç</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 3 KOLAY ADIMDA ARAÇ KİRALA ═══════ -->
+<section class="og-section og-section--slate">
+  <div class="og-container">
+    <div class="og-section-title">3 KOLAY ADIMDA ARAÇ KİRALA</div>
+    <div class="og-steps-grid">
+      <div class="og-step-card">
+        <div class="og-step-card__icon-wrap">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <div class="og-step-card__body">
+          <div class="og-step-card__num">ADIM 1</div>
+          <div class="og-step-card__name">Konum Seçin</div>
+          <div class="og-step-card__desc">Teslim alma ve iade noktasını belirleyin.</div>
+        </div>
+      </div>
+
+      <div class="og-step-card">
+        <div class="og-step-card__icon-wrap">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <div class="og-step-card__body">
+          <div class="og-step-card__num">ADIM 2</div>
+          <div class="og-step-card__name">Tarih Belirleyin</div>
+          <div class="og-step-card__desc">Alış ve iade tarihlerinizi seçin.</div>
+        </div>
+      </div>
+
+      <div class="og-step-card">
+        <div class="og-step-card__icon-wrap">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/>
+          </svg>
+        </div>
+        <div class="og-step-card__body">
+          <div class="og-step-card__num">ADIM 3</div>
+          <div class="og-step-card__name">Aracınızı Seçin</div>
+          <div class="og-step-card__desc">Size uygun aracı seçip hemen kiralayın.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ MÜŞTERİLERİMİZ NE DİYOR? ═══════ -->
+<section class="og-section og-section--white">
+  <div class="og-container">
+    <div class="og-reviews-header">
+      <div class="og-section-title" style="margin-bottom:0">MÜŞTERİLERİMİZ NE DİYOR?</div>
+      <div class="og-rating-badge">
+        <div class="og-rating-badge__score">4,8</div>
+        <div>
+          <div class="og-rating-badge__stars">★★★★★</div>
+          <div class="og-rating-badge__text">50.000+ mutlu müşteri</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="og-reviews-grid">
+      <div class="og-review-card" *ngFor="let rev of reviews">
+        <div class="og-review-card__stars">{{ rev.stars }}</div>
+        <p class="og-review-card__quote">“{{ rev.quote }}”</p>
+        <div class="og-review-card__author">
+          <div class="og-review-card__avatar">{{ rev.name.substring(0, 2) }}</div>
+          <div>
+            <div class="og-review-card__author-name">{{ rev.name }}</div>
+            <div class="og-review-card__verified">✓ Doğrulanmış rezervasyon</div>
           </div>
         </div>
-        <div class="veh-price">
-          <strong>{{ getSegmentPrice(segment.segmentId) }}</strong>'den başlayan fiyatlarla
-        </div>
-        <button class="veh-btn" (click)="openSegmentPopup(segment.segmentName)">Hemen Kirala</button>
       </div>
     </div>
   </div>
-</div>
-
-<!-- ═══════ MÜŞTERİ YORUMLARI ═══════ -->
-<div class="og-band og-band--white">
-  <div class="og-wrap og-wrap--center">
-    <h2 class="og-title">Müşterilerimiz Ne Diyor?</h2>
-    <p class="reviews-stat">50.000+ mutlu müşteri · 4.8/5</p>
-    <div class="reviews-grid">
-      <div class="review-card" *ngFor="let rev of reviews">
-        <div class="review-stars">{{ rev.stars }}</div>
-        <p class="review-quote">"{{ rev.quote }}"</p>
-        <div class="review-name">{{ rev.name }}</div>
-      </div>
-    </div>
-  </div>
-</div>
+</section>
 
 <!-- ═══════ SIKÇA SORULAN SORULAR ═══════ -->
-<div class="og-band og-band--slate">
-  <div class="faq-wrap">
-    <h2 class="og-title">Sıkça Sorulan Sorular</h2>
-    <div class="faq-list">
-      <div class="faq-item" *ngFor="let faq of faqs; let i = index" (click)="toggleFaq(i)">
-        <div class="faq-q">
-          {{ faq.q }}
-          <span class="faq-symbol">{{ faqOpen[i] ? '−' : '+' }}</span>
+<section class="og-section og-section--slate" id="faq">
+  <div class="og-container og-container--narrow">
+    <div class="og-section-title" style="text-align: center;">SIKÇA SORULAN SORULAR</div>
+    <div class="og-faq-list">
+      <div class="og-faq-card" *ngFor="let faq of faqs; let i = index" (click)="toggleFaq(i)">
+        <div class="og-faq-card__header">
+          <span class="og-faq-card__q">{{ faq.q }}</span>
+          <span class="og-faq-card__icon">{{ faqOpen[i] ? '−' : '+' }}</span>
         </div>
-        <div class="faq-a" *ngIf="faqOpen[i]">{{ faq.a }}</div>
+        <div class="og-faq-card__answer" *ngIf="faqOpen[i]">
+          {{ faq.a }}
+        </div>
       </div>
     </div>
   </div>
+</section>
+
+<!-- ═══════ Modals / Popups ═══════ -->
+<div class="og-popup-overlay" *ngIf="showSegmentPopup">
+  <div class="og-popup-box">
+    <app-car-search-form [alisOfisiOptions]="alisOfisiOptions" [iadeOfisiOptions]="iadeOfisiOptions"
+      [customerType]="customerType" [showCloseButton]="true" (search)="navigateToCarList($event)"
+      (close)="closeSegmentPopup()">
+    </app-car-search-form>
+  </div>
 </div>
 
-<!-- ═══════ Segment Popup ═══════ -->
-<div class="popup-overlay" *ngIf="showSegmentPopup">
-  <app-car-search-form [alisOfisiOptions]="alisOfisiOptions" [iadeOfisiOptions]="iadeOfisiOptions"
-    [customerType]="customerType" [showCloseButton]="true" (search)="navigateToCarList($event)"
-    (close)="closeSegmentPopup()">
-  </app-car-search-form>
-</div>
-
-<!-- ═══════ Şehir Popup ═══════ -->
-<div class="popup-overlay" *ngIf="showCityPopup">
-  <app-car-search-form [alisOfisiOptions]="cityLocations" [iadeOfisiOptions]="cityLocations"
-    [customerType]="customerType" [showCloseButton]="true" (search)="navigateToCarList($event)"
-    (close)="closeCityPopup()">
-  </app-car-search-form>
+<div class="og-popup-overlay" *ngIf="showCityPopup">
+  <div class="og-popup-box">
+    <app-car-search-form [alisOfisiOptions]="cityLocations" [iadeOfisiOptions]="cityLocations"
+      [customerType]="customerType" [showCloseButton]="true" (search)="navigateToCarList($event)"
+      (close)="closeCityPopup()">
+    </app-car-search-form>
+  </div>
 </div>

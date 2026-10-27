@@ -2,26 +2,36 @@
   <div class="auth-card">
 
     <div class="auth-card__logo">
-      <img src="assets/images/logocar.png" alt="RentACar">
+      <a routerLink="/" class="auth-brand-link">
+        <svg class="auth-brand-logo" width="40" height="40" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-label="OtoGez Logo">
+          <rect width="48" height="48" rx="12" fill="#F97316"/>
+          <g fill="none" stroke="#111827" stroke-width="3">
+            <circle cx="22" cy="22" r="12"/>
+            <ellipse cx="22" cy="22" rx="5" ry="12"/>
+            <path d="M10 22h24"/>
+          </g>
+          <path d="M25 25l19 7-8 3 4 8-4 2-4-8-6 5z" fill="#FFFFFF" stroke="#111827" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>
+        <span class="auth-brand-name">Oto<span class="auth-brand-accent">Gez</span></span>
+      </a>
     </div>
 
+    <!-- Bireysel / Kurumsal tab switcher -->
     <div class="auth-tab-group">
       <a class="auth-tab" [routerLink]="['/login']" [class.active]="isActive('/login')">Bireysel</a>
-      <a class="auth-tab" [routerLink]="['/loginforcorporate']"
-        [class.active]="isActive('/loginforcorporate')">Kurumsal</a>
+      <a class="auth-tab" [routerLink]="['/loginforcorporate']" [class.active]="isActive('/loginforcorporate')">Kurumsal</a>
     </div>
 
-    <h2 class="auth-card__title">Kurumsal Giriş</h2>
+    <h1 class="auth-card__title">Kurumsal Giriş</h1>
 
     <form [formGroup]="loginForCorporateForm">
-
       <div class="auth-field">
-        <label for="corpEmail">E-posta</label>
-        <input id="corpEmail" formControlName="email" type="email" placeholder="sirket@email.com">
+        <label for="corpEmail">KURUMSAL E-POSTA</label>
+        <input id="corpEmail" formControlName="email" type="email" placeholder="ad@sirket.com">
       </div>
 
       <div class="auth-field">
-        <label for="corpPassword">Şifre</label>
+        <label for="corpPassword">ŞİFRE</label>
         <input id="corpPassword" formControlName="password" type="password" placeholder="••••••••">
       </div>
 
@@ -29,7 +39,7 @@
     </form>
 
     <div class="auth-footer">
-      Hesabınız yok mu? <a routerLink="/registerforcorporate" style="color:#1d4ed8;font-weight:600;">Kayıt Ol</a>
+      Hesabınız yok mu? <a routerLink="/registerforcorporate">Kayıt Ol</a>
     </div>
 
   </div>

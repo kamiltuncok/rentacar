@@ -1,457 +1,452 @@
-/* ═══════════════════════════════════════
-   OtoGez Anasayfa — palette
-   ═══════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════
+   OtoGez Home Styles (Palette 2)
+   ═══════════════════════════════════════════════════════════════════ */
 :host {
-  --og-navy: #0F172A;
-  --og-blue: #2563EB;
-  --og-amber: #F59E0B;
-  --og-amber-hover: #DB9109;
-  --og-slate-bg: #E8EDF3;
-  --og-green: #10B981;
-
   display: block;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #111827;
+  background: #F9FAFB;
 }
 
-/* ═══════════════════════════════════════
-   Full-width bands + centered wrappers
-   ═══════════════════════════════════════ */
-.og-band {
+.og-section {
   width: 100%;
+  padding: 64px 24px;
 }
 
-.og-band--slate {
-  background: var(--og-slate-bg);
-}
-
-.og-band--white {
+.og-section--white {
   background: #FFFFFF;
 }
 
-.og-wrap {
-  max-width: 1100px;
+.og-section--slate {
+  background: #F9FAFB;
+}
+
+.og-container {
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 72px 48px;
 }
 
-.og-wrap--center {
-  text-align: center;
+.og-container--narrow {
+  max-width: 820px;
 }
 
-.og-title {
-  font-size: 34px;
+.og-section-title {
+  font-size: 22px;
   font-weight: 800;
-  color: var(--og-navy);
-  margin: 0 0 12px;
-  letter-spacing: -0.01em;
-  text-align: center;
+  color: #F97316;
+  letter-spacing: 0.02em;
+  margin-bottom: 28px;
+  text-transform: uppercase;
 }
 
-.og-subtitle {
-  font-size: 15px;
-  color: #475569;
-  margin: 0 0 48px;
-  text-align: center;
-}
-
-.og-wrap:not(.og-wrap--center) .og-title {
-  margin-bottom: 44px;
-}
-
-/* ═══════════════════════════════════════
-   Trust Bar
-   ═══════════════════════════════════════ */
-.trust-bar {
+/* ─── Trust Bar ─────────────────────────────────────────────────────────── */
+.og-trust-bar {
   background: #FFFFFF;
-  border-bottom: 1px solid #E2E8F0;
-  padding: 20px 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 48px;
-  flex-wrap: wrap;
+  border-bottom: 1px solid #E5E7EB;
+  padding: 22px 24px;
 }
 
-.trust-item {
+.og-trust-bar__inner {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
-  align-items: center;
-  gap: 8px;
+  gap: 16px 36px;
+  flex-wrap: wrap;
+  justify-content: center;
   font-size: 14px;
   font-weight: 600;
-  color: #334155;
+  color: #4B5563;
 }
 
-.trust-check {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--og-green);
-  color: #FFFFFF;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+.og-trust-bar__check {
+  color: #F97316;
+  font-weight: 800;
+  margin-right: 4px;
 }
 
-/* ═══════════════════════════════════════
-   3 Kolay Adım
-   ═══════════════════════════════════════ */
-.steps-grid {
-  display: flex;
-  justify-content: center;
-  gap: 56px;
-  flex-wrap: wrap;
-}
-
-.step-card {
-  max-width: 260px;
-}
-
-.step-icon-wrap {
-  position: relative;
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 16px;
-}
-
-.step-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
-  background: #FFFFFF;
-  color: var(--og-blue);
-  font-size: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
-}
-
-.step-num {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--og-navy);
-  color: #FFFFFF;
-  font-size: 12px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.step-name {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--og-navy);
-  margin: 0 0 8px;
-}
-
-.step-desc {
-  font-size: 14px;
-  color: #64748B;
-  line-height: 1.5;
-  margin: 0;
-}
-
-/* ═══════════════════════════════════════
-   Cities
-   ═══════════════════════════════════════ */
-.city-grid {
+/* ─── Araç Sınıfları ────────────────────────────────────────────────────── */
+.og-classes-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+}
+
+.og-class-card {
+  background: #FFFFFF;
+  border-radius: 18px;
+  padding: 24px 20px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+  border: 1px solid #E5E7EB;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.og-class-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 35px -15px rgba(15, 23, 42, 0.2);
+  border-color: #FDBA74;
+}
+
+.og-class-card__title {
+  font-weight: 800;
+  font-size: 19px;
+  margin-bottom: 12px;
+  color: #111827;
+}
+
+.og-class-card__image-wrap {
+  height: 120px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.og-class-card__img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.og-class-card:hover .og-class-card__img {
+  transform: scale(1.05);
+}
+
+.og-class-card__features {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.og-class-card__feat {
+  font-size: 11.5px;
+  font-weight: 600;
+  background: #F3F4F6;
+  color: #4B5563;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.og-class-card__footer {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid #E5E7EB;
+  font-size: 13px;
+  color: #4B5563;
+}
+
+.og-class-card__price {
+  font-size: 22px;
+  font-weight: 800;
+  color: #F97316;
+  margin: 0 2px;
+}
+
+.og-class-card__btn {
+  margin-top: 14px;
+  padding: 10px;
+  border: none;
+  background: #FFEDD5;
+  color: #EA580C;
+  font-weight: 700;
+  font-size: 13.5px;
+  font-family: inherit;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.og-class-card:hover .og-class-card__btn {
+  background: #F97316;
+  color: #111827;
+}
+
+/* ─── Şehirler ──────────────────────────────────────────────────────────── */
+.og-cities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
 }
 
-.city-card {
-  width: 100%;
-  height: 220px;
-  border-radius: 14px;
+.og-city-card {
   position: relative;
+  height: 340px;
+  border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
-  background: #B8C4D1;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: #1F2937;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.city-card img {
+.og-city-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 40px -16px rgba(17, 24, 39, 0.55);
+}
+
+.og-city-card__media {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.og-city-card:hover .og-city-card__media {
+  transform: scale(1.08);
+}
+
+.og-city-card__media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
 }
 
-.city-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.18);
-}
-
-.city-card:hover img {
-  transform: scale(1.06);
-}
-
-.city-card__overlay {
+.og-city-card__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.15) 45%, rgba(0, 0, 0, 0) 70%);
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 40%, rgba(8, 12, 24, 0.88) 100%);
 }
 
-.city-card__name {
+.og-city-card__content {
   position: absolute;
-  bottom: 16px;
-  left: 20px;
+  left: 24px;
+  bottom: 22px;
   color: #FFFFFF;
-  font-size: 20px;
-  font-weight: 700;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
 }
 
-/* ═══════════════════════════════════════
-   Vehicle Classes
-   ═══════════════════════════════════════ */
-.veh-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  align-items: start;
+.og-city-card__name {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
 }
 
-.veh-card {
-  width: 100%;
-  background: #FFFFFF;
-  border-radius: 14px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.veh-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.12);
-}
-
-.veh-name {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--og-navy);
-}
-
-.veh-image {
-  width: 100%;
-  height: 130px;
-  border-radius: 10px;
-  background: #E2E8F0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.veh-image img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.veh-features {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
-.veh-feature {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: #475569;
+.og-city-card__count {
+  font-size: 14px;
+  color: #E5E7EB;
   font-weight: 600;
 }
 
-.veh-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--og-blue);
-  flex-shrink: 0;
-}
-
-.veh-price {
-  font-size: 15px;
-  color: var(--og-navy);
-}
-
-.veh-price strong {
-  font-weight: 800;
-  font-size: 20px;
-}
-
-.veh-btn {
-  width: 100%;
-  padding: 13px;
-  border: none;
-  border-radius: 10px;
-  background: var(--og-amber);
-  color: #1F2937;
-  font-size: 15px;
-  font-weight: 700;
-  font-family: inherit;
-  cursor: pointer;
-  transition: background 150ms, transform 150ms;
-}
-
-.veh-btn:hover {
-  background: var(--og-amber-hover);
-  transform: translateY(-1px);
-}
-
-/* ═══════════════════════════════════════
-   Reviews
-   ═══════════════════════════════════════ */
-.reviews-stat {
-  font-size: 15px;
-  color: var(--og-blue);
-  font-weight: 700;
-  margin: 0 0 44px;
-  text-align: center;
-}
-
-.reviews-grid {
+/* ─── 3 Kolay Adım ──────────────────────────────────────────────────────── */
+.og-steps-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 24px;
-  align-items: start;
 }
 
-.review-card {
-  width: 100%;
-  background: var(--og-slate-bg);
+.og-step-card {
+  background: #FFFFFF;
+  border-radius: 18px;
+  padding: 28px 24px;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+  border: 1px solid #E5E7EB;
+}
+
+.og-step-card__icon-wrap {
+  flex: none;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #FFEDD5;
+  color: #EA580C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.og-step-card__num {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #EA580C;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.og-step-card__name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 6px;
+}
+
+.og-step-card__desc {
+  color: #4B5563;
+  line-height: 1.55;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ─── Müşteri Yorumları ─────────────────────────────────────────────────── */
+.og-reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.og-rating-badge {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #FFFFFF;
   border-radius: 14px;
-  padding: 24px;
-  text-align: left;
+  padding: 10px 18px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+  border: 1px solid #E5E7EB;
+}
+
+.og-rating-badge__score {
+  font-size: 28px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.og-rating-badge__stars {
+  color: #F59E0B;
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+
+.og-rating-badge__text {
+  font-size: 12.5px;
+  color: #4B5563;
+  font-weight: 600;
+}
+
+.og-reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+}
+
+.og-review-card {
+  background: #FFFFFF;
+  border-radius: 18px;
+  padding: 26px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+  border: 1px solid #E5E7EB;
+  display: flex;
+  flex-direction: column;
+}
+
+.og-review-card__stars {
+  color: #F59E0B;
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+
+.og-review-card__quote {
+  margin: 14px 0 20px;
+  line-height: 1.6;
+  color: #111827;
+  font-size: 14.5px;
+  flex: 1;
+}
+
+.og-review-card__author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.og-review-card__avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #F97316;
+  color: #111827;
+  font-weight: 800;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.og-review-card__author-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: #111827;
+}
+
+.og-review-card__verified {
+  font-size: 12.5px;
+  color: #4B5563;
+  font-weight: 600;
+}
+
+/* ─── Sıkça Sorulan Sorular ─────────────────────────────────────────────── */
+.og-faq-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.review-stars {
-  color: var(--og-blue);
-  font-size: 16px;
-  letter-spacing: 2px;
-}
-
-.review-quote {
-  font-size: 14px;
-  color: #334155;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.review-name {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--og-navy);
-}
-
-/* ═══════════════════════════════════════
-   FAQ
-   ═══════════════════════════════════════ */
-.faq-wrap {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 72px 48px;
-}
-
-.faq-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.faq-item {
+.og-faq-card {
   background: #FFFFFF;
-  border-radius: 12px;
-  padding: 18px 22px;
+  border-radius: 14px;
+  padding: 18px 24px;
   cursor: pointer;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+  border: 1px solid #E5E7EB;
+  transition: border-color 0.15s ease;
 }
 
-.faq-q {
+.og-faq-card:hover {
+  border-color: #FDBA74;
+}
+
+.og-faq-card__header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   gap: 16px;
+  font-weight: 700;
   font-size: 15px;
-  font-weight: 700;
-  color: var(--og-navy);
+  color: #111827;
 }
 
-.faq-symbol {
-  color: var(--og-blue);
-  font-size: 18px;
-  font-weight: 700;
-  flex-shrink: 0;
+.og-faq-card__icon {
+  color: #F97316;
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 800;
 }
 
-.faq-a {
-  font-size: 14px;
-  color: #475569;
-  line-height: 1.6;
+.og-faq-card__answer {
   margin-top: 12px;
+  color: #4B5563;
+  line-height: 1.6;
+  font-size: 14px;
+  border-top: 1px solid #F3F4F6;
+  padding-top: 12px;
 }
 
-/* ═══════════════════════════════════════
-   Popup Overlay
-   ═══════════════════════════════════════ */
-.popup-overlay {
+/* ─── Modals / Popups ───────────────────────────────────────────────────── */
+.og-popup-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 1rem;
+  justify-content: center;
   z-index: 2000;
+  padding: 20px;
 }
 
-/* ═══════════════════════════════════════
-   Responsive
-   ═══════════════════════════════════════ */
-@media (max-width: 768px) {
-  .og-wrap,
-  .faq-wrap {
-    padding: 48px 20px;
-  }
-
-  .trust-bar {
-    gap: 20px 32px;
-    padding: 18px 20px;
-  }
-
-  .og-title {
-    font-size: 26px;
-  }
-
-  .steps-grid {
-    gap: 32px;
-  }
-
-  .city-grid,
-  .veh-grid,
-  .reviews-grid {
-    grid-template-columns: 1fr;
-    justify-items: center;
-  }
-
-  .city-card,
-  .veh-card,
-  .review-card {
-    max-width: 360px;
-  }
+.og-popup-box {
+  width: 100%;
+  max-width: 650px;
 }

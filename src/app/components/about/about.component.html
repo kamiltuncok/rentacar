@@ -1,0 +1,108 @@
+<div class="og-about-page">
+
+  <!-- Header Banner -->
+  <section class="og-about-header">
+    <div class="og-about-container">
+      <div class="og-about-eyebrow">BİZ KİMİZ?</div>
+      <h1 class="og-about-title">Hakkımızda</h1>
+      <p class="og-about-subtitle">
+        Yolculuklarınızı güvenli, konforlu ve özgür kılmak için yenilikçi teknolojilerle yola çıktık.
+      </p>
+    </div>
+  </section>
+
+  <!-- Story & Highlight Section -->
+  <section class="og-about-section">
+    <div class="og-about-container">
+      <div class="og-about-grid-story">
+        <div class="og-about-story-text">
+          <h2 class="og-about-section-heading">Hikayemiz & Vizyonumuz</h2>
+          <p class="og-about-p">
+            <strong>OtoGez</strong>, Türkiye genelinde modern ve esnek araç kiralama deneyimi sunma amacıyla kurulmuştur. Sektördeki klasik kiralama süreçlerinin karmaşıklığını ve gizli maliyetlerini ortadan kaldırarak; şeffaf, hızlı ve müşteri odaklı bir mobilite ekosistemi inşa ettik.
+          </p>
+          <p class="og-about-p">
+            Ekonomik şehir içi otomobillerinden geniş aile SUV'larına, konforlu iş seyahati sedanlarından elektrikli yeni nesil araçlara kadar filomuzu sürekli güncel ve genç tutuyoruz. Gelişmiş yapay zeka destekli dinamik fiyatlandırma sistemimiz sayesinde her müşterimize adil ve rekabetçi fiyatlar sunuyoruz.
+          </p>
+          <p class="og-about-p">
+            Havalimanlarından şehir merkezlerine kadar uzanan 30'u aşkın teslim noktamız ve 7/24 yol yardım desteğimizle, yola çıktığınız andan varış noktanıza kadar size eşlik ediyoruz.
+          </p>
+        </div>
+
+        <!-- Highlight Stat Cards -->
+        <div class="og-about-stats-grid">
+          <div class="og-about-stat-card" *ngFor="let s of stats">
+            <div class="og-about-stat-val">{{ s.value }}</div>
+            <div class="og-about-stat-lbl">{{ s.label }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission & Vision Cards -->
+  <section class="og-about-section og-about-section--slate">
+    <div class="og-about-container">
+      <div class="og-about-mv-grid">
+        <div class="og-about-mv-card">
+          <div class="og-about-mv-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h3 class="og-about-mv-title">Misyonumuz</h3>
+          <p class="og-about-mv-desc">
+            Bireysel ve kurumsal tüm müşterilerimizin seyahat ihtiyaçlarına en uygun araçları; güvenilir, şeffaf, dijital ve sorunsuz bir hizmet standardıyla buluşturmak.
+          </p>
+        </div>
+
+        <div class="og-about-mv-card">
+          <div class="og-about-mv-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12h20"></path>
+              <path d="M20 12l-6-6"></path>
+              <path d="M20 12l-6 6"></path>
+            </svg>
+          </div>
+          <h3 class="og-about-mv-title">Vizyonumuz</h3>
+          <p class="og-about-mv-desc">
+            Türkiye'nin ve bölgenin en yenilikçi, çevreye duyarlı ve müşteri memnuniyeti en yüksek araç paylaşım ve kiralama markası olmak.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Values -->
+  <section class="og-about-section">
+    <div class="og-about-container">
+      <div class="og-about-center-header">
+        <h2 class="og-about-section-heading">Temel Değerlerimiz</h2>
+        <p class="og-about-section-sub">Her kararda ve her yolculukta bize rehberlik eden ilkelerimiz.</p>
+      </div>
+
+      <div class="og-about-values-grid">
+        <div class="og-about-value-card" *ngFor="let val of values">
+          <div class="og-about-val-bullet"></div>
+          <h4 class="og-about-val-title">{{ val.title }}</h4>
+          <p class="og-about-val-desc">{{ val.desc }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to action Banner -->
+  <section class="og-about-cta">
+    <div class="og-about-container og-about-cta__inner">
+      <div class="og-about-cta__content">
+        <h2 class="og-about-cta__title">Yola Çıkmaya Hazır mısınız?</h2>
+        <p class="og-about-cta__text">Geniş filomuzdan dilediğiniz aracı seçin, avantajlı fiyatlarla güvenle kiralayın.</p>
+      </div>
+      <div class="og-about-cta__actions">
+        <a routerLink="/cars" class="og-about-btn og-about-btn--primary">Araçları İncele</a>
+        <a routerLink="/branches" class="og-about-btn og-about-btn--ghost">Şubelerimiz</a>
+      </div>
+    </div>
+  </section>
+
+</div>

@@ -105,11 +105,8 @@
       <article class="cl-card" *ngFor="let car of carDetails">
         <!-- Image Area -->
         <div class="cl-card-image">
-          <img *ngIf="car.imagePath && car.imagePath.length > 0; else otherContent" [src]="getImagePath(car)"
-            alt="{{car.description}}" />
-          <ng-template #otherContent>
-            <img [src]="defaultImagePath" alt="{{car.description}}" />
-          </ng-template>
+          <img [src]="getImagePath(car)" (error)="onImgError($event, car)" [alt]="carTitle(car)" loading="lazy" class="cl-card-img" />
+          <span class="cl-segment-badge" [ngClass]="segmentClass(car.segmentName)">{{ car.segmentName || 'Ekonomik' }}</span>
         </div>
 
         <!-- Content Area -->

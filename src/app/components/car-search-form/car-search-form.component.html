@@ -1,92 +1,88 @@
-<!-- Hero Section -->
-<div class="hero" [class.hero--popup]="showCloseButton">
-  <button *ngIf="showCloseButton" class="hero__close" (click)="onClose()">&#10005;</button>
+<!-- OtoGez Hero + Search Section -->
+<div class="og-hero" [class.og-hero--popup]="showCloseButton">
+  <button *ngIf="showCloseButton" class="og-hero__close" (click)="onClose()" aria-label="Kapat">&#10005;</button>
 
-  <div class="hero__inner">
-    <div class="hero__main">
-      <div class="hero__content" *ngIf="!showCloseButton">
-        <h1 class="hero__title">
-          <span class="hero__title-accent">Kolay</span> Kiralama, Her Yere.
+  <div class="og-hero__inner">
+    <!-- Glassmorphic Search Card -->
+    <div class="og-search-card">
+      <div class="og-search-card__header">
+        <h1 class="og-search-card__title">
+          Kolay Kiralama,<br><span class="og-search-card__title-accent">Her Yere.</span>
         </h1>
-        <p class="hero__subtitle">Mükemmel aracınızı bulun ve hemen yola çıkın</p>
-        <div class="hero__stats">
-          <span>500+ araç</span>
-          <span class="hero__dot">·</span>
-          <span>30 şehir</span>
-          <span class="hero__dot">·</span>
-          <span>Ücretsiz iptal</span>
-        </div>
+        <p class="og-search-card__subtitle">Mükemmel aracınızı bulun ve hemen yola çıkın</p>
       </div>
 
-      <!-- Search Card -->
-      <div class="search-card">
-        <div class="search-tabs">
-          <button class="search-tab" (click)="setCustomerType('individual')"
-            [class.search-tab--active]="customerType === 'individual'">
-            Bireysel
-          </button>
-          <button class="search-tab" (click)="setCustomerType('corporate')"
-            [class.search-tab--active]="customerType === 'corporate'">
-            Kurumsal
-          </button>
+      <!-- Individual / Corporate Tabs -->
+      <div class="og-search-tabs">
+        <button type="button" class="og-search-tab" (click)="setCustomerType('individual')"
+          [class.og-search-tab--active]="customerType === 'individual'">
+          Bireysel
+        </button>
+        <button type="button" class="og-search-tab" (click)="setCustomerType('corporate')"
+          [class.og-search-tab--active]="customerType === 'corporate'">
+          Kurumsal
+        </button>
+      </div>
+
+      <div class="og-search-body">
+        <!-- Pickup Office -->
+        <div class="og-search-field">
+          <label class="og-search-label">ALIŞ NOKTASI</label>
+          <input type="text" class="og-search-input" [(ngModel)]="selectedStartLocation"
+            placeholder="Şehir veya ofis seçiniz..." [attr.list]="alisOfisiId"
+            (change)="setStartLocation(selectedStartLocation)">
+          <datalist [id]="alisOfisiId">
+            <option *ngFor="let option of alisOfisiOptions" [value]="option.locationName"></option>
+          </datalist>
         </div>
 
-        <div class="search-body">
-          <!-- Pickup office -->
-          <div class="search-field">
-            <label class="search-label search-label--accent">Teslim Alma Ofisi</label>
-            <input type="text" class="search-input search-input--accent" [(ngModel)]="selectedStartLocation"
-              placeholder="Ofis seçiniz..." [attr.list]="alisOfisiId"
-              (change)="setStartLocation(selectedStartLocation)">
-            <datalist [id]="alisOfisiId">
-              <option *ngFor="let option of alisOfisiOptions" [value]="option.locationName"></option>
-            </datalist>
-          </div>
-
-          <!-- Dates row -->
-          <div class="search-dates">
-            <div class="search-field">
-              <label class="search-label">Alış Tarihi</label>
-              <div class="search-datetime">
-                <input type="date" class="search-input" [(ngModel)]="selectedStartDate">
-                <input type="time" class="search-input search-input--time" [(ngModel)]="selectedStartTime">
-              </div>
-            </div>
-
-            <div class="search-daybadge">{{ dayCount }} gün</div>
-
-            <div class="search-field">
-              <label class="search-label">İade Tarihi</label>
-              <div class="search-datetime">
-                <input type="date" class="search-input" [(ngModel)]="selectedEndDate">
-                <input type="time" class="search-input search-input--time" [(ngModel)]="selectedEndTime">
-              </div>
+        <!-- Dates Row -->
+        <div class="og-search-dates-row">
+          <div class="og-search-field">
+            <label class="og-search-label">ALIŞ</label>
+            <div class="og-search-datetime-group">
+              <input type="date" class="og-search-input og-search-input--date" [(ngModel)]="selectedStartDate">
+              <input type="time" class="og-search-input og-search-input--time" [(ngModel)]="selectedStartTime">
             </div>
           </div>
 
-          <!-- Different return office -->
-          <label class="search-checkbox">
-            <input type="checkbox" (click)="toggleReturnOfficeVisibility($event)">
-            <span>Araç farklı bir ofiste teslim edilecek</span>
-          </label>
-
-          <div class="search-field" *ngIf="isDifferentReturnOffice">
-            <label class="search-label">İade Etme Ofisi</label>
-            <input type="text" class="search-input" [(ngModel)]="selectedEndLocation" placeholder="İade ofisi seçiniz..."
-              [attr.list]="iadeOfisiId">
-            <datalist [id]="iadeOfisiId">
-              <option *ngFor="let option of iadeOfisiOptions" [value]="option.locationName"></option>
-            </datalist>
+          <div class="og-search-field">
+            <label class="og-search-label">İADE</label>
+            <div class="og-search-datetime-group">
+              <input type="date" class="og-search-input og-search-input--date" [(ngModel)]="selectedEndDate">
+              <input type="time" class="og-search-input og-search-input--time" [(ngModel)]="selectedEndTime">
+            </div>
           </div>
-
-          <button class="search-btn" (click)="onSearch()">Araç Ara</button>
         </div>
+
+        <div class="og-search-duration-badge" *ngIf="dayCount > 0">
+          <span>Toplam kiralama: <strong>{{ dayCount }} gün</strong></span>
+        </div>
+
+        <!-- Different return office checkbox -->
+        <label class="og-search-checkbox">
+          <input type="checkbox" (click)="toggleReturnOfficeVisibility($event)">
+          <span>Araç farklı bir ofiste teslim edilecek</span>
+        </label>
+
+        <!-- Return Office (conditional) -->
+        <div class="og-search-field" *ngIf="isDifferentReturnOffice">
+          <label class="og-search-label">İADE ETME OFİSİ</label>
+          <input type="text" class="og-search-input" [(ngModel)]="selectedEndLocation" placeholder="İade ofisi seçiniz..."
+            [attr.list]="iadeOfisiId">
+          <datalist [id]="iadeOfisiId">
+            <option *ngFor="let option of iadeOfisiOptions" [value]="option.locationName"></option>
+          </datalist>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="button" class="og-search-btn" (click)="onSearch()">ARAÇ ARA</button>
       </div>
     </div>
 
-    <!-- Premium sedan / SUV (transparent, nose points left toward the form) -->
-    <div class="hero__art" *ngIf="!showCloseButton" aria-hidden="true">
-      <img src="assets/hero-car.png" alt="Premium sedan / SUV">
+    <!-- Hero Art (desktop) -->
+    <div class="og-hero__art" *ngIf="!showCloseButton" aria-hidden="true">
+      <img src="assets/hero-car.png" alt="OtoGez Araç Kiralama" class="og-hero__art-img">
     </div>
   </div>
 </div>

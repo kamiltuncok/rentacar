@@ -1,92 +1,226 @@
 @if (dataLoaded()) {
 <div class="profile-page">
 
-    <!-- Page Header -->
-    <div class="profile-header">
-        <span class="g-eyebrow">Hesap</span>
-        <h1 class="g-page-title">Profil Ayarları</h1>
-    </div>
+  <!-- Page Header -->
+  <header class="profile-header">
+    <span class="og-eyebrow">HESAP YÖNETİMİ</span>
+    <h1 class="og-page-title">Profil Ayarları</h1>
+    <p class="og-page-subtitle">Kişisel bilgilerinizi görüntüleyin, güncelleyin ve hesap güvenliğinizi yönetin.</p>
+  </header>
 
-    <div class="profile-layout">
+  <div class="profile-layout">
 
-        <!-- Sidebar: User Card (aside always renders so the grid stays intact) -->
-        <aside class="profile-sidebar">
-            @if (user(); as u) {
-            <div class="user-card">
-                <div class="user-card__avatar">
-                    <span class="user-card__initials">
-                        {{ u.firstName?.charAt(0) }}{{ u.lastName?.charAt(0) }}
-                    </span>
-                </div>
-                <div class="user-card__name">{{ u.firstName }} {{ u.lastName }}</div>
-                <div class="user-card__email">{{ u.email }}</div>
-            </div>
-            }
-        </aside>
+    <!-- Left Sidebar: User Summary Card -->
+    <aside class="profile-sidebar">
+      <div class="user-card">
+        <div class="user-card__avatar">
+          <span class="user-card__initials">{{ getInitials() }}</span>
+        </div>
 
-        <!-- Main Content -->
-        <main class="profile-main">
+        <h2 class="user-card__name">
+          @if (user()?.firstName || user()?.lastName) {
+            {{ user()?.firstName }} {{ user()?.lastName }}
+          } @else {
+            OtoGez Kullanıcısı
+          }
+        </h2>
 
-            <!-- Personal Info Section -->
-            <section class="profile-section">
-                <div class="section-header">
-                    <h2 class="section-header__title">Kişisel Bilgiler</h2>
-                    <p class="section-header__desc">Adınızı ve soyadınızı güncelleyebilirsiniz.</p>
-                </div>
+        <div class="user-card__email">{{ user()?.email || 'kullanici@otogez.com' }}</div>
 
-                <form [formGroup]="profileForm" class="form-grid">
-                    <div class="form-field">
-                        <label class="form-label">Ad</label>
-                        <input formControlName="firstName" type="text" class="form-input" placeholder="Adınız">
-                    </div>
-                    <div class="form-field">
-                        <label class="form-label">Soyad</label>
-                        <input formControlName="lastName" type="text" class="form-input" placeholder="Soyadınız">
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" (click)="updateUserNames()" class="btn-primary-solid">Bilgileri
-                            Güncelle</button>
-                    </div>
-                </form>
-            </section>
+        <div class="user-card__badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>{{ getRoleLabel() }}</span>
+        </div>
 
-            <hr class="section-divider">
+        @if (user()?.companyName) {
+        <div class="user-card__company">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+          <span>{{ user()?.companyName }}</span>
+        </div>
+        }
 
-            <!-- Password Section -->
-            <section class="profile-section">
-                <div class="section-header">
-                    <h2 class="section-header__title">Şifre Değiştir</h2>
-                    <p class="section-header__desc">Güvenliğiniz için şifrenizi düzenli olarak güncelleyin.</p>
-                </div>
+        <div class="user-card__divider"></div>
 
-                <form [formGroup]="passwordForm" class="form-grid form-grid--3col">
-                    <div class="form-field">
-                        <label class="form-label">Mevcut Şifre</label>
-                        <input formControlName="oldPassword" type="password" class="form-input" placeholder="••••••••">
-                    </div>
-                    <div class="form-field">
-                        <label class="form-label">Yeni Şifre</label>
-                        <input formControlName="newPassword" type="password" class="form-input" placeholder="••••••••">
-                    </div>
-                    <div class="form-field">
-                        <label class="form-label">Yeni Şifre Tekrarı</label>
-                        <input formControlName="repeatNewPassword" type="password" class="form-input"
-                            placeholder="••••••••">
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" (click)="updatePassword()" class="btn-secondary-solid">Şifreyi
-                            Güncelle</button>
-                    </div>
-                </form>
-            </section>
+        <div class="user-card__meta">
+          <div class="meta-row">
+            <span class="meta-label">Müşteri No</span>
+            <span class="meta-value">#{{ user()?.customerId || user()?.id || '-' }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Hesap Durumu</span>
+            <span class="meta-badge-active">
+              <span class="status-dot"></span>
+              Aktif
+            </span>
+          </div>
+        </div>
+      </div>
+    </aside>
 
-        </main>
-    </div>
+    <!-- Main Content: Forms -->
+    <main class="profile-main">
+
+      <!-- Section 1: Kişisel Bilgiler -->
+      <section class="og-card">
+        <div class="card-header">
+          <div class="card-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="card-title">Kişisel Bilgiler</h2>
+            <p class="card-desc">Sistemde kayıtlı ad ve soyad bilgilerinizi bu alandan güncelleyebilirsiniz.</p>
+          </div>
+        </div>
+
+        <form [formGroup]="profileForm" class="og-form-grid">
+          <div class="form-group">
+            <label class="form-label" for="firstName">Adınız</label>
+            <input
+              id="firstName"
+              formControlName="firstName"
+              type="text"
+              class="og-input"
+              placeholder="Adınız"
+              [class.is-invalid]="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="lastName">Soyadınız</label>
+            <input
+              id="lastName"
+              formControlName="lastName"
+              type="text"
+              class="og-input"
+              placeholder="Soyadınız"
+              [class.is-invalid]="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched"
+            />
+          </div>
+
+          <div class="form-group form-group--full">
+            <label class="form-label" for="profileEmail">E-posta Adresi</label>
+            <input
+              id="profileEmail"
+              type="email"
+              class="og-input og-input--readonly"
+              [value]="user()?.email || ''"
+              readonly
+              disabled
+            />
+            <span class="form-hint">E-posta adresi hesap güvenliği ve doğrulanmış kimlik sebebiyle değiştirilemez.</span>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              (click)="updateUserNames()"
+              class="btn-primary-solid"
+              [disabled]="isUpdatingProfile() || profileForm.invalid"
+            >
+              @if (isUpdatingProfile()) {
+                <span class="btn-spinner"></span>
+                <span>Kaydediliyor...</span>
+              } @else {
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                  <polyline points="17 21 17 13 7 13 7 21"/>
+                  <polyline points="7 3 7 8 15 8"/>
+                </svg>
+                <span>Bilgileri Güncelle</span>
+              }
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Section 2: Şifre Değiştir -->
+      <section class="og-card">
+        <div class="card-header">
+          <div class="card-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="card-title">Şifre Değiştir</h2>
+            <p class="card-desc">Hesap güvenliğiniz için şifrenizi düzenli olarak güncelleyin.</p>
+          </div>
+        </div>
+
+        <form [formGroup]="passwordForm" class="og-form-grid og-form-grid--3col">
+          <div class="form-group">
+            <label class="form-label" for="oldPassword">Mevcut Şifre</label>
+            <input
+              id="oldPassword"
+              formControlName="oldPassword"
+              type="password"
+              class="og-input"
+              placeholder="••••••••"
+              [class.is-invalid]="passwordForm.get('oldPassword')?.invalid && passwordForm.get('oldPassword')?.touched"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="newPassword">Yeni Şifre</label>
+            <input
+              id="newPassword"
+              formControlName="newPassword"
+              type="password"
+              class="og-input"
+              placeholder="••••••••"
+              [class.is-invalid]="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="repeatNewPassword">Yeni Şifre Tekrarı</label>
+            <input
+              id="repeatNewPassword"
+              formControlName="repeatNewPassword"
+              type="password"
+              class="og-input"
+              placeholder="••••••••"
+              [class.is-invalid]="passwordForm.get('repeatNewPassword')?.invalid && passwordForm.get('repeatNewPassword')?.touched"
+            />
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              (click)="updatePassword()"
+              class="btn-dark-solid"
+              [disabled]="isUpdatingPassword() || passwordForm.invalid"
+            >
+              @if (isUpdatingPassword()) {
+                <span class="btn-spinner"></span>
+                <span>Güncelleniyor...</span>
+              } @else {
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                </svg>
+                <span>Şifreyi Güncelle</span>
+              }
+            </button>
+          </div>
+        </form>
+      </section>
+
+    </main>
+  </div>
 </div>
 } @else {
-<!-- Spinner -->
-<div class="g-spinner-wrap">
-    <div class="g-spinner"></div>
-    <p class="g-spinner-text">Profil yükleniyor…</p>
+<!-- Loading State -->
+<div class="profile-loading">
+  <div class="og-spinner"></div>
+  <p class="loading-text">Profil bilgileri yükleniyor…</p>
 </div>
 }

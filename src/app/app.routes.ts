@@ -149,6 +149,12 @@ export const routes: Routes = [
         loadComponent: () => import('./components/branches/branches.component').then(m => m.BranchesComponent),
     },
 
+    // ─── About (lazy) ───
+    {
+        path: 'about',
+        loadComponent: () => import('./components/about/about.component').then(m => m.AboutComponent),
+    },
+
     // ─── Location Managers (lazy) ───
     {
         path: 'location-managers',

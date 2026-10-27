@@ -1,54 +1,61 @@
 <div class="auth-page">
-    <div class="auth-card">
+  <div class="auth-card auth-card--wide">
 
-        <div class="auth-card__logo">
-            <img src="assets/images/logocar.png" alt="RentACar">
-        </div>
-
-        <div class="auth-tab-group">
-            <a class="auth-tab" [routerLink]="['/register']" [class.active]="isActive('/register')">Bireysel</a>
-            <a class="auth-tab" [routerLink]="['/registerforcorporate']"
-                [class.active]="isActive('/registerforcorporate')">Kurumsal</a>
-        </div>
-
-        <h2 class="auth-card__title">Kurumsal Kayıt</h2>
-
-        <form [formGroup]="registerCorporateForm">
-
-            <div class="auth-field">
-                <label for="corpCompName">Şirket Adı</label>
-                <input id="corpCompName" formControlName="companyName" type="text" placeholder="Şirket adınız">
-            </div>
-
-            <div class="auth-field">
-                <label for="corpTaxNo">Vergi Numarası</label>
-                <input id="corpTaxNo" formControlName="taxNumber" type="text" maxlength="10" placeholder="1234567890">
-            </div>
-
-            <div class="auth-field">
-                <label for="corpRegEmail">E-posta</label>
-                <input id="corpRegEmail" formControlName="email" type="email" placeholder="sirket@email.com">
-            </div>
-
-            <div class="auth-field">
-                <label for="corpPhone">Telefon</label>
-                <input id="corpPhone" formControlName="phoneNumber" type="text" maxlength="11"
-                    placeholder="05XXXXXXXXX">
-            </div>
-
-
-            <div class="auth-field">
-                <label for="corpRegPass">Şifre</label>
-                <input id="corpRegPass" formControlName="password" type="password" placeholder="••••••••">
-            </div>
-
-            <button class="auth-submit" type="submit" (click)="register()">Kayıt Ol</button>
-        </form>
-
-        <div class="auth-footer">
-            Zaten hesabınız var mı? <a routerLink="/loginforcorporate" style="color:#1d4ed8;font-weight:600;">Giriş
-                Yap</a>
-        </div>
-
+    <div class="auth-card__logo">
+      <a routerLink="/" class="auth-brand-link">
+        <svg class="auth-brand-logo" width="40" height="40" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-label="OtoGez Logo">
+          <rect width="48" height="48" rx="12" fill="#F97316"/>
+          <g fill="none" stroke="#111827" stroke-width="3">
+            <circle cx="22" cy="22" r="12"/>
+            <ellipse cx="22" cy="22" rx="5" ry="12"/>
+            <path d="M10 22h24"/>
+          </g>
+          <path d="M25 25l19 7-8 3 4 8-4 2-4-8-6 5z" fill="#FFFFFF" stroke="#111827" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>
+        <span class="auth-brand-name">Oto<span class="auth-brand-accent">Gez</span></span>
+      </a>
     </div>
+
+    <!-- Bireysel / Kurumsal tab switcher -->
+    <div class="auth-tab-group">
+      <a class="auth-tab" [routerLink]="['/register']" [class.active]="isActive('/register')">Bireysel</a>
+      <a class="auth-tab" [routerLink]="['/registerforcorporate']" [class.active]="isActive('/registerforcorporate')">Kurumsal</a>
+    </div>
+
+    <h1 class="auth-card__title">Kurumsal Kayıt</h1>
+
+    <form [formGroup]="registerCorporateForm">
+      <div class="auth-field">
+        <label for="corpCompName">ŞİRKET ADI</label>
+        <input id="corpCompName" formControlName="companyName" type="text" placeholder="Şirket unvanı">
+      </div>
+
+      <div class="auth-field">
+        <label for="corpTaxNo">VERGİ NUMARASI</label>
+        <input id="corpTaxNo" formControlName="taxNumber" type="text" maxlength="10" placeholder="10 haneli vergi numarası">
+      </div>
+
+      <div class="auth-field">
+        <label for="corpRegEmail">KURUMSAL E-POSTA</label>
+        <input id="corpRegEmail" formControlName="email" type="email" placeholder="ad@sirket.com">
+      </div>
+
+      <div class="auth-field">
+        <label for="corpPhone">TELEFON</label>
+        <input id="corpPhone" formControlName="phoneNumber" type="text" maxlength="11" placeholder="05XXXXXXXXX">
+      </div>
+
+      <div class="auth-field">
+        <label for="corpRegPass">ŞİFRE</label>
+        <input id="corpRegPass" formControlName="password" type="password" placeholder="••••••••">
+      </div>
+
+      <button class="auth-submit" type="submit" (click)="register()">Kayıt Ol</button>
+    </form>
+
+    <div class="auth-footer">
+      Zaten hesabınız var mı? <a routerLink="/loginforcorporate">Giriş Yap</a>
+    </div>
+
+  </div>
 </div>

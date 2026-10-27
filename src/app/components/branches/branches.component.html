@@ -1,125 +1,80 @@
-<div class="branches-page">
-  <div class="branches-inner">
+<div class="og-branches-container">
+  <!-- Page Header -->
+  <header class="og-branches-header">
+    <h1 class="og-branches-title">Şubeler</h1>
+    <p class="og-branches-subtitle">{{ locations.length }} aktif şubemizden size en yakın olanı bulun.</p>
+  </header>
 
-    <!-- Page Header -->
-    <div class="g-page-header">
-      <h1 class="g-page-title">Şubeler</h1>
-      <p class="g-page-subtitle">{{ locations.length }} aktif şubemizden size en yakın noktayı bulun.</p>
+  <!-- Map Card -->
+  <div class="og-branches-map-card">
+    <div class="og-branches-map-head">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+        <circle cx="12" cy="10" r="3" />
+      </svg>
+      <span>Harita Görünümü</span>
     </div>
+    <div id="map" class="og-branches-map"></div>
+  </div>
 
-    <!-- Map Section -->
-    <div class="branches-map-card">
-      <div class="branches-map-card__head">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
-          <circle cx="12" cy="10" r="3" />
+  <!-- City Filter Chips -->
+  <div class="og-branches-filters">
+    <span class="og-branches-filter-label">ŞEHİR</span>
+    <button type="button" class="og-branch-chip" [class.active]="selectedCityId === 0" (click)="filterByCity(0)">
+      Tümü
+    </button>
+    <button type="button" *ngFor="let city of cities" class="og-branch-chip"
+      [class.active]="selectedCityId === city.id" (click)="filterByCity(city.id)">
+      {{ city.name }}
+    </button>
+  </div>
+
+  <!-- Branch Cards Grid -->
+  <div class="og-branches-grid">
+    <!-- Empty state -->
+    <div *ngIf="locations.length === 0" class="og-branches-empty">
+      <div class="og-branches-empty-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="10" r="3"></circle>
+          <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z"></path>
         </svg>
-        Harita Görünümü
       </div>
-      <div id="map" class="branches-map"></div>
+      <h3 class="og-branches-empty-title">Bu şehirde şube bulunamadı</h3>
+      <p class="og-branches-empty-text">Farklı bir şehir seçerek tekrar deneyebilirsiniz.</p>
     </div>
 
-    <!-- Filter + List -->
-    <div class="branches-content">
-
-      <!-- City Filter -->
-      <div class="branches-filter">
-        <span class="branches-filter__label">Şehir Filtrele</span>
-        <div class="branches-pill-group">
-          <button class="branches-pill" [class.branches-pill--active]="selectedCityId === 0"
-            (click)="filterByCity(0)">Tümü</button>
-
-          <button *ngFor="let city of cities" class="branches-pill"
-            [class.branches-pill--active]="selectedCityId === city.id" (click)="filterByCity(city.id)">
-            {{ city.name }}
-          </button>
+    <!-- Branch Card -->
+    <article *ngFor="let location of locations" class="og-branch-card">
+      <div class="og-branch-card__header">
+        <div class="og-branch-card__icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="og-branch-card__name">{{ location.locationName }}</h2>
+          <div class="og-branch-card__city">{{ getCityName(location.locationCityId) }}</div>
         </div>
       </div>
 
-      <!-- Location Cards -->
-      <div class="location-grid">
+      <div class="og-branch-card__details">
+        <span class="og-branch-card__detail-lbl">Adres</span>
+        <span class="og-branch-card__detail-val">{{ location.address }}</span>
 
-        <div *ngIf="locations.length === 0" class="g-empty-state">
-          <div class="g-empty-state__icon">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
-              <circle cx="12" cy="10" r="3" />
-            </svg>
-          </div>
-          <div class="g-empty-state__title">Şube bulunamadı</div>
-          <p class="g-empty-state__text">Farklı bir şehir deneyin.</p>
-        </div>
+        <span class="og-branch-card__detail-lbl">E-posta</span>
+        <span class="og-branch-card__detail-val">{{ location.email }}</span>
 
-        <div *ngFor="let location of locations" class="location-card">
-          <div class="location-card__head">
-            <div class="location-card__icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-            </div>
-            <div>
-              <h3 class="location-card__name">{{ location.locationName }}</h3>
-              <span class="location-card__city">{{ getCityName(location.locationCityId) }}</span>
-            </div>
-          </div>
-
-          <dl class="location-card__details">
-            <div class="location-card__detail-row">
-              <dt>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M3 12h18" />
-                  <path d="M3 6h18" />
-                  <path d="M3 18h18" />
-                </svg>
-                Adres
-              </dt>
-              <dd>{{ location.address }}</dd>
-            </div>
-            <div class="location-card__detail-row">
-              <dt>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
-                </svg>
-                E-posta
-              </dt>
-              <dd>{{ location.email }}</dd>
-            </div>
-            <div class="location-card__detail-row">
-              <dt>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path
-                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.72a16 16 0 0 0 5.06 5.06l.93-.93a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 20.92 15z" />
-                </svg>
-                Telefon
-              </dt>
-              <dd>{{ location.phoneNumber }}</dd>
-            </div>
-          </dl>
-
-          <!-- Google Maps link -->
-          <div class="location-card__actions">
-            <a [href]="'https://www.google.com/maps/search/?api=1&query=' + (location.locationName + ' ' + location.address + ' ' + getCityName(location.locationCityId))"
-              target="_blank" class="location-card__maps-link">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              Google Maps'te Göster
-            </a>
-          </div>
-        </div>
-
+        <span class="og-branch-card__detail-lbl">Telefon</span>
+        <span class="og-branch-card__detail-val">{{ location.phoneNumber }}</span>
       </div>
-    </div>
 
+      <div class="og-branch-card__footer">
+        <a [href]="'https://www.google.com/maps/search/?api=1&query=' + (location.locationName + ' ' + location.address + ' ' + getCityName(location.locationCityId))"
+          target="_blank" class="og-branch-card__maps-link">
+          Google Maps'te Göster →
+        </a>
+      </div>
+    </article>
   </div>
 </div>

@@ -1,67 +1,77 @@
-<!-- Premium Navbar: full-width outer <header> carries the dark background;
-     the inner <nav> is centered and capped to the same max-width as the hero. -->
-<header class="g-nav">
-  <nav class="g-nav__inner" aria-label="Ana gezinme">
+<header class="og-nav">
+  <!-- Main Navigation Bar -->
+  <div class="og-nav__main">
+    <div class="og-nav__container og-nav__main-inner">
+      <!-- Brand Logo -->
+      <a class="og-nav__brand" routerLink="/">
+        <svg class="og-nav__logo" width="40" height="40" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-label="OtoGez Logo">
+          <rect width="48" height="48" rx="12" fill="#F97316"/>
+          <g fill="none" stroke="#111827" stroke-width="3">
+            <circle cx="22" cy="22" r="12"/>
+            <ellipse cx="22" cy="22" rx="5" ry="12"/>
+            <path d="M10 22h24"/>
+          </g>
+          <path d="M25 25l19 7-8 3 4 8-4 2-4-8-6 5z" fill="#FFFFFF" stroke="#111827" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>
+        <span class="og-nav__brand-name">Oto<span class="og-nav__brand-accent">Gez</span></span>
+      </a>
 
-    <!-- Brand -->
-    <a class="g-nav__brand" routerLink="/">
-      <img src="assets/images/logocar.png" alt="RentACar Logo" class="g-nav__logo">
-    </a>
+      <!-- Center Links -->
+      <nav class="og-nav__links" aria-label="Ana Gezinme">
+        <a class="og-nav__link" routerLink="/" routerLinkActive="og-nav__link--active" [routerLinkActiveOptions]="{exact: true}">ANASAYFA</a>
+        <a class="og-nav__link" routerLink="/cars" routerLinkActive="og-nav__link--active">ARAÇLAR</a>
+        <a class="og-nav__link" routerLink="/branches" routerLinkActive="og-nav__link--active">ŞUBELER</a>
+        <a class="og-nav__link" routerLink="/about" routerLinkActive="og-nav__link--active">HAKKIMIZDA</a>
+        <a *ngIf="isAuthenticated" class="og-nav__link" routerLink="/rentals" routerLinkActive="og-nav__link--active">KİRALAMALARIM</a>
+        <a *ngIf="showLocationManagerMenu()" class="og-nav__link" routerLink="/location-rentals" routerLinkActive="og-nav__link--active">KİRALAMALARI YÖNET</a>
+      </nav>
 
-    <!-- Center Links -->
-    <ul class="g-nav__links">
-      <li><a class="g-nav__link" routerLink="/" routerLinkActive="g-nav__link--active"
-          [routerLinkActiveOptions]="{exact:true}">Anasayfa</a></li>
-      <li><a class="g-nav__link" routerLink="/cars" routerLinkActive="g-nav__link--active">Arabalar</a></li>
-      <li><a class="g-nav__link" routerLink="/branches" routerLinkActive="g-nav__link--active">Şubeler</a></li>
-      <li *ngIf="isAuthenticated"><a class="g-nav__link" routerLink="/rentals"
-          routerLinkActive="g-nav__link--active">Kiralamalarım</a></li>
-      <li *ngIf="showLocationManagerMenu()">
-        <a class="g-nav__link" routerLink="/location-rentals" routerLinkActive="g-nav__link--active">Kiralamaları
-          Yönet</a>
-      </li>
-    </ul>
-
-    <!-- Right side -->
-    <div class="g-nav__right">
-
-      <!-- Admin Dropdown -->
-      <div *ngIf="showAdminMenu()" class="g-nav__dropdown-wrap">
-        <button class="g-nav__link g-nav__dropdown-trigger" (click)="isDropdownOpen = !isDropdownOpen">
-          İşlemler
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
-        </button>
-        <div *ngIf="isDropdownOpen" class="g-nav__dropdown">
-          <a class="g-nav__dropdown-item" routerLink="/cars/add" (click)="closeDropdown()">Araba Ekle</a>
-          <a class="g-nav__dropdown-item" routerLink="/carimages/add" (click)="closeDropdown()">Araba Resmi Ekle</a>
-          <a class="g-nav__dropdown-item" routerLink="/brands/add" (click)="closeDropdown()">Marka Ekle</a>
-          <a class="g-nav__dropdown-item" routerLink="/colors/add" (click)="closeDropdown()">Renk Ekle</a>
-          <a class="g-nav__dropdown-item" routerLink="/locations/add" (click)="closeDropdown()">Şube Ekle</a>
-          <a class="g-nav__dropdown-item" routerLink="/location-managers" (click)="closeDropdown()">Lokasyon Yöneticisi
-            Ata</a>
+      <!-- Right Actions -->
+      <div class="og-nav__actions">
+        <!-- Admin Operations Dropdown -->
+        <div *ngIf="showAdminMenu()" class="og-nav__dropdown-wrap">
+          <button class="og-nav__dropdown-trigger" (click)="toggleDropdown()">
+            <span>İşlemler</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div *ngIf="isDropdownOpen" class="og-nav__dropdown">
+            <a class="og-nav__dropdown-item" routerLink="/cars/add" (click)="closeDropdown()">Araba Ekle</a>
+            <a class="og-nav__dropdown-item" routerLink="/carimages/add" (click)="closeDropdown()">Araba Resmi Ekle</a>
+            <a class="og-nav__dropdown-item" routerLink="/brands/add" (click)="closeDropdown()">Marka Ekle</a>
+            <a class="og-nav__dropdown-item" routerLink="/colors/add" (click)="closeDropdown()">Renk Ekle</a>
+            <a class="og-nav__dropdown-item" routerLink="/locations/add" (click)="closeDropdown()">Şube Ekle</a>
+            <a class="og-nav__dropdown-item" routerLink="/location-managers" (click)="closeDropdown()">Lokasyon Yöneticisi Ata</a>
+          </div>
         </div>
+
+        <!-- Auth buttons: Guest -->
+        <ng-container *ngIf="!isAuthenticated">
+          <a class="og-nav__btn-login" routerLink="/login">Giriş</a>
+          <a class="og-nav__btn-register" routerLink="/register">Kayıt Ol</a>
+        </ng-container>
+
+        <!-- Auth buttons: Logged in profile & Logout -->
+        <ng-container *ngIf="isAuthenticated">
+          <a class="og-nav__profile-btn" [routerLink]="getProfileUrl()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span class="og-nav__user-name">{{ displayName }}</span>
+            <span class="og-nav__role-badge">{{ getUserRoleText() }}</span>
+          </a>
+          <button class="og-nav__btn-logout" (click)="logout()" title="Çıkış Yap">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span>Çıkış</span>
+          </button>
+        </ng-container>
       </div>
-
-      <!-- Auth — guest -->
-      <ng-container *ngIf="!isAuthenticated">
-        <a class="g-nav__auth-link" routerLink="/login">Giriş</a>
-        <a class="g-nav__auth-btn" routerLink="/register">Kayıt Ol</a>
-      </ng-container>
-
-      <!-- Auth — logged in -->
-      <ng-container *ngIf="isAuthenticated">
-        <a class="g-nav__user" [routerLink]="getProfileUrl()">
-          <img src="assets/images/user.png" width="26" height="26" alt="profil">
-          <span>{{ displayName }}</span>
-          <span class="g-nav__role-badge">{{ getUserRoleText() }}</span>
-        </a>
-        <button class="g-nav__link" style="background:none;border:none;cursor:pointer;"
-          (click)="logout()">Çıkış</button>
-      </ng-container>
     </div>
-
-  </nav>
+  </div>
 </header>

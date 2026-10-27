@@ -1,49 +1,58 @@
 <div class="auth-page">
-  <div class="auth-card">
+  <div class="auth-card auth-card--wide">
 
     <div class="auth-card__logo">
-      <img src="assets/images/logocar.png" alt="RentACar">
+      <a routerLink="/" class="auth-brand-link">
+        <svg class="auth-brand-logo" width="40" height="40" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-label="OtoGez Logo">
+          <rect width="48" height="48" rx="12" fill="#F97316"/>
+          <g fill="none" stroke="#111827" stroke-width="3">
+            <circle cx="22" cy="22" r="12"/>
+            <ellipse cx="22" cy="22" rx="5" ry="12"/>
+            <path d="M10 22h24"/>
+          </g>
+          <path d="M25 25l19 7-8 3 4 8-4 2-4-8-6 5z" fill="#FFFFFF" stroke="#111827" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>
+        <span class="auth-brand-name">Oto<span class="auth-brand-accent">Gez</span></span>
+      </a>
     </div>
 
+    <!-- Bireysel / Kurumsal tab switcher -->
     <div class="auth-tab-group">
       <a class="auth-tab" [routerLink]="['/register']" [class.active]="isActive('/register')">Bireysel</a>
-      <a class="auth-tab" [routerLink]="['/registerforcorporate']"
-        [class.active]="isActive('/registerforcorporate')">Kurumsal</a>
+      <a class="auth-tab" [routerLink]="['/registerforcorporate']" [class.active]="isActive('/registerforcorporate')">Kurumsal</a>
     </div>
 
-    <h2 class="auth-card__title">Hesap Oluştur</h2>
+    <h1 class="auth-card__title">Hesap Oluştur</h1>
 
     <form [formGroup]="registerForm">
-
       <div class="auth-fields-row">
         <div class="auth-field">
-          <label for="regFirstName">Ad</label>
+          <label for="regFirstName">AD</label>
           <input id="regFirstName" formControlName="firstName" type="text" placeholder="Adınız">
         </div>
         <div class="auth-field">
-          <label for="regLastName">Soyad</label>
+          <label for="regLastName">SOYAD</label>
           <input id="regLastName" formControlName="lastName" type="text" placeholder="Soyadınız">
         </div>
       </div>
 
       <div class="auth-field">
-        <label for="regEmail">E-posta</label>
-        <input id="regEmail" formControlName="email" type="email" placeholder="ornek@email.com">
-      </div>
-
-      <div class="auth-field">
-        <label for="regId">TC Kimlik No</label>
+        <label for="regId">TC KİMLİK NO</label>
         <input id="regId" formControlName="identityNumber" type="text" maxlength="11" placeholder="12345678901">
       </div>
 
       <div class="auth-field">
-        <label for="regPhone">Telefon</label>
+        <label for="regEmail">E-POSTA</label>
+        <input id="regEmail" formControlName="email" type="email" placeholder="ornek@email.com">
+      </div>
+
+      <div class="auth-field">
+        <label for="regPhone">TELEFON</label>
         <input id="regPhone" formControlName="phoneNumber" type="text" maxlength="11" placeholder="05XXXXXXXXX">
       </div>
 
-
       <div class="auth-field">
-        <label for="regPassword">Şifre</label>
+        <label for="regPassword">ŞİFRE</label>
         <input id="regPassword" formControlName="password" type="password" placeholder="••••••••">
       </div>
 
@@ -51,7 +60,7 @@
     </form>
 
     <div class="auth-footer">
-      Zaten hesabınız var mı? <a routerLink="/login" style="color:#1d4ed8;font-weight:600;">Giriş Yap</a>
+      Zaten hesabınız var mı? <a routerLink="/login">Giriş Yap</a>
     </div>
 
   </div>

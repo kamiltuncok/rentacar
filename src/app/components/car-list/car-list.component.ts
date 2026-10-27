@@ -11,13 +11,13 @@ import { CarDetail } from './../../models/carDetail';
 import { CarService } from 'src/app/services/car.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component } from '@angular/core';
-import { NgIf, NgFor } from '@angular/common';
+import { NgIf, NgFor, NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-car-list',
   templateUrl: './car-list.component.html',
   styleUrls: ['./car-list.component.css'],
-  imports: [NgIf, NgFor]
+  imports: [NgIf, NgFor, NgClass]
 })
 export class CarListComponent {
   carDetails: CarDetail[] = [];
@@ -32,7 +32,7 @@ export class CarListComponent {
   to: string = '';
   dataLoaded = false;
   apiUrl = "https://localhost:44306/Uploads/Images/";
-  defaultImagePath = 'https://www.araba.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Ftasit-com%2Fimages%2Ff_webp%2Cq_auto%2Fv1694162148%2Fmg-araba-modelleri%2Fmg-araba-modelleri.webp%3F_i%3DAA&w=3840&q=75';
+  defaultImagePath = 'assets/images/middle.png';
   customerType: number; // Customer type to distinguish between individual and corporate
   fuels: Fuel[] = [];
   gears: Gear[] = [];
@@ -256,17 +256,51 @@ export class CarListComponent {
     });
   }
 
+  getFallbackImage(car?: CarDetail): string {
+    const text = ((car?.segmentName || '') + ' ' + (car?.description || '') + ' ' + (car?.brandName || '')).toLowerCase();
+    if (text.includes('ekonom') || text.includes('economy') || text.includes('clio') || text.includes('egea') || text.includes('i20') || text.includes('polo')) {
+      return 'assets/images/economy.png';
+    }
+    if (text.includes('lüks') || text.includes('luks') || text.includes('lux') || text.includes('premium') || text.includes('porsche') || text.includes('passat') || text.includes('bmw') || text.includes('mercedes') || text.includes('audi') || text.includes('tesla')) {
+      return 'assets/images/lux.jpg';
+    }
+    return 'assets/images/middle.png';
+  }
+
   getImagePath(car: CarDetail): string {
     if (car && car.imagePath && car.imagePath.length > 0) {
       const firstImage = car.imagePath[0];
       if (firstImage && firstImage.imagePath) {
-        if (firstImage.imagePath.startsWith('http://') || firstImage.imagePath.startsWith('https://')) {
-          return firstImage.imagePath;
+        const path = firstImage.imagePath;
+        if (path === 'default-car-image.jpg') {
+          return this.getFallbackImage(car);
         }
-        return this.apiUrl + firstImage.imagePath;
+        if (path.startsWith('http://') || path.startsWith('https://')) {
+          return path;
+        }
+        return this.apiUrl + path;
       }
     }
-    return this.defaultImagePath;
+    return this.getFallbackImage(car);
+  }
+
+  onImgError(event: Event, car?: CarDetail) {
+    const img = event.target as HTMLImageElement;
+    const fallback = this.getFallbackImage(car);
+    if (img.src !== fallback && !img.src.endsWith(fallback)) {
+      img.src = fallback;
+    }
+  }
+
+  segmentClass(segmentName: string): string {
+    const name = (segmentName || 'Ekonomik').toLowerCase();
+    if (name.includes('lüks') || name.includes('luks') || name.includes('lux') || name.includes('üst') || name.includes('premium')) {
+      return 'cl-badge--lux';
+    }
+    if (name.includes('orta') || name.includes('middle')) {
+      return 'cl-badge--mid';
+    }
+    return 'cl-badge--eco';
   }
 
   navigateToPayment(carId: number) {
