@@ -1,0 +1,96 @@
+<div class="sc" (keydown.escape)="isOpen && close()">
+  <section
+    *ngIf="isOpen"
+    id="support-chat-panel"
+    class="sc-panel"
+    role="dialog"
+    aria-modal="false"
+    aria-labelledby="support-chat-title">
+
+    <header class="sc-header">
+      <div>
+        <h2 id="support-chat-title" class="sc-title">Destek Asistanı</h2>
+        <p class="sc-subtitle">Kiralama, depozito, iptal ve ödeme soruları</p>
+      </div>
+      <div class="sc-header-actions">
+        <button type="button" class="sc-icon-btn" (click)="reset()" [disabled]="isSending || messages.length === 0"
+          aria-label="Sohbeti sıfırla" title="Sohbeti sıfırla">↺</button>
+        <button type="button" class="sc-icon-btn" (click)="close()" aria-label="Destek asistanını kapat" title="Kapat">×</button>
+      </div>
+    </header>
+
+    <div #log class="sc-log" role="log" aria-live="polite" aria-relevant="additions" tabindex="0">
+      <p *ngIf="messages.length === 0" class="sc-empty">
+        Merhaba! Size kiralama koşulları hakkında yardımcı olabilirim. Asistan rezervasyon oluşturamaz,
+        iptal edemez veya ödeme alamaz. Lütfen kart, kimlik numarası ya da parola paylaşmayın.
+      </p>
+
+      <div *ngFor="let entry of messages" class="sc-row" [ngClass]="'sc-row--' + entry.role">
+        <div class="sc-bubble"
+          [ngClass]="{ 'sc-bubble--error': entry.isError, 'sc-bubble--fallback': entry.status === 'no_reliable_answer' || entry.status === 'refused' }">
+          <span class="sc-visually-hidden">{{ entry.role === 'user' ? 'Siz:' : 'Asistan:' }}</span>
+          <p class="sc-text">{{ entry.text }}</p>
+
+          <p *ngIf="entry.notice" class="sc-notice">{{ entry.notice }}</p>
+
+          <div *ngIf="entry.sources?.length" class="sc-sources">
+            <span class="sc-sources-label">Kaynaklar:</span>
+            <a *ngFor="let source of entry.sources" class="sc-source"
+               [routerLink]="isBranchSource(source) ? '/branches' : '/help'"
+               [fragment]="isBranchSource(source) ? undefined : source.id">
+              {{ source.title }}<span *ngIf="source.isSample" class="sc-badge">örnek</span>
+            </a>
+          </div>
+
+          <p *ngIf="entry.status === 'no_reliable_answer'" class="sc-handoff">
+            <a routerLink="/help">Yardım sayfasına göz atın</a> veya destek ekibine yazın: info&#64;otogez.com
+          </p>
+
+          <button *ngIf="entry.isError && failedMessage" type="button" class="sc-retry" (click)="retry()" [disabled]="isSending">
+            Tekrar dene
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="isSending" class="sc-row sc-row--assistant">
+        <div class="sc-bubble sc-typing" role="status">
+          <span class="sc-dot"></span><span class="sc-dot"></span><span class="sc-dot"></span>
+          <span class="sc-visually-hidden">Asistan yanıt hazırlıyor</span>
+        </div>
+      </div>
+    </div>
+
+    <form class="sc-form" (ngSubmit)="send()">
+      <label for="support-chat-input" class="sc-visually-hidden">Mesajınız</label>
+      <textarea
+        #input
+        id="support-chat-input"
+        name="message"
+        class="sc-input"
+        rows="2"
+        [(ngModel)]="draft"
+        [attr.maxlength]="maxLength"
+        (keydown)="onKeydown($event)"
+        placeholder="Sorunuzu yazın… (Enter: gönder, Shift+Enter: yeni satır)"
+        aria-describedby="support-chat-counter"></textarea>
+      <div class="sc-form-footer">
+        <span id="support-chat-counter" class="sc-counter">{{ draft.length }}/{{ maxLength }}</span>
+        <button type="submit" class="sc-send" [disabled]="!canSend" [attr.aria-busy]="isSending">
+          {{ isSending ? 'Gönderiliyor…' : 'Gönder' }}
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <button
+    #toggleButton
+    type="button"
+    class="sc-toggle"
+    (click)="toggle()"
+    [attr.aria-expanded]="isOpen"
+    aria-controls="support-chat-panel"
+    [attr.aria-label]="isOpen ? 'Destek asistanını kapat' : 'Destek asistanını aç'">
+    <span aria-hidden="true">{{ isOpen ? '×' : '?' }}</span>
+    <span class="sc-toggle-label" *ngIf="!isOpen">Yardım</span>
+  </button>
+</div>

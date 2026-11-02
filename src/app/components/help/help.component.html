@@ -1,0 +1,26 @@
+<div class="og-help-page">
+  <section class="og-help-header">
+    <div class="og-help-container">
+      <div class="og-help-eyebrow">YARDIM MERKEZİ</div>
+      <h1 class="og-help-title">Sıkça Sorulan Sorular</h1>
+      <p class="og-help-subtitle">
+        Destek asistanının yanıtlarında kullandığı bilgiler. "Örnek politika" etiketli maddeler sistemde
+        uygulanmayan örnek koşullardır; kesin bilgi için şubeyle teyit edin. Diğer sorularınız için: info&#64;otogez.com
+      </p>
+    </div>
+  </section>
+
+  <section class="og-help-container og-help-list" aria-live="polite">
+    <p *ngIf="isLoading" class="og-help-state">Yükleniyor…</p>
+    <p *ngIf="loadFailed" class="og-help-state">Yardım içerikleri yüklenemedi. Lütfen daha sonra tekrar deneyin.</p>
+
+    <article *ngFor="let article of articles" class="og-help-card" [id]="article.id"
+      [class.og-help-card--active]="article.id === highlightedId">
+      <h2 class="og-help-card__title">
+        {{ article.title }}
+        <span *ngIf="article.isSample" class="og-help-badge">Örnek politika</span>
+      </h2>
+      <p class="og-help-card__text">{{ article.content }}</p>
+    </article>
+  </section>
+</div>

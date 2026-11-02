@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NaviComponent } from './components/navi/navi.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { SupportChatComponent } from './components/support-chat/support-chat.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NaviComponent, FooterComponent],
+  imports: [RouterOutlet, NaviComponent, FooterComponent, SupportChatComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })

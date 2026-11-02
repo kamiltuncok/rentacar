@@ -1,8 +1,11 @@
-import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { HttpInterceptorFn, HttpErrorResponse, HttpContextToken } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, throwError } from 'rxjs';
+
+/** Hatasını kendi arayüzünde gösteren istekler (ör. destek sohbeti) global toast'ı kapatır. */
+export const SKIP_GLOBAL_ERROR_TOAST = new HttpContextToken<boolean>(() => false);
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     const router = inject(Router);
@@ -10,6 +13,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
     return next(req).pipe(
         catchError((error: HttpErrorResponse) => {
+            if (req.context.get(SKIP_GLOBAL_ERROR_TOAST)) {
+                return throwError(() => error);
+            }
+
             switch (error.status) {
                 case 401:
                     router.navigate(['/login']);

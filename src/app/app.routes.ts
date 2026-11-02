@@ -155,6 +155,12 @@ export const routes: Routes = [
         loadComponent: () => import('./components/about/about.component').then(m => m.AboutComponent),
     },
 
+    // ─── Help / SSS (lazy) ───
+    {
+        path: 'help',
+        loadComponent: () => import('./components/help/help.component').then(m => m.HelpComponent),
+    },
+
     // ─── Location Managers (lazy) ───
     {
         path: 'location-managers',
