@@ -36,19 +36,23 @@
         <div class="row g-3">
           <div class="col-12 col-md-4">
             <div class="metric-box">
-              <div class="metric-label">Karar başına ciro farkı</div>
+              <div class="metric-label">Net ciro farkı (segment ağırlıklı)</div>
               <div class="metric-value" [ngClass]="upliftClass">{{ upliftLabel }}</div>
-              <div class="metric-hint">RL grubunun kontrol grubuna göre farkı</div>
+              <div class="metric-hint">
+                RL grubunun kontrol grubuna göre araç-gün başına farkı
+                <span *ngIf="ciLabel"><br>{{ ciLabel }}</span>
+                <br>{{ performance.isSignificant ? 'İstatistiksel olarak anlamlı' : 'Anlamlı değil — RL etkisi kanıtlanmadı' }}
+              </div>
             </div>
           </div>
 
           <div class="col-12 col-md-4">
             <div class="metric-box">
               <div class="metric-label">RL grubu</div>
-              <div class="metric-value">{{ performance.rlGroup.revenuePerDecision | number:'1.0-2' }} ₺</div>
+              <div class="metric-value">{{ performance.rlGroup.revenuePerCarDay | number:'1.0-2' }} ₺ / araç-gün</div>
               <div class="metric-hint">
-                {{ performance.rlGroup.decisions }} karar ·
-                {{ performance.rlGroup.realizedRentals }} kiralama ·
+                {{ performance.rlGroup.cars }} araç · {{ performance.rlGroup.decisions }} karar ·
+                {{ performance.rlGroup.realizedRentals }} rezervasyon ({{ performance.rlGroup.cancelledRentals }} iptal) ·
                 ort. ödül {{ performance.rlGroup.averageReward | number:'1.0-4' }}
               </div>
             </div>
@@ -57,10 +61,10 @@
           <div class="col-12 col-md-4">
             <div class="metric-box">
               <div class="metric-label">Kontrol grubu (sabit fiyat)</div>
-              <div class="metric-value">{{ performance.controlGroup.revenuePerDecision | number:'1.0-2' }} ₺</div>
+              <div class="metric-value">{{ performance.controlGroup.revenuePerCarDay | number:'1.0-2' }} ₺ / araç-gün</div>
               <div class="metric-hint">
-                {{ performance.controlGroup.decisions }} karar ·
-                {{ performance.controlGroup.realizedRentals }} kiralama
+                {{ performance.controlGroup.cars }} araç · {{ performance.controlGroup.decisions }} karar ·
+                {{ performance.controlGroup.realizedRentals }} rezervasyon ({{ performance.controlGroup.cancelledRentals }} iptal)
               </div>
             </div>
           </div>
@@ -84,7 +88,8 @@
             <th class="text-end">Eski</th>
             <th class="text-end">Yeni</th>
             <th class="text-end">Değişim</th>
-            <th class="text-end">Ödül</th>
+            <th>Tür</th>
+            <th>Ödül hesabı</th>
             <th>Karar anındaki durum</th>
           </tr>
         </thead>
@@ -94,7 +99,8 @@
             <td class="text-end text-muted">{{ d.oldPrice | number:'1.0-0' }} ₺</td>
             <td class="text-end fw-semibold">{{ d.newPrice | number:'1.0-0' }} ₺</td>
             <td class="text-end" [ngClass]="actionClass(d.action)">{{ d.priceChange }}</td>
-            <td class="text-end">{{ d.reward | number:'1.0-4' }}</td>
+            <td class="small">{{ decisionKind(d) }}</td>
+            <td class="small text-muted">{{ d.windowEndsAt | date:'dd.MM HH:mm' }}</td>
             <td class="small text-muted">{{ explainState(d.stateKey) }}</td>
           </tr>
         </tbody>

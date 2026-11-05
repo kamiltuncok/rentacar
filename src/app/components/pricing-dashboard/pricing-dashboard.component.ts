@@ -80,7 +80,9 @@ export class PricingDashboardComponent implements OnInit {
     this.pricingService.settleRewards().subscribe({
       next: result => {
         this.settling = false;
-        this.toastr.success(`${result.settledDecisions} karar kapatıldı`);
+        this.toastr.success(
+          `${result.settledDecisions} karar kapatıldı · ${result.learnedDecisions} öğrenildi · ` +
+          `${result.controlDecisions} kontrol · ${result.excludedDecisions} hariç`);
         this.loadPerformance();
       },
       error: () => {
@@ -99,8 +101,9 @@ export class PricingDashboardComponent implements OnInit {
         this.toastr.success(`Araç ${carId}: ${decision.oldPrice} → ${decision.newPrice} TL`);
         this.loadCars();
       },
-      error: () => {
-        this.toastr.error('Fiyat güncellenemedi');
+      error: err => {
+        // 409: aracın önceki kararının gözlem penceresi henüz kapanmadı
+        this.toastr.error(err?.error?.message ?? 'Fiyat güncellenemedi');
         this.updatingCarId = null;
       }
     });
@@ -120,21 +123,34 @@ export class PricingDashboardComponent implements OnInit {
     return 'action-flat';
   }
 
-  /** State anahtarını okunur parçalara böler. */
+  decisionKind(d: PricingDecision): string {
+    if (d.isControlGroup) return 'Kontrol';
+    return d.isExploration ? 'RL (keşif)' : 'RL';
+  }
+
+  /** State anahtarını okunur parçalara böler: SEGMENT|TALEP|FIYAT|TREND|ATALET|MEVSIM */
   explainState(stateKey: string): string {
-    if (!stateKey) return 'Kontrol grubu (RL kararı yok)';
+    if (!stateKey || stateKey === 'CONTROL') return 'Kontrol grubu (fiyat sabit, RL kararı yok)';
     const tr: { [k: string]: string } = {
       LOW: 'Düşük', MID: 'Orta', HIGH: 'Yüksek',
       RISING: 'Yükseliyor', FALLING: 'Düşüyor', STABLE: 'Sabit',
       HIGH_SEASON: 'Yüksek sezon', MID_SEASON: 'Orta sezon', LOW_SEASON: 'Düşük sezon'
     };
     const parts = stateKey.split('|');
-    if (parts.length !== 5) return stateKey;
-    return `Talep: ${tr[parts[0]] ?? parts[0]} · `
-      + `Fiyat: ${tr[parts[1]] ?? parts[1]} · `
-      + `Trend: ${tr[parts[2]] ?? parts[2]} · `
-      + `Atalet: ${parts[3]} · `
-      + `${tr[parts[4]] ?? parts[4]}`;
+    if (parts.length !== 6) return stateKey;
+    const [segment, demand, price, trend, inertia, season] = parts;
+    return `Segment ${segment} · `
+      + `Talep: ${tr[demand] ?? demand} · `
+      + `Fiyat: ${tr[price] ?? price} · `
+      + `Trend: ${tr[trend] ?? trend} · `
+      + `Atalet: ${inertia} · `
+      + `${tr[season] ?? season}`;
+  }
+
+  get ciLabel(): string {
+    const p = this.performance;
+    if (p?.differenceCi95Low == null || p?.differenceCi95High == null) return '';
+    return `%95 GA: ${p.differenceCi95Low.toFixed(0)} … ${p.differenceCi95High.toFixed(0)} ₺/araç-gün`;
   }
 
   get upliftLabel(): string {

@@ -10,7 +10,7 @@
 }
 
 .og-branches-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 48px 24px 72px;
 }
@@ -59,7 +59,7 @@
 }
 
 .og-branches-map {
-  height: 340px;
+  height: clamp(380px, 65vh, 620px);
   width: 100%;
   border-radius: 14px;
   overflow: hidden;

@@ -169,7 +169,8 @@ export class HomeComponent {
     this.locationService.getCities().pipe(
       switchMap(cityRes => {
         if (!cityRes.success) return EMPTY;
-        const found = cityRes.data.find((c: LocationCity) => c.name.toLowerCase() === cityName.toLowerCase());
+        const target = this.normalizeCityName(cityName);
+        const found = cityRes.data.find((c: LocationCity) => this.normalizeCityName(c.name) === target);
         if (!found) return EMPTY;
         return this.locationService.getLocationsByCity(found.id);
       }),
@@ -185,6 +186,17 @@ export class HomeComponent {
         this.cityLocations = [];
       }
     });
+  }
+
+  // 'İstanbul', 'Istanbul' ve 'istanbul' aynı şehir sayılsın (İ/ı ve diğer aksanlar yok sayılır)
+  private normalizeCityName(name: string): string {
+    return name
+      .replace(/İ/g, 'I')
+      .replace(/ı/g, 'i')
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .toLowerCase()
+      .trim();
   }
 
   openSegmentPopup(segment: string) {

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Car } from '../models/car';
 import { ListResponseModel } from '../models/listResponseModel';
-import { PricingDecision, PricingPerformance } from '../models/pricing';
+import { PricingDecision, PricingPerformance, SettlementSummary } from '../models/pricing';
 
 /**
  * RL fiyatlandırma uçları. Python servisine (8001) DOĞRUDAN gidilmez —
@@ -29,7 +29,7 @@ export class PricingService {
       `${this.apiUrl}${carId}/recommended-price`);
   }
 
-  /** Tek aracın fiyatını RL kararıyla günceller. */
+  /** Tek araç için RL kararı (gözlem penceresi açıksa 409 döner). */
   updatePrice(carId: number): Observable<PricingDecision> {
     return this.httpClient.post<PricingDecision>(`${this.apiUrl}${carId}/update-price`, {});
   }
@@ -40,8 +40,8 @@ export class PricingService {
   }
 
   /** Penceresi dolmuş kararların ödülünü gerçekleşen kiralamalardan kapatır. */
-  settleRewards(): Observable<{ settledDecisions: number }> {
-    return this.httpClient.post<{ settledDecisions: number }>(
+  settleRewards(): Observable<SettlementSummary> {
+    return this.httpClient.post<SettlementSummary>(
       `${this.apiUrl}settle-rewards`, {});
   }
 

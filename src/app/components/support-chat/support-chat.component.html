@@ -67,7 +67,7 @@
         id="support-chat-input"
         name="message"
         class="sc-input"
-        rows="2"
+        rows="3"
         [(ngModel)]="draft"
         [attr.maxlength]="maxLength"
         (keydown)="onKeydown($event)"
@@ -90,7 +90,14 @@
     [attr.aria-expanded]="isOpen"
     aria-controls="support-chat-panel"
     [attr.aria-label]="isOpen ? 'Destek asistanını kapat' : 'Destek asistanını aç'">
-    <span aria-hidden="true">{{ isOpen ? '×' : '?' }}</span>
-    <span class="sc-toggle-label" *ngIf="!isOpen">Yardım</span>
+    <span aria-hidden="true" *ngIf="isOpen">×</span>
+    <svg *ngIf="!isOpen" class="sc-toggle-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 14v-3a8 8 0 0 1 16 0v3" />
+      <rect x="2.5" y="13" width="4" height="6" rx="1.5" />
+      <rect x="17.5" y="13" width="4" height="6" rx="1.5" />
+      <path d="M19.5 19v.5a2.5 2.5 0 0 1-2.5 2.5h-4" />
+    </svg>
+    <span class="sc-toggle-label" *ngIf="!isOpen">Yardıma Mı İhtiyacınız Var?</span>
   </button>
 </div>

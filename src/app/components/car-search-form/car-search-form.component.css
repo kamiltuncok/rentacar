@@ -24,15 +24,21 @@
 .og-hero--popup {
   min-height: auto;
   background: #111827;
-  padding: 36px 24px;
-  border-radius: 20px;
-  max-width: 600px;
+  padding: 0;
+  border-radius: 22px;
+  max-width: 820px;
   margin: 0 auto;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 .og-hero--popup::before {
   display: none;
+}
+
+/* In popups the search card fills the whole box */
+.og-hero--popup .og-search-card {
+  width: 100%;
+  padding: 36px 40px;
 }
 
 .og-hero__close {
@@ -287,6 +293,10 @@
 
   .og-search-card {
     width: 100%;
+  }
+
+  .og-hero--popup .og-search-card {
+    padding: 28px 22px;
   }
 
   .og-hero__art {
